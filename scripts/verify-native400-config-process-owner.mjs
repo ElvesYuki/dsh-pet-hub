@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-config-process-owner.test.mjs'],expected:28,timeoutMs:30000,layer:'native400-owned-process-and-service-cleanup-barrier',prefix:'tcp14-',scope:'Original Node child only, fixed tool-compatible argv/JSON, actual private fd/process/stdio/UDS exit, bounded malformed output, ownership/reservation/cancellation/manual cleanup. No firmware Python, serial port, ESP, real config or LAN binding. Upstream USB/STA partial evidence is cited separately and not rerun.'});

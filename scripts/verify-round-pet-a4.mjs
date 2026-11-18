@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/round-pet-a4.test.mjs'],expected:48,layer:'round-pet-device-pull-candidate',prefix:'ha4-',scope:'Temporary loopback mTLS/PKI and scoped binding authority; original real PET4, pull/next-HTTP receipts, bounded queue/read permits, explicit deadlines/actual cleanup and A3 observation proof; no firmware/device/production listener or configured services.'});

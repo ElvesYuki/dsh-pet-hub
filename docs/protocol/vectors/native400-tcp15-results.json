@@ -1,0 +1,972 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "declared-source-inventory-and-original-Node-copy-load-host-only",
+  "tests": {
+    "isolated": 26,
+    "check": "passed",
+    "full_with_build": 1682,
+    "full_exit_code": 0,
+    "full_wall_ms": 99367.253375,
+    "final_build_exit_code": 0,
+    "sequential_full_runs": 2,
+    "initial_full_pass": 1682,
+    "rerun_reason": "added wrapper outcome/verification negative assertions after first passing full suite"
+  },
+  "cases": [
+    "SNAP01 default off rejects without creating any snapshot",
+    "SNAP02 copies exact reviewed files with deterministic path-free manifest and verifies",
+    "SNAP03 source changed after seal cannot change real child dependency loading",
+    "SNAP04 independent source pin mismatch fails and removes partial files",
+    "SNAP05 runtime wrong pin rejects before staging and never spawns",
+    "SNAP06 absolute hidden escaping and malformed labels are refused",
+    "SNAP07 duplicate paths roots roles and undeclared entry cannot self-authorize",
+    "SNAP08 symlink source file is never followed or copied",
+    "SNAP09 hardlinked and writable source files fail closed",
+    "SNAP10 nonprivate destination and symlink source directory are rejected",
+    "SNAP11 file count and per-file byte limits reject without leaked stage",
+    "SNAP12 concurrent source mutation before publish aborts whole snapshot",
+    "SNAP13 injected async seal hook is rejected without unhandled rejection or residue",
+    "SNAP14 modified copied dependency invalidates preflight without child execution",
+    "SNAP15 missing inventory file and extra injected module invalidate exact inventory",
+    "SNAP16 manifest rewrite and unsafe copied permissions cannot bypass memory capability",
+    "SNAP17 cloned or fake snapshot cannot select executable or override guard",
+    "SNAP18 closing snapshot waits actual child exit and prevents late second run",
+    "SNAP19 postflight content mutation returns unknown even after real valid queued output",
+    "SNAP20 aborted and close-before-run never leave a lease or start the child",
+    "SNAP21 manager-only snapshot is valid preparation but cannot become USB consumer",
+    "SNAP22 stable errors and public evidence never expose local paths or input data",
+    "SNAP23 total byte limit aborts after partial copies without deleting caller files",
+    "SNAP24 extra consumer options cannot substitute script runtime or verification",
+    "SNAP25 copied symlinks and writable nested directories cannot expand inventory",
+    "SNAP26 runtime replacement is detected even when declared files remain unchanged"
+  ],
+  "isolated": {
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 5278,
+    "temporary_environment_removed": true
+  },
+  "source_sha256": {
+    "packages/runtime/native400-execution-snapshot.mjs": "ec89aad89e9b7c2c6ea39ad14d62538fa8ccc59593cd23b59ac0e491fd6b2a7b",
+    "tests/native400-execution-snapshot.test.mjs": "11d32ea29a4842c22b084673fb8f43262e95901b404acf7f76d73888904664c0",
+    "tests/fixtures/native400-snapshot-child.mjs": "cacd764947e207d3fa502bb2cc5abd2be437bf2f740664fd225411422c6414d5",
+    "tests/fixtures/native400-snapshot-dependency.mjs": "208b5f0ddff3e9451ffd15bf2e95cf1409f9e3f8a43220f5c6c41f1a3ff85fc6",
+    "scripts/verify-native400-execution-snapshot.mjs": "eca3094ad37122a3447d6c719b1d67b9d57f327396189afdb6e0826907d9514c",
+    "scripts/verify-native400-hub-snapshot.mjs": "11622c7714efe68eeeae257f9100137a4ce74cc0ff577618e082213cdf3a3edd"
+  },
+  "existing_source_changes": [],
+  "current_hub_code_snapshot": {
+    "schema_version": 1,
+    "passed": true,
+    "node_version": "v24.14.1",
+    "scope": "fixed local hub code-only conservative inventory; copied module not imported or executed",
+    "manifest": {
+      "schema_version": 1,
+      "profile": "native400-execution-snapshot/1",
+      "coverage": "declared-inventory-only",
+      "runtime": {
+        "kind": "node",
+        "sha256": "35d4bc736bbe4161f0c074aa140ddb74586e46969bc2ad63d32c838bec4463ff",
+        "bytes": 119168512
+      },
+      "entries": [
+        {
+          "role": "manager",
+          "root": "hub",
+          "path": "packages/runtime/service.mjs"
+        }
+      ],
+      "roots": [
+        {
+          "label": "hub",
+          "files": [
+            {
+              "path": "LICENSE",
+              "sha256": "0806698fbbca9c5a21d5f303ad6e3dba3671894a046df668151dad62793227d0",
+              "bytes": 1066
+            },
+            {
+              "path": "THIRD_PARTY.md",
+              "sha256": "d2cc74b82edaf7108d7efd59d187d678309db33dbdce2044aaf3ecc19db452f5",
+              "bytes": 45625
+            },
+            {
+              "path": "apps/service/main.mjs",
+              "sha256": "0054884266a5cf47a27fe5a4817cf7e370a10e485bc370f3aeb444d433a9cc86",
+              "bytes": 2400
+            },
+            {
+              "path": "package-lock.json",
+              "sha256": "2e651284bda7fe90b8a7935a423e559e604647f82c24fbb41a94df67906480d4",
+              "bytes": 289
+            },
+            {
+              "path": "package.json",
+              "sha256": "7a69f083581ea1b973c4c9b99caf054236227cc3f85d0f93a54fd1b0cb026316",
+              "bytes": 1566
+            },
+            {
+              "path": "packages/core/assembly-view.mjs",
+              "sha256": "bf6cd9db204b0bf10ae559efac7637e1dd140d2fef48dce4b14fc7885de3e1e5",
+              "bytes": 1270
+            },
+            {
+              "path": "packages/core/character-arm-morph.mjs",
+              "sha256": "a9d02d5ddeae9aa5feb7c60fb4a09c7038324454675c3c9f4c62e6e5bd1aecb0",
+              "bytes": 2860
+            },
+            {
+              "path": "packages/core/character-expression.mjs",
+              "sha256": "e15945dde2a208a1dfff354fdc386ec0d06396a8260db0d6f0b5f399f3d3197c",
+              "bytes": 2006
+            },
+            {
+              "path": "packages/core/character-motion-probe.mjs",
+              "sha256": "ca0c02b47ec8ca346ab5eb8bde1a53be0dcfe4a611cff81371275d910aa60977",
+              "bytes": 3402
+            },
+            {
+              "path": "packages/core/character-natural-motion.mjs",
+              "sha256": "fc7b426494d25ad85fe451ddf922f989ee0825422c7c249cd2464f4b8161322a",
+              "bytes": 8697
+            },
+            {
+              "path": "packages/core/character-speech.mjs",
+              "sha256": "8178e3c4a6a20656197d893508e16fa8b0c9be63f43614f07c45c6cfffb942a4",
+              "bytes": 3629
+            },
+            {
+              "path": "packages/core/character-states.mjs",
+              "sha256": "72b4802254cc9fc94212ac0512307b6997e213b38444bb56c7a72f16edeaf543",
+              "bytes": 3488
+            },
+            {
+              "path": "packages/core/character-wave.mjs",
+              "sha256": "1f633bdddd9448fa849dddcb72b99397794569632b5ad4d3ac03d7b76bf608b7",
+              "bytes": 3016
+            },
+            {
+              "path": "packages/core/crc32.mjs",
+              "sha256": "626dff165498b1eba1080a9692992f58784946534d35b3db58b7737737c6577d",
+              "bytes": 323
+            },
+            {
+              "path": "packages/core/device.mjs",
+              "sha256": "980751a9c9bc4b5d867a7d43ff023d32d81e813b077d8310036a6cfcc8d8381a",
+              "bytes": 8925
+            },
+            {
+              "path": "packages/core/index.mjs",
+              "sha256": "a11eac1f0b063a8ff6335dd36863c76b31b942fd06e1ef303863fc36f6deb262",
+              "bytes": 1125
+            },
+            {
+              "path": "packages/core/layered-character-json.mjs",
+              "sha256": "ef4c31c3f4d47b2d89acd4cdc52e03836e67d004dc668387f71949a0f06252aa",
+              "bytes": 2608
+            },
+            {
+              "path": "packages/core/layered-character-package.mjs",
+              "sha256": "ab90a2ead7d850cde595a1697e8fc41ef7baf6ba2bf635f8c594de47364ca5d8",
+              "bytes": 7086
+            },
+            {
+              "path": "packages/core/layered-character-png.mjs",
+              "sha256": "e86767dcc6c60fbf280790b2f35b26b588b1bcb525bfd93da7f10b26f2c5b1b8",
+              "bytes": 2350
+            },
+            {
+              "path": "packages/core/layered-character-profiles.mjs",
+              "sha256": "e215c1f7b7f0b3f3827f022f20f1961870fa38652d76d865aba8c1e602c5bbfd",
+              "bytes": 6309
+            },
+            {
+              "path": "packages/core/lease-budget.mjs",
+              "sha256": "db2498246171d0d4563e4ce7c93f57bcf92c709461aaed4e1251d5bfea5f0460",
+              "bytes": 6260
+            },
+            {
+              "path": "packages/core/lease-wire.mjs",
+              "sha256": "5c9dc540be5fa6ed532aae1c4c382971c4aa45c11ec91031cf9c84783885d067",
+              "bytes": 2844
+            },
+            {
+              "path": "packages/core/material-playback.mjs",
+              "sha256": "814ef74ab6a9a35913a4da1df08abef84ad0905dbf4391c8e7f5229fb9fd207c",
+              "bytes": 3861
+            },
+            {
+              "path": "packages/core/material-profile.mjs",
+              "sha256": "2541d0da6e241fd8bd3bd668e2b1602dd1acfe34101b0fc6cc0794fd3bf32546",
+              "bytes": 793
+            },
+            {
+              "path": "packages/core/materials.mjs",
+              "sha256": "5e99831d289f79920c279c5d8a790c2bb33770e7f2f40856b8c34a4119ed5927",
+              "bytes": 6626
+            },
+            {
+              "path": "packages/core/native360-device.mjs",
+              "sha256": "7127eb2fa2cf620df3e291a48a26d4ac9e4d94bbf28f28dde16ad673213a3ca5",
+              "bytes": 10623
+            },
+            {
+              "path": "packages/core/native360-flash.mjs",
+              "sha256": "ad0425c6f08b5fd6a02516f66df47fef4b7f176e5c6e5b1d4f1065112f9e6413",
+              "bytes": 10102
+            },
+            {
+              "path": "packages/core/native360-profile.mjs",
+              "sha256": "8b693462b855751268cfa6a792457287dc4c80d50b5fe236683495305e101e69",
+              "bytes": 2752
+            },
+            {
+              "path": "packages/core/native400-bootstrap.mjs",
+              "sha256": "01565ac17c61c5b2ff0e59be879fe130bacdd2f0a34837f641094f7d86a59c79",
+              "bytes": 9571
+            },
+            {
+              "path": "packages/core/native400-bridge-events.mjs",
+              "sha256": "a1d5bb1abfdc091c6e82e2d38e1a9f4e5d390c2e06996e1b0c9170a21eeacdfb",
+              "bytes": 7591
+            },
+            {
+              "path": "packages/core/native400-cycle-budget.mjs",
+              "sha256": "e69c2b4782ec7c2364490a77341f40133f44133f9eea87f7d419810515dafad2",
+              "bytes": 1775
+            },
+            {
+              "path": "packages/core/native400-identity.mjs",
+              "sha256": "715f91ba067029f9ff260b7e46f19f3ef6be360a695b741a7591785e3f665203",
+              "bytes": 9411
+            },
+            {
+              "path": "packages/core/native400-observations.mjs",
+              "sha256": "34b27112acc009327c9d842f8c838a780a732cc7d4aeab046bb0442c7b3d899d",
+              "bytes": 7344
+            },
+            {
+              "path": "packages/core/native400-review-access.mjs",
+              "sha256": "a8d53eb369cfd4d9324e7ace639672b101b8df0efab9676b4c9f180839ccc2dd",
+              "bytes": 2399
+            },
+            {
+              "path": "packages/core/native400-review-controls-view.mjs",
+              "sha256": "6a97a1e8efb886c19725eccbe3c0bf122870be40bbcab5a9ba24cea767813b9b",
+              "bytes": 4965
+            },
+            {
+              "path": "packages/core/native400-scheduling.mjs",
+              "sha256": "b890a418c7d9378ded7cd433c2de5a3fefa59481348a52a426ae217a5c11731e",
+              "bytes": 2189
+            },
+            {
+              "path": "packages/core/native400-session-profile.mjs",
+              "sha256": "89ec4f149046d8eaa0a44d1cad8a03bcdc1715e70e8cf0a815ebb164babbe9b8",
+              "bytes": 1779
+            },
+            {
+              "path": "packages/core/native400-source-review-view.mjs",
+              "sha256": "ef2a00164c9dbecd6c5fbf359b37417ef0198d5a41c4278cfb65c2fe6e294a2e",
+              "bytes": 4210
+            },
+            {
+              "path": "packages/core/native400-tcp-control.mjs",
+              "sha256": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+              "bytes": 9439
+            },
+            {
+              "path": "packages/core/native400-tcp-host-view.mjs",
+              "sha256": "00b62dfcb9a0844b1b92775425b4ee6a850d37df47fdc02137ec42b8013c526a",
+              "bytes": 1680
+            },
+            {
+              "path": "packages/core/native400-tcp-lan-host-view.mjs",
+              "sha256": "fe9a54a6b74e0fae9447573d52bb31f38d7be02c059a1ff2769e9cfd95d08752",
+              "bytes": 1903
+            },
+            {
+              "path": "packages/core/native400-tcp-network.mjs",
+              "sha256": "ad6566f5360e27e98f413d25823e7f670b9f462ebb21568f2b3cdddd16b6818d",
+              "bytes": 1417
+            },
+            {
+              "path": "packages/core/native400-tcp-observation.mjs",
+              "sha256": "1be8680ed9e6ad60269f028a3deae35189dd276ff9951ef11e29bfa7bd1079c4",
+              "bytes": 6353
+            },
+            {
+              "path": "packages/core/native400-tcp.mjs",
+              "sha256": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+              "bytes": 3748
+            },
+            {
+              "path": "packages/core/native400-window.mjs",
+              "sha256": "639ed97d2711a9e973fa6534f4c04bfb848b7810f67bd5d19a11c41010a13f3e",
+              "bytes": 16235
+            },
+            {
+              "path": "packages/core/native400-wire-contract.json",
+              "sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+              "bytes": 29188
+            },
+            {
+              "path": "packages/core/native400-wire.mjs",
+              "sha256": "17d93b3e9dfb75bdb076a1f422d862e45e04a38bf56dfc509dff605a731fcae4",
+              "bytes": 11705
+            },
+            {
+              "path": "packages/core/observation-view.mjs",
+              "sha256": "01253e790e3328fc135f5b08119106a7469bfd6fcc7a89a216bb9cc5dacf58ad",
+              "bytes": 4646
+            },
+            {
+              "path": "packages/core/pet4-encode.mjs",
+              "sha256": "0530a4f544dd9558296bae3a3db8d7550db1f11adfe6486a439c1aca8a642476",
+              "bytes": 4861
+            },
+            {
+              "path": "packages/core/pet4.mjs",
+              "sha256": "5717a7ecd90004540cb0025124f50a311db2276d228ee08b8834eb6103fa60c5",
+              "bytes": 5406
+            },
+            {
+              "path": "packages/core/protocol.mjs",
+              "sha256": "12582ab3ae0d2a4ed96e29da24601842b8f8167d7aba1cf06cf915c2b09d91c1",
+              "bytes": 6076
+            },
+            {
+              "path": "packages/core/registry.mjs",
+              "sha256": "64ad0c77f77f7b352d514723def891bf793e51bc5bfacfea21f967fa1efe2f81",
+              "bytes": 12027
+            },
+            {
+              "path": "packages/core/role-package.mjs",
+              "sha256": "24aa401cb004ddc13f5b3f5d37be94aefaa7cda35c3d0b2beb8b4e4c3b3b0ef1",
+              "bytes": 1505
+            },
+            {
+              "path": "packages/core/round-pet-first-window.mjs",
+              "sha256": "a800bf961ca4bd3c61703f7cd472e4e86cfd2907611bf31e35146d7cef09a4ea",
+              "bytes": 7083
+            },
+            {
+              "path": "packages/core/round-pet-identity.mjs",
+              "sha256": "3c1aa33f78a5ef732a5277a684a44e0f00ac875d2cb68aba6acfc57ab0b2f5dd",
+              "bytes": 6873
+            },
+            {
+              "path": "packages/core/round-pet-observation-schema.mjs",
+              "sha256": "e1f0e4f1d731dad965471fe987bbedef7633e1c146333af9a78fa10413bb932f",
+              "bytes": 5641
+            },
+            {
+              "path": "packages/core/round-pet-observations.mjs",
+              "sha256": "2119daa55e765f8e890802ea01fc83a8ecf07ef4765a8549936e2241476954eb",
+              "bytes": 21508
+            },
+            {
+              "path": "packages/core/round-pet-pull.mjs",
+              "sha256": "d2cd444e914c2078b84bb444f5d74db92c8a7a017cc7f70fa4dc17995a897dd5",
+              "bytes": 6885
+            },
+            {
+              "path": "packages/core/round-pet-root-checkpoint.mjs",
+              "sha256": "341848d1bd27d54a6931f8816864ee455ca1891f256724ce96c2411d20fbd004",
+              "bytes": 3947
+            },
+            {
+              "path": "packages/core/round-pet-wire-contract.json",
+              "sha256": "ca218da7d3d05c2a8d6b30990a7ae195685caa078c652396108f36ec905209d0",
+              "bytes": 42946
+            },
+            {
+              "path": "packages/core/round-pet-wire.mjs",
+              "sha256": "1bb6384b0adac62e4f4116128640211b5803707816f9f8d8a4e149cb293462e9",
+              "bytes": 9740
+            },
+            {
+              "path": "packages/core/scheduler.mjs",
+              "sha256": "68afa7faed5a1d6d4357db72a5779afaf19304b70b08ac2c359f3718f045a232",
+              "bytes": 4788
+            },
+            {
+              "path": "packages/runtime/asset-segment.mjs",
+              "sha256": "42244903549fb450ac642af240bc09dd6312255963daa3a7184677dba6817ed0",
+              "bytes": 1420
+            },
+            {
+              "path": "packages/runtime/asset-stream.mjs",
+              "sha256": "9080a935cccd74a3e33270014cc9a9a474af6a90bfc94fe0618d02b600673e9d",
+              "bytes": 1115
+            },
+            {
+              "path": "packages/runtime/binding-root-authority.mjs",
+              "sha256": "16e0dce75f19c942c76ee9280870846f8a661dde090204ba8ca4837f0dc280f0",
+              "bytes": 606
+            },
+            {
+              "path": "packages/runtime/binding-store.mjs",
+              "sha256": "0b43613e927628d41b9aed901248bc7eb4a04ac6f3a31bcd5b24845fcf699221",
+              "bytes": 12053
+            },
+            {
+              "path": "packages/runtime/certificate-profile.mjs",
+              "sha256": "e3a3dcc343d378b49d3a7ac2746c6804b32f98296199526d4205893c207e7918",
+              "bytes": 5566
+            },
+            {
+              "path": "packages/runtime/client.mjs",
+              "sha256": "2745568611c1b83b8114c1cebeba4d158ba6a30ca8a48c406a072dda2dd6d6af",
+              "bytes": 2144
+            },
+            {
+              "path": "packages/runtime/index.mjs",
+              "sha256": "afe4af1dd2459550821967296d0a774c5ee7516f89f0f051d9d7f06a1e883e3b",
+              "bytes": 364
+            },
+            {
+              "path": "packages/runtime/layered-character-export.mjs",
+              "sha256": "62652ebf1964b4787cd474c9865639061c2b2c1b0cb04242557ee20a8308d831",
+              "bytes": 11337
+            },
+            {
+              "path": "packages/runtime/layered-character-loader.mjs",
+              "sha256": "6928e81fa389715b8fa55941892d29dc99f9d8c51bc887f613ac82d870e54f99",
+              "bytes": 2376
+            },
+            {
+              "path": "packages/runtime/layered-character-png.mjs",
+              "sha256": "1405874c50818ada145eb58e87e2b9d4ecb7cc5dc80ffd51fc207bf471690dcd",
+              "bytes": 639
+            },
+            {
+              "path": "packages/runtime/layered-character-validator.mjs",
+              "sha256": "d81f282d78e4cad62084005c7514117a4f288fe5ed28f64593f1813f7bc50e31",
+              "bytes": 5958
+            },
+            {
+              "path": "packages/runtime/load-metrics.mjs",
+              "sha256": "a079f4a83d8593a3f6807c5e889aba2e13924641e9d98458db965d65d9a0e914",
+              "bytes": 5144
+            },
+            {
+              "path": "packages/runtime/managed-sessions.mjs",
+              "sha256": "9387ec7b7872fa07b561709ea86da63252b5458c2e8107637c18f3f369c9dddf",
+              "bytes": 3458
+            },
+            {
+              "path": "packages/runtime/material-import.mjs",
+              "sha256": "b7f2ff014c286b65b7dd93420f9a04e9bbe07f16d47e0bdc61c1912e74896861",
+              "bytes": 6258
+            },
+            {
+              "path": "packages/runtime/material-store.mjs",
+              "sha256": "f1662c0949e1f70d2ff43f49e265979c5b2f9ed9bffd18152262a584152ad8a4",
+              "bytes": 5268
+            },
+            {
+              "path": "packages/runtime/material-worker.mjs",
+              "sha256": "c3d381eba183a03213da9c0afb89dcbd8bd5757aab8e31e5ba5ffb2cbe1084a3",
+              "bytes": 11512
+            },
+            {
+              "path": "packages/runtime/materials.mjs",
+              "sha256": "53f1f74208b5eeae58f4a8a17337fa8d35d4d65e38177954ecbb588366475783",
+              "bytes": 3857
+            },
+            {
+              "path": "packages/runtime/mtls-peer.mjs",
+              "sha256": "8254d2be1799b7df0f61d8994bf29a4c6c2cf283646f5701ceb7f444b6318046",
+              "bytes": 5913
+            },
+            {
+              "path": "packages/runtime/native400-bootstrap-review.mjs",
+              "sha256": "b201b86f03dca9d0ba9fb0685fc91f2fc6b078f1b92f3004e437f18a4838e5f5",
+              "bytes": 4645
+            },
+            {
+              "path": "packages/runtime/native400-config-owner.mjs",
+              "sha256": "a8cf77786b1de2b8754c65afd7dfe3b4c493f77cbe0db8ae339e07b2c6fb5591",
+              "bytes": 2435
+            },
+            {
+              "path": "packages/runtime/native400-execution-snapshot.mjs",
+              "sha256": "ec89aad89e9b7c2c6ea39ad14d62538fa8ccc59593cd23b59ac0e491fd6b2a7b",
+              "bytes": 11468
+            },
+            {
+              "path": "packages/runtime/native400-lan-input-audit.mjs",
+              "sha256": "e39bcd808588abad915fd8e0786a4f923061936159995726ea2c0a768b7ec64f",
+              "bytes": 8710
+            },
+            {
+              "path": "packages/runtime/native400-material.mjs",
+              "sha256": "3875989e2cff465caca3addcbc744a70668a9d2d56a29bf65098e65f0700ed3b",
+              "bytes": 4095
+            },
+            {
+              "path": "packages/runtime/native400-private-config-session.mjs",
+              "sha256": "69f5c110e765a5ae24f65dc70da251b593d5fa6e2ceed1b98b417a8400fcce27",
+              "bytes": 10690
+            },
+            {
+              "path": "packages/runtime/native400-review-channel.mjs",
+              "sha256": "2654b01f8dce76882e22f9d5942c9c0b40313b389af540bd49dafa4435080e39",
+              "bytes": 4607
+            },
+            {
+              "path": "packages/runtime/native400-review-controller.mjs",
+              "sha256": "2599f5a27927e0a726c31375fa2c4f931e06d5b368fda936f6362074920cdd7b",
+              "bytes": 14306
+            },
+            {
+              "path": "packages/runtime/native400-review-journal.mjs",
+              "sha256": "65b549a6f1c9c13433dc2a96efa925d483f7f35eda9ed3c33543f473219f35fa",
+              "bytes": 6426
+            },
+            {
+              "path": "packages/runtime/native400-review-manager.mjs",
+              "sha256": "7d504f48ff919b224634a05b4a14e80ef96ce7e2f2f10f94f043a54962c9a8da",
+              "bytes": 6708
+            },
+            {
+              "path": "packages/runtime/native400-reviewed-lan-request.mjs",
+              "sha256": "b6224c9f35d5e1b241e70815141b655c30935e6e52dcf07cd35d6eba24d09d6e",
+              "bytes": 5085
+            },
+            {
+              "path": "packages/runtime/native400-source-review-host.mjs",
+              "sha256": "24230b6074f3229ed941442dad5c4740b5255278176bee5c145ac70eca8752ee",
+              "bytes": 3947
+            },
+            {
+              "path": "packages/runtime/native400-source-selection.mjs",
+              "sha256": "46347dfba39dd47f10f2db707c9a294ee155f7290e40eee0173792117d9cf812",
+              "bytes": 5854
+            },
+            {
+              "path": "packages/runtime/native400-tcp-binding.mjs",
+              "sha256": "5412c6020b523e25a7d77e8e88a9941b11e89936df98757efd3d03c2c9354733",
+              "bytes": 7198
+            },
+            {
+              "path": "packages/runtime/native400-tcp-host.mjs",
+              "sha256": "bb00db9f03d393372d32135f72f20643edc738201c599eb7e3ebf4403920c7b4",
+              "bytes": 2350
+            },
+            {
+              "path": "packages/runtime/native400-tcp-lan-host.mjs",
+              "sha256": "db71e6d9a85f4824a0699d4d1c633516be02250bdfb0bca10bef6f3f1ede6d00",
+              "bytes": 3969
+            },
+            {
+              "path": "packages/runtime/native400-tcp-lan-owner.mjs",
+              "sha256": "3549d191df49058ffa476d9f1d05684ffc7ef16ef9d277822d2c884862905bd4",
+              "bytes": 496
+            },
+            {
+              "path": "packages/runtime/native400-tcp-lan-profile.mjs",
+              "sha256": "664cf33e2ba53d48042bcd87d8a5a5c8f1c091e510e3df5acd0b98d5c4764410",
+              "bytes": 5608
+            },
+            {
+              "path": "packages/runtime/native400-tcp-lan-request.mjs",
+              "sha256": "7dca9133089f975f099c2c70447160c198f5db88260b248ad4d67fddc784d4df",
+              "bytes": 5066
+            },
+            {
+              "path": "packages/runtime/native400-tcp-owner.mjs",
+              "sha256": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+              "bytes": 7771
+            },
+            {
+              "path": "packages/runtime/native400-tcp.mjs",
+              "sha256": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+              "bytes": 3077
+            },
+            {
+              "path": "packages/runtime/native400-usb-process-consumer.mjs",
+              "sha256": "c95fbd41ad5b1f977afbb49121316396996779f3be7106e004c04ecc988ed641",
+              "bytes": 6148
+            },
+            {
+              "path": "packages/runtime/native400-wire-review.mjs",
+              "sha256": "20d081e5d7fdd42ec5536c152eaa610f766ba250e3e4468aee285222883ce4cf",
+              "bytes": 21925
+            },
+            {
+              "path": "packages/runtime/observation-review.mjs",
+              "sha256": "8508b1637944f01fc8cb4f45a6055c97ed1fd6e522850fc48d8e58d44f7cc124",
+              "bytes": 467
+            },
+            {
+              "path": "packages/runtime/offline-lease-auth.mjs",
+              "sha256": "b11d2f1a659d250e854375d765110b8093cd327ed4f16c02f200eea7e2a5eee3",
+              "bytes": 4122
+            },
+            {
+              "path": "packages/runtime/paths.mjs",
+              "sha256": "b0109ffaace6350e998a29557fb4b993ad301941ca7fe5c0bcf6e8853c65d2c5",
+              "bytes": 1495
+            },
+            {
+              "path": "packages/runtime/power-source.mjs",
+              "sha256": "e5b165a381c494fb907ad043c70ffc542f704670ebe65e1d480052358820498e",
+              "bytes": 3704
+            },
+            {
+              "path": "packages/runtime/pull-request-owner.mjs",
+              "sha256": "ac0da86e3a96b059e4dd1e272d42dcdfc840e5e1fdb51a9d5a49481aa1827401",
+              "bytes": 4891
+            },
+            {
+              "path": "packages/runtime/role-runtime.mjs",
+              "sha256": "921bb8f08fdc658dd0b7f38e596cac4f0f1f31ea45220fa8bb9086f0671a66f9",
+              "bytes": 13450
+            },
+            {
+              "path": "packages/runtime/round-pet-assembly.mjs",
+              "sha256": "04f14f73b376c1137dc68edbf249b9d6af67d8b22a63ec7cefc2cf2ba7f84ee7",
+              "bytes": 13367
+            },
+            {
+              "path": "packages/runtime/round-pet-import.mjs",
+              "sha256": "051850e958075cbf1fcae4ebcd362aeb37ffafd288340b32d2b8bc86581e82eb",
+              "bytes": 5027
+            },
+            {
+              "path": "packages/runtime/round-pet-material-profiles.mjs",
+              "sha256": "9c3e7b6932bb74d6882dfa5d61b75e5a6020910a29db506fe85412caae6d56aa",
+              "bytes": 1496
+            },
+            {
+              "path": "packages/runtime/round-pet-material.mjs",
+              "sha256": "20a89d89cc6c764244303a805204af4b4cca6d336e49b4d123536f2814adab72",
+              "bytes": 3470
+            },
+            {
+              "path": "packages/runtime/round-pet-pull.mjs",
+              "sha256": "f72e1412b12c3d0486cba0a11593cf4f96fa6e61a2f87925680dc91bdaea818e",
+              "bytes": 18581
+            },
+            {
+              "path": "packages/runtime/round-pet-read-lane.mjs",
+              "sha256": "06f3338b22888f35e5ebe2e2aeaab96c3ecc4548c0b1178995e4bc8c8a98d172",
+              "bytes": 3713
+            },
+            {
+              "path": "packages/runtime/round-pet-reader.mjs",
+              "sha256": "df4a7d41696fadea0b108a5fa13fb4072da2ef9f7e0da191ddec489d03f2e67a",
+              "bytes": 2969
+            },
+            {
+              "path": "packages/runtime/round-pet-wire-review.mjs",
+              "sha256": "3e22d022ef42843f02f33d8454bf08392b979ea200c269c3cb47d9ace8faabb8",
+              "bytes": 19206
+            },
+            {
+              "path": "packages/runtime/service.mjs",
+              "sha256": "bb1dbc31dfc9ad6599aef798735c4c11968acf9c2c181ca02148ae2d7ef330dd",
+              "bytes": 22912
+            },
+            {
+              "path": "packages/runtime/session-runtime.mjs",
+              "sha256": "855d615855e1b8d62bc17f37267bc92638f24fc9ed67c1170a283ed1e0764f6f",
+              "bytes": 11662
+            },
+            {
+              "path": "packages/runtime/store-lifecycle.mjs",
+              "sha256": "f9207fe35fdafcd502c02b9ac6513296e3cba995a692176098b031f78906f3ef",
+              "bytes": 8124
+            },
+            {
+              "path": "packages/simulator/dual-clock.mjs",
+              "sha256": "9efdbf43af72e2c46f49fb260fb5d62e362a510a5b9bf9f1fe10e15df904646b",
+              "bytes": 4130
+            },
+            {
+              "path": "packages/simulator/index.mjs",
+              "sha256": "b59741f14364e7c9e8ae01c755f5a81fab266be82dd4b2820d8a1c04cb4d5d39",
+              "bytes": 2968
+            },
+            {
+              "path": "packages/simulator/layered-character-fixture.mjs",
+              "sha256": "58a4fdbf2a537519fec289c38217c9f72974e8376e0ac6926a5b9eab113aa64e",
+              "bytes": 4302
+            },
+            {
+              "path": "packages/simulator/layered-character-l3.mjs",
+              "sha256": "5eb5a5142dcbc1946d2f71d87cadd122bb5ba18800c1e2578c3151f1da55b4a2",
+              "bytes": 3832
+            },
+            {
+              "path": "packages/simulator/layered-character-resource-observer.mjs",
+              "sha256": "7aa87ec596d29cd985b089e53a235442da42be8f5c8a62d8855c75a0ce6a6391",
+              "bytes": 2780
+            },
+            {
+              "path": "packages/simulator/lease-budget.mjs",
+              "sha256": "c386ca56a26c4625f3fa33c0e0fa5a0491244f35ed2b22ed18812019c16f00f8",
+              "bytes": 1288
+            },
+            {
+              "path": "packages/simulator/lease-delay.mjs",
+              "sha256": "b14fe16e105c3c78c71ff2baa870cfa411f0dd55f15a1c08fbe5d56e569904f0",
+              "bytes": 1521
+            },
+            {
+              "path": "packages/simulator/lease-matrix.mjs",
+              "sha256": "765bd079221e2209221d19e3b4e4b331aa77922316cdcbdd1cada943219f4199",
+              "bytes": 1377
+            },
+            {
+              "path": "packages/simulator/material-fixture.mjs",
+              "sha256": "49a1218ec55e30c8b8a0f82b36e9a80b0f3bd76bf79f0a5bb9780bce66c9b7ff",
+              "bytes": 1250
+            },
+            {
+              "path": "packages/simulator/native360-fixture.mjs",
+              "sha256": "fc3b38df37a48ada4cb6e3f0e71316f472a6fd8bfa091b37e048fce96463e2e1",
+              "bytes": 2788
+            },
+            {
+              "path": "packages/simulator/native360-flash.mjs",
+              "sha256": "7fd9943e7d947a73e3639d1773d219b8ce462572dcf14f676425aeca9f677c89",
+              "bytes": 2505
+            },
+            {
+              "path": "packages/simulator/native400-bootstrap-fixture.mjs",
+              "sha256": "1d5e32afd0b1eed419083e569b993d94ba4f120773ff2f9652774bb2b2fe1511",
+              "bytes": 2792
+            },
+            {
+              "path": "packages/simulator/native400-identity-fixture.mjs",
+              "sha256": "00adcb69cdaf3a3b0dae75a57b928a63e83afda38faecb4ae176b3471390e32b",
+              "bytes": 4849
+            },
+            {
+              "path": "packages/simulator/native400-scheduling-driver.mjs",
+              "sha256": "fc92fd0944075a815270fa8446cabe4ad22fc3a48a1f587a387afb7abd59cad7",
+              "bytes": 5751
+            },
+            {
+              "path": "packages/simulator/native400-window-fixture.mjs",
+              "sha256": "0b7cde955d86d6ce6cbbfe2bc4da44c3b39cc0d29a9a62249182c7cba0868d2a",
+              "bytes": 4937
+            },
+            {
+              "path": "packages/simulator/native400-wire-executor.mjs",
+              "sha256": "5b68117fd0df81b8f23706f0ed81f92b0c396fce7ff236ffcc21f740debf1d4f",
+              "bytes": 12859
+            },
+            {
+              "path": "packages/simulator/native400-wire-fixture.mjs",
+              "sha256": "be70468f9bd7b71c70fcf67a29bd832959b19014db5d0db86668d5e81f2b5f85",
+              "bytes": 10007
+            },
+            {
+              "path": "packages/simulator/pet4-sample.mjs",
+              "sha256": "1d5b8a810a435f86e525cf1f47e773a5088d0da689815fab282c08d2f34b8d22",
+              "bytes": 1757
+            },
+            {
+              "path": "packages/simulator/replay-endurance.mjs",
+              "sha256": "9dfde9c5e07d43b5c49a90ab8c7f908c01d15d23cb921d2a21798cf623bdb559",
+              "bytes": 5416
+            },
+            {
+              "path": "packages/simulator/role-fixture.mjs",
+              "sha256": "19ee81122a18944b1a169121b97d1131aaedfac7bb6c2df8eca5196dbfba1e9c",
+              "bytes": 1588
+            },
+            {
+              "path": "packages/simulator/root-persistence-budget.mjs",
+              "sha256": "5cc2fdf2e27d82a46de7e957fe3e5371d201b7d25a3d672714ed954920025a4e",
+              "bytes": 1032
+            },
+            {
+              "path": "packages/simulator/round-pet-executor.mjs",
+              "sha256": "51e79d78196e83bd7325b671c8d54398f267b851270ec0a73530295c9a965a0b",
+              "bytes": 16976
+            },
+            {
+              "path": "packages/simulator/round-pet-import-fixture.mjs",
+              "sha256": "c7d5856cd3e729935e7c0af973121123f34df9c3f4f53a8d24d8a59ce1e60d8f",
+              "bytes": 2844
+            },
+            {
+              "path": "packages/simulator/round-pet-observation-fixture.mjs",
+              "sha256": "d2fd270f349db27ee54ca1837c28457126b3c00fabfa920639bd26db84fb161c",
+              "bytes": 4406
+            },
+            {
+              "path": "packages/simulator/session.mjs",
+              "sha256": "1ea4dd79ebaa6d0c559cff3bedae1ba77dde78a18845bc8afdb41151288a24ce",
+              "bytes": 10869
+            },
+            {
+              "path": "packages/simulator/transport-budget.mjs",
+              "sha256": "b7f806df5e5993d01c170fe0b24e333d21bb279828428950a0229c85be6990bc",
+              "bytes": 781
+            },
+            {
+              "path": "packages/simulator/transport-lane.mjs",
+              "sha256": "99b015bf5239d9547b31d747124d7aeaff403424cf3a721a9efb075f92783b2a",
+              "bytes": 2518
+            },
+            {
+              "path": "packages/simulator/wall-memory.mjs",
+              "sha256": "214677471fd7d983954b4223b2a5b6c15fc0a8d9d9d1d90ba486bb7ba3434d4c",
+              "bytes": 7886
+            },
+            {
+              "path": "packages/source-pet/assembly.mjs",
+              "sha256": "8173d9c37b4228c822a50eb2bb4101b7751d1e81fff099f8e57b97bd40cfbfa2",
+              "bytes": 2383
+            },
+            {
+              "path": "packages/source-pet/index.mjs",
+              "sha256": "f14edc2c827ff8e6308fbb336912de79721952156cfaaedd2e581d93b25161ba",
+              "bytes": 1476
+            },
+            {
+              "path": "packages/source-pet/page.mjs",
+              "sha256": "e1d750be6c70ea639930303ce36f9583b9796554061abd132b24b9fc7f0c4b3a",
+              "bytes": 433
+            },
+            {
+              "path": "packages/source-pet/schema.mjs",
+              "sha256": "19e8e1cba99c3a0f667e8fded591dbc48455f24ef0f7474c37d56c32fcb8f4a1",
+              "bytes": 562
+            },
+            {
+              "path": "packages/ui/character-display.mjs",
+              "sha256": "b3d8c569c6b9a43436357d801999c03051380b6ab2a9b9bb3c01839babd1d4cd",
+              "bytes": 2545
+            },
+            {
+              "path": "packages/ui/character-natural-preview.mjs",
+              "sha256": "c33bdfa9904c091c1826afc6cf5ff2dacd720c09a348851eb009ac09c6c6f6bf",
+              "bytes": 26304
+            },
+            {
+              "path": "packages/ui/frame-preview.mjs",
+              "sha256": "bd33c364f5edd7a3320c95a4193e74d15052ca8bede2b835294bf032ed786b2f",
+              "bytes": 4501
+            },
+            {
+              "path": "packages/ui/index.mjs",
+              "sha256": "0739fe60bb4666f859c8a3e63a71ca392576d341769dd96d8c45e326fd78f52b",
+              "bytes": 24663
+            },
+            {
+              "path": "packages/ui/layered-character-candidate.mjs",
+              "sha256": "bc46732dc1eb99ca5c2399fe829601fe9a01be63b184e2f669a7347b012abd00",
+              "bytes": 1397
+            },
+            {
+              "path": "packages/ui/layered-character-files.mjs",
+              "sha256": "4d0c1669ea28f327ee4a67edbf8fc25eb37058ad730015f76d3a1af35e8ff371",
+              "bytes": 3973
+            },
+            {
+              "path": "packages/ui/layered-character-page.mjs",
+              "sha256": "d0f12a9d0d7d9ae874d899e221f49355a4d12848b7f5d0d4b4a1e6f4c0848603",
+              "bytes": 2352
+            },
+            {
+              "path": "packages/ui/native400-review-controls.mjs",
+              "sha256": "66ed00f310f84d004b003cda27b19da8d9167b8b05e364d1c2b57ec7214bebba",
+              "bytes": 5772
+            },
+            {
+              "path": "packages/ui/native400-source-review.mjs",
+              "sha256": "9cb1f7d134ee90f90aaf04356fdbc9a0aa6dcdc57184c4a54c6062435fd897fe",
+              "bytes": 1670
+            },
+            {
+              "path": "packages/ui/native400-tcp-observation.mjs",
+              "sha256": "c2e3a023df2932bff42a4b05e8c4b2ec99f360f227dd2398c5f6850b873cba5f",
+              "bytes": 1457
+            },
+            {
+              "path": "packages/ui/round-pet-observations.mjs",
+              "sha256": "0c7a65a421f998427f909af2d021df2ee9cb3f138ea7853d31071a3940508ce6",
+              "bytes": 3197
+            },
+            {
+              "path": "scripts/verify-native400-hub-snapshot.mjs",
+              "sha256": "11622c7714efe68eeeae257f9100137a4ce74cc0ff577618e082213cdf3a3edd",
+              "bytes": 2686
+            }
+          ]
+        }
+      ]
+    },
+    "view": {
+      "schema_version": 1,
+      "profile": "native400-execution-snapshot-view/1",
+      "sha256": "bb694bd2f0c930b3b2f271b387b9e60b93fa3e34cd3d8a0fd454d30939f924c7",
+      "coverage": "declared-inventory-only",
+      "files": 164,
+      "bytes": 1016343,
+      "fenced": false,
+      "removed": false,
+      "active_runs": 0,
+      "runtime_closure_proven": false,
+      "device_evidence": false
+    },
+    "actual_manager_module_executed": false,
+    "actual_consumer_or_Python_executed": false,
+    "complete_runtime_closure_proven": false,
+    "device_evidence": false,
+    "cleanup": {
+      "temporary_environment_removed": true,
+      "snapshot_removed": true
+    }
+  },
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "5c906914f3a617d93ca8c1eb52e29fe52c804b705512c33b90d53ca5cf4f8a48",
+    "docs/context/current-todos.md": "5e4a7340d2f58888b4191171133a65ba9fdacd7fe344ec9cb2e9f2c1914f52fe",
+    "docs/protocol/round-pet400-lan-input-contract.md": "47e0af9139da29ea4e656212fab4a9444989b189bb4c2829c70d216e9335bfcc",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9",
+    "apps/round-pet/reports/2026-11-05-400-pmu-probe.md": "cde3d6ebcf1af90c42157481b86309fb6ae448918fb04739533ac2f0119159fd"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "5c906914f3a617d93ca8c1eb52e29fe52c804b705512c33b90d53ca5cf4f8a48",
+    "docs/context/current-todos.md": "5e4a7340d2f58888b4191171133a65ba9fdacd7fe344ec9cb2e9f2c1914f52fe",
+    "docs/protocol/round-pet400-lan-input-contract.md": "47e0af9139da29ea4e656212fab4a9444989b189bb4c2829c70d216e9335bfcc",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9",
+    "apps/round-pet/reports/2026-11-05-400-pmu-probe.md": "cde3d6ebcf1af90c42157481b86309fb6ae448918fb04739533ac2f0119159fd"
+  },
+  "endpoint_changes_during_turn": [],
+  "actual_original_Node_child_imports_copied_dependency": true,
+  "actual_child_and_stdio_close_before_lease_release": true,
+  "declared_inventory_preflight_and_postflight_checked": true,
+  "postflight_failure_public_outcome_unknown_tested": true,
+  "original_source_changes_do_not_change_copy_tested": true,
+  "full_runtime_or_dynamic_import_closure_proven": false,
+  "actual_manager_copy_imported_or_started": false,
+  "actual_upstream_Python_or_serial_executed": false,
+  "slice_LAN_listener_started": false,
+  "slice_USB_STA_ESP": false,
+  "real_credentials_or_inventory_read": false,
+  "real_material_or_window_approval_issued": false,
+  "firmware_build_or_device_scripts_executed": false,
+  "existing_service_profile_changes": false,
+  "new_loopback_device_transport_exercised": false,
+  "previous_loopback_and_UDS_tests_regressed_in_full_suite": true,
+  "not_covered": [
+    "Real manager fresh process from complete reviewed execution bundle",
+    "Actual Python/serial/stdlib/native dependencies, interpreter environment and full loaded closure",
+    "Runtime native/system dependency hashing and armed-window latency admission",
+    "ESP PMU candidate startup/fault recovery, TCP OPEN/ACK/PRESENTED/cancel and dynamic resources",
+    "Media stream, persistent save, STATE extensions and V3"
+  ],
+  "document_links_checked": 14,
+  "source_inventory_still_matches": true,
+  "dist_runtime_matches_source": true,
+  "dist_license_current": true
+}

@@ -1,0 +1,141 @@
+{
+  "passed": true,
+  "layer": "offline-priority-poll-draft-and-sticky-provider",
+  "cases": [
+    "PRIO01 payload golden bytes and reserved fields strictly validated",
+    "PRIO02 priority HELLO capability opt-in is incompatible with legacy strict length",
+    "PRIO03 default disabled and initial unknown cannot enable hold",
+    "PRIO04 duplicate reply does not refresh freshness",
+    "PRIO05 query timeout is fail closed even if late clear arrives",
+    "PRIO06 distinct fresh query permits stable state revision without replay",
+    "PRIO07 wrong session or connection cannot provide current state",
+    "PRIO08 boot mismatch, malformed current payload and rollback fail closed",
+    "PRIO09 touch start then end cannot automatically clear the sticky stop",
+    "PRIO10 missed complete gesture between two clear polls still stops hold",
+    "PRIO11 same revision changed contents is invalid; fault cannot clear",
+    "PRIO12 disconnect and new provider require an independent initial snapshot",
+    "PRIO13 cadence, monotonic query seq, pending and clock rollback are bounded",
+    "PRIO14 option A preserves physical priority but automatically resumes refreshed remote base",
+    "PRIO15 option B provider stops real hold channel and touch end does not revive it",
+    "PRIO16 clear-snapshot versus BASE race preserves touch then stops after observed local state",
+    "PRIO17 explicit no-auto-recovery priority profile cannot revive hold after disconnect/reconnect"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 505,
+  "scope": "Pure capability/snapshot payloads and connection-bound priority provider; replay/order/expiry/generation, A/B touch semantics and genuine shared IPC/loopback model race. Default wire/owner unchanged; firmware contract remains draft; no ESP.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "full_suite": {
+    "passed": 1865,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 106394.449959
+  },
+  "checks": {
+    "syntax_exit": 0,
+    "standard_build_exit": 0,
+    "isolated_candidate_build_exit": 0
+  },
+  "old_TCP23_sources_unchanged": {
+    "packages/runtime/native400-pet-hold-source.mjs": true,
+    "packages/runtime/native400-pet-bridge.mjs": true,
+    "packages/runtime/native400-node-control-channel.mjs": true,
+    "packages/core/native400-node-control-access.mjs": true,
+    "tests/native400-pet-hold.test.mjs": true,
+    "scripts/observe-native400-pet.mjs": true,
+    "scripts/verify-native400-pet-hold.mjs": true
+  },
+  "default_wire_owner_unchanged": {
+    "packages/core/native400-tcp.mjs": true,
+    "packages/core/native400-tcp-control.mjs": true,
+    "packages/runtime/native400-tcp.mjs": true,
+    "packages/runtime/native400-tcp-owner.mjs": true
+  },
+  "new_sources": {
+    "packages/core/native400-priority-draft.mjs": "c88553e06e539d03e1f1835a3fb07aab4702e8406445e9035c1e22b93039b04d",
+    "packages/runtime/native400-priority-provider.mjs": "e03e3fb20663c6939d5abd6bdc05b54640907163a8ac1d7df085aec733636494",
+    "tests/native400-priority-provider.test.mjs": "de40f899aeb72e3d41826df2db2db5bbefca25e4f2ae803bd4cf058fd03403e3",
+    "scripts/verify-native400-priority-provider.mjs": "7754fd9f8489600c4c40bee52ed35d3553672b8363e9d2b93e8dafe49553ca7e"
+  },
+  "candidate_artifacts": {
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+    "dist-dsh022/packages/runtime/native400-priority-provider.mjs": "e03e3fb20663c6939d5abd6bdc05b54640907163a8ac1d7df085aec733636494",
+    "dist-dsh022/packages/core/native400-priority-draft.mjs": "c88553e06e539d03e1f1835a3fb07aab4702e8406445e9035c1e22b93039b04d"
+  },
+  "upstream_readonly_references": {
+    "control_bridge.h": "0ab8887baf4c836edfd915b48d3e9be4baf755d38025e66add2cae99da93967c",
+    "control_transport.h": "48697e51de0d9d25f8efd968f7fda02a1aae7d7930528ac29c8df91f45a86e09"
+  },
+  "product_decision": {
+    "A_endpoint_arbitration_protects_touch": true,
+    "A_auto_resumes_latest_remote": true,
+    "B_preserves_TCP23_sticky_stop": true,
+    "network_profile_requires_autoRecover": false,
+    "product_policy_changed": false
+  },
+  "draft": {
+    "profile": "ptc1-priority-poll/1",
+    "hello_payload_bytes": 64,
+    "snapshot_payload_bytes": 32,
+    "tentative_query_type": 5,
+    "tentative_snapshot_type": 131,
+    "max_query_hz": 2,
+    "query_deadline_ms": 250,
+    "snapshot_max_age_ms": 1000,
+    "application_bytes_per_second": 192,
+    "jointly_frozen": false,
+    "full_frame_codec_installed": false,
+    "Node_CPP_crosscheck": false,
+    "endpoint_implementation": false,
+    "ESP_verified": false
+  },
+  "pet": {
+    "installed_snapshot": {
+      "installed_version": "0.4.3",
+      "package_sha256": "f4b4de4a5b9206e9608730fffa3b3b92e6ec287641fb33efc68307223c971d35",
+      "state_route_sha256": "0a6e42fe92ce22ae21ccbcc4a921d4cf0e0a0e591d6f0c79660aba4376a58832",
+      "runtime_loaded_version_attested": false
+    },
+    "process_start_executable_read_without_args_env": true,
+    "runtime_loaded_identity_attested": false,
+    "old_endpoint_attempt_discarded": true,
+    "valid_observation_ms": 10000,
+    "valid_samples": 20,
+    "states": [
+      null
+    ],
+    "transitions": 0,
+    "unavailable": 0,
+    "natural_task_transition_verified": false,
+    "minimum_runtime_proof_provider": "actual host/plugin owner: load-time build identity + registration generation + host instance via authenticated read-only diagnostics"
+  },
+  "resource_limits": {
+    "provider_timers": 0,
+    "provider_sockets": 0,
+    "max_pending_queries": 1,
+    "max_retained_snapshots": 1,
+    "endpoint_counter_bytes_minimum_logical": 16,
+    "endpoint_RAM_stack_measured": false
+  },
+  "cleanup": {
+    "isolated_environment_removed": true,
+    "new_profile_started": false,
+    "production_listener_started": false,
+    "existing_service_restarted_by_task": false,
+    "pet_write_calls": false,
+    "ESP_USB_access": false,
+    "upstream_written": false,
+    "credentials_read": false,
+    "commit_push": false
+  },
+  "document_audit": {
+    "relative_links": 705,
+    "broken": 0,
+    "trailing_whitespace": 0
+  }
+}

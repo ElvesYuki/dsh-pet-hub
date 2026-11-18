@@ -1,0 +1,140 @@
+{
+  "passed": true,
+  "layer": "explicit-pet-hold-state-with-independent-lifetimes",
+  "cases": [
+    "HOLD01 fresh same counter holds with a new bounded BASE at low water",
+    "HOLD02 stale response during controls await stops and withdraws own target",
+    "HOLD03 expired target is never resurrected by unchanged source",
+    "HOLD04 manual CAS race is not overwritten or cancelled",
+    "HOLD05 local touch stops holding without interrupting local priority",
+    "HOLD06 default unknown priority cannot start a hold target",
+    "HOLD07 pause stops renewals and original target cannot gain deadline",
+    "HOLD08 control authority low budget is independent of source window",
+    "HOLD09 observation source low budget cannot borrow long control authority",
+    "HOLD10 real lane source window cannot be replaced by page grant remaining",
+    "HOLD11 unknown renewal freezes reads and confirms identical body; stale then withdraws",
+    "HOLD12 source clock rollback fails closed and withdraws only own intent",
+    "HOLD13 close aborts pending HTTP and no late result submits",
+    "HOLD14 attaching pages never extends source or authority windows",
+    "HOLD15 missing limits capability refuses hold but legacy view remains parsable",
+    "HOLD16 cloned source and arbitrary page cache cannot mint trusted receipts",
+    "HOLD17 counter rollback stops without a new generation being silently created",
+    "HOLD18 unsupported semantic never becomes idle or another cached action",
+    "HOLD19 controls roundtrip age is deducted from page and lane budgets",
+    "HOLD20 fresh explicit unknown confirmation preserves original remaining TTL",
+    "HOLD21 closed source generation stops and withdraws old target",
+    "HOLD22 confirming a lost ACK cannot cancel a later manual target",
+    "HOLD23 explicit HTTP source failure stops and withdraws its own target",
+    "HOLD24 slow HTTP arrival cannot stamp old in-flight data fresh"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 2165,
+  "scope": "Original HTTP response-liveness receipts, genuine audited shared IPC and real loopback TCP/model; freshness, monotonic source generation, distinct lane/authority budgets, ownership/CAS, local priority, exact unknown confirmation, expiry and cleanup. No ESP or real task-transition claim.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "full_suite": {
+    "tests": 1848,
+    "passed": 1848,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 112762.668375
+  },
+  "checks": {
+    "syntax_exit": 0,
+    "standard_build_exit": 0,
+    "isolated_candidate_build_exit": 0
+  },
+  "event_regression": {
+    "passed": 20
+  },
+  "observation": {
+    "duration_ms": 15000,
+    "samples": 30,
+    "states": [
+      null
+    ],
+    "semantic_or_counter_transitions": 0,
+    "unavailable": 0,
+    "natural_task_transition_verified": false,
+    "real_disconnect_induced": false,
+    "write_calls": false,
+    "task_submitted": false
+  },
+  "installed_pet": {
+    "installed_version": "0.4.3",
+    "package_sha256": "f4b4de4a5b9206e9608730fffa3b3b92e6ec287641fb33efc68307223c971d35",
+    "compiled_client_sha256": "5e1486543c144d34cde6fb3b2688bb87a2212276ea2e95e380a1aeb4baadfa6a",
+    "compiled_host_sha256": null,
+    "running_loaded_version_attested": false,
+    "selected_hashes_stable_this_turn": true,
+    "process_start_and_executable_read": true,
+    "process_environment_or_arguments_read": false,
+    "listener_pid_unchanged": true,
+    "runtime_loaded_SHA_attested": false
+  },
+  "hold_contract": {
+    "opt_in": true,
+    "default": "event",
+    "ttl_ms": 5000,
+    "low_water_ms": 2000,
+    "sample_max_age_ms": 1500,
+    "observation_window_max_ms": 120000,
+    "each_remaining_budget_must_exceed_ms": 7500,
+    "controls_roundtrip_deducted": true,
+    "priority_default": "unknown",
+    "actual_ESP_priority_provider_implemented": false,
+    "source_receipts_and_context_immutable": true
+  },
+  "artifact_hashes": {
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+    "dist-dsh022/packages/runtime/native400-pet-hold-source.mjs": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+    "dist-dsh022/packages/runtime/native400-pet-bridge.mjs": "e65d2a48f405383393553e82c0fe8d6a4a485211c2af773dc45e4e8c5d6665e2"
+  },
+  "source_hashes": {
+    "packages/runtime/native400-pet-hold-source.mjs": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+    "packages/runtime/native400-pet-bridge.mjs": "e65d2a48f405383393553e82c0fe8d6a4a485211c2af773dc45e4e8c5d6665e2",
+    "packages/runtime/native400-node-control-channel.mjs": "c56bfd36b0a6999e15acfeb52fab066e069ed4d5d8ffc4a445d528828081bcf3",
+    "packages/core/native400-node-control-access.mjs": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+    "tests/native400-pet-hold.test.mjs": "b89f210ef92ffa07dedcb8f0115bc352a467b24c73408b3af24373c0951581f7",
+    "scripts/observe-native400-pet.mjs": "bae191a3d5658f6c4461c59de49c2b454f5873f5929778235003fdb6d648f4fd",
+    "scripts/verify-native400-pet-hold.mjs": "2dc1eb4f605e7ab5f335431a3c5aa040055c1d5a3216eae7ee6e8b73ad682813"
+  },
+  "wire_and_owner_unchanged": {
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/core/native400-tcp-control.mjs": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-tcp-owner.mjs": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8"
+  },
+  "evidence_levels": {
+    "HTTP_IPC_TCP_loopback": true,
+    "virtual_clocks_and_device_model": true,
+    "real_public_pet_reads": true,
+    "real_pet_hold_activated": false,
+    "new_DSH_profile_this_turn": false,
+    "real_ESP_access": false
+  },
+  "cleanup": {
+    "isolated_test_environment_removed": true,
+    "bridge_timer_and_reader_close_tested": true,
+    "existing_services_modified": false,
+    "RSS_hard_budget_measured": false
+  },
+  "boundaries": {
+    "upstream_repository_written": false,
+    "ESP_USB_access": false,
+    "pet_write_API": false,
+    "new_DSH_session_listener": false,
+    "account_configuration_read": false,
+    "commit_push": false
+  },
+  "document_audit": {
+    "relative_links_checked": 678,
+    "broken": 0,
+    "trailing_whitespace": 0
+  }
+}

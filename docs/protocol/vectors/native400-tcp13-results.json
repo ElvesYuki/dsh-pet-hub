@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "private-file-and-fake-consumer-lifecycle-host-only",
+  "tests": {
+    "specialized_and_isolated": 24,
+    "check": "passed",
+    "full_with_build": 1628,
+    "full_exit_code": 0,
+    "full_wall_ms": 99746.785833,
+    "final_build_exit_code": 0
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 344,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "FILE01 private complete JSON is readable only during the single consumer then file and lock exit",
+    "FILE02 unknown and rejected complete cleanup without retrying a consumer",
+    "FILE03 raw exception text or spoofed code cannot leak sensitive strings through public errors",
+    "FILE04 non-contract consumer results are unknown with cleanup and no raw result projection",
+    "FILE05 same-directory contender cannot touch winner files or close its consumer",
+    "FILE06 one consumer object cannot be reused as an automatic second USB attempt",
+    "FILE07 close fences immediately but waits ignored abort and discards late queued",
+    "FILE08 run settlement alone does not remove a file before consumer close actually exits",
+    "FILE09 external abort uses the same session close and preserves ownership until run exits",
+    "FILE10 deadline before consumer start cannot pretend an ignored hook already released its file",
+    "FILE11 guard invalidated during async staging prevents consumer admission",
+    "FILE12 guard failure during consume aborts once without accepting late success",
+    "FILE13 pre-aborted session creates no files and never claims a consumer",
+    "FILE14 uncertain consumer close holds lock and plaintext; explicit cleanup retry does not rerun",
+    "FILE15 failed unlink occurs after visible truncate and retains lock until explicit cleanup",
+    "FILE16 failed unlock retains only its own lock and cleanup never repeats consumer close",
+    "FILE17 swapped sensitive pathname cannot cause deletion or truncation of a foreign symlink target",
+    "FILE18 replaced lock inode is never removed as if it belonged to this session",
+    "FILE19 invalid config unsafe parent and asynchronous guards fail without a consumer run",
+    "FILE20 failed staging write cleans file and lock before reporting not-started",
+    "FILE21 genuine audit and reviewed request reject an unstarted owner before touching staging",
+    "FILE22 duck-typed request cannot bypass the reviewed handoff into private file I/O",
+    "FILE23 cleanup leaves pre-existing parent files alone and public state has no secrets paths or digest",
+    "FILE24 cancellation after known queued preserves that history without claiming it was withdrawn"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-private-config-session.mjs": "a112a65d443114202eb0337b4ab9a16cccb8c17732a92d33b157cdc39aae49b2",
+    "packages/runtime/native400-reviewed-lan-request.mjs": "b6224c9f35d5e1b241e70815141b655c30935e6e52dcf07cd35d6eba24d09d6e",
+    "packages/runtime/native400-tcp-lan-host.mjs": "db71e6d9a85f4824a0699d4d1c633516be02250bdfb0bca10bef6f3f1ede6d00",
+    "tests/native400-private-config-session.test.mjs": "290c5121518702e7f3fb37b273af5b27de0cb3027d44397d4f90bfea42ad21de",
+    "scripts/verify-native400-private-config-session.mjs": "f1f486f902158bbc880210bdce2ee5c0b44fbcbc6bbb2d163fcfec1bd8bd4423"
+  },
+  "existing_source_changes": [
+    "packages/runtime/native400-reviewed-lan-request.mjs",
+    "packages/runtime/native400-tcp-lan-host.mjs"
+  ],
+  "unchanged_transport_source_service_sha256": {
+    "packages/runtime/native400-tcp-lan-request.mjs": "7dca9133089f975f099c2c70447160c198f5db88260b248ad4d67fddc784d4df",
+    "packages/runtime/native400-tcp-lan-profile.mjs": "664cf33e2ba53d48042bcd87d8a5a5c8f1c091e510e3df5acd0b98d5c4764410",
+    "packages/runtime/native400-tcp-owner.mjs": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-lan-input-audit.mjs": "e39bcd808588abad915fd8e0786a4f923061936159995726ea2c0a768b7ec64f",
+    "packages/runtime/service.mjs": "e1f83c1bbb63f23ee7ac9b79b5500b9fc744509a5f781f7b1925930cfdf79e44"
+  },
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9"
+  },
+  "endpoint_changes_during_turn": [],
+  "actual_private_files_fds_and_wx_competition": true,
+  "fake_consumer_only": true,
+  "unknown_cleanup_holds_ownership": true,
+  "explicit_cleanup_does_not_rerun": true,
+  "symlink_target_and_foreign_lock_preserved": true,
+  "sensitive_public_error_text_filtered": true,
+  "actual_UDS_unstarted_owner_rejection": true,
+  "actual_LAN_config_handoff": false,
+  "actual_new_TCP_listener": false,
+  "actual_serial_or_subprocess_consumer": false,
+  "service_close_barrier_integrated": false,
+  "secure_physical_erasure_claimed": false,
+  "real_credentials_or_usage_approval": false,
+  "real_USB_STA_ESP": false,
+  "firmware_scripts_or_builds_executed": false,
+  "existing_service_or_DSH_profile_changed": false,
+  "not_covered": [
+    "Real serial/subprocess consumer adapter and actual fd/process exit",
+    "Service-wide session/request/TCP/audit shutdown ownership barrier",
+    "Successful genuine LAN handoff and captured source/epoch/window guard during real consume",
+    "Real purpose/index-responsibility acceptance and fresh device inventory/backup",
+    "Actual STA resources latency worker-View cleanup 400fps; STATE media persistence V3"
+  ],
+  "document_links_checked": 14,
+  "source_hashes_match": true,
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "endpoint_final_recheck_changes": []
+}

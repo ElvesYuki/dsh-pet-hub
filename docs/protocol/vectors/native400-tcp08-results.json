@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "independent-LAN-transport-window-loopback-rehearsal-only",
+  "tests": {
+    "specialized_and_isolated": 13,
+    "check": "passed",
+    "full_with_build": 1537,
+    "full_exit_code": 0,
+    "full_wall_ms": 102811.676791
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 82,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "LAN01 separate closed decision rejects offline options and wrong purpose",
+    "LAN02 exact four identity and namespace/index mapping are pinned",
+    "LAN03 endpoint classes cannot turn rehearsal into real LAN by a field flip",
+    "LAN04 prepare has no interface IO and cloned token cannot be acquired",
+    "LAN05 real LAN branch checks exact selected NIC without binding a LAN socket",
+    "LAN06 one owner and one claim only; source mutation does not change snapshot",
+    "LAN07 actual loopback window requires explicit enable and link, hides endpoint",
+    "LAN08 waiting listener expires even without a device and cannot reopen",
+    "LAN09 paused window still closes actual active socket on deadline",
+    "LAN10 interface loss and enumerate errors permanently fence window",
+    "LAN11 deadline starts at preparation, clock rollback cannot mint new lifetime",
+    "LAN12 explicit endpoint override/fixed ports rejected and old owner stays offline only",
+    "LAN13 expiry fences incoming HELLO before OPEN even before timer tick"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-tcp-lan-profile.mjs": "368ac0eceaa3fbd869bd4f56570a3c8490c74c74af30379bf6eee808d6db3aa6",
+    "packages/runtime/native400-tcp-lan-owner.mjs": "3549d191df49058ffa476d9f1d05684ffc7ef16ef9d277822d2c884862905bd4",
+    "packages/runtime/native400-tcp-owner.mjs": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "tests/native400-tcp-lan.test.mjs": "f4882c54160ac08448e7991b629216132c084652f0cc25fbaba07ba86898a477",
+    "scripts/verify-native400-tcp-lan.mjs": "770468f5b48c2c98cdd808f311fb2d9cc0e382b6ce56912246ac39da73baf404"
+  },
+  "tcp07_source_unchanged": {
+    "packages/core/native400-tcp-host-view.mjs": true,
+    "packages/runtime/native400-tcp-host.mjs": true,
+    "packages/runtime/native400-tcp-binding.mjs": true,
+    "packages/runtime/service.mjs": true,
+    "tests/native400-tcp-host.test.mjs": true,
+    "tests/fixtures/native400-tcp-host-child.mjs": true,
+    "scripts/verify-native400-tcp-host.mjs": true
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "751d973a9925c33d7237ac1ad3560bad63375170e6f8dc30d0756b01ae13275d",
+    "docs/context/current-system.md": "fd31508bb1f0cf1ce5c41ba55fc95029898d46b20a2c25287c597e2d3827fb13",
+    "docs/context/current-todos.md": "e986661a47d0dd39f41a92502c46ff139f2c4c7499c25bf5a119abf3bc9fac02",
+    "docs/protocol/round-pet400-sta-bootstrap.md": "9f986fb7fe1a2340a17f33f8e8bf6d7cfc2763e50b26ae6c33c4e4dc0aca13f5",
+    "apps/round-pet/reports/2026-11-05-400-sta-bootstrap.md": "b583f9643ba26972706b6be53a02423567df00dec6b30c04e57d532650269886",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/station_bootstrap_firmware.h": "cc56710cdbbb88d3570d10b19000186224cd2f73e21f42fc863c4fd3a46d08d7",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/station_bootstrap_firmware.cpp": "6b9671d513a0c8c4e00cd45e373dd7f1bc275e0fbfce3b4a362f45e1d67d27c7"
+  },
+  "actual_loopback_rehearsal": true,
+  "LAN_preflight_injected_NIC_only": true,
+  "actual_LAN_bind": false,
+  "esp_connected": false,
+  "STA_executed": false,
+  "production_service_or_config_changed": false,
+  "real_material_or_cache_read": false,
+  "real_source_or_license_approved": false,
+  "decision_references_are_caller_declarations": true,
+  "old_offline_grant_upgraded": false,
+  "new_wire": false,
+  "LAN_single_instance_host_integrated": false,
+  "upstream_evidence_not_rerun": {
+    "tool_tests": 182,
+    "station_image_sha256": "f8e0f56f5e5779395f4b2ae6d28d05bea062aca3e5f2265525ed5c0af408583b",
+    "station_image_bytes": 1208480,
+    "station_dram_delta": 35616,
+    "station_iram_text_delta": 26700,
+    "psram_bytes": 4439288,
+    "undeployed": true,
+    "device_prefix": "f5538cb9"
+  },
+  "not_covered": [
+    "R0 real source and role usage approval",
+    "LAN dedicated single-instance host and trusted config provider",
+    "actual NIC LAN STA ESP dynamic resources worst latency and worker/View",
+    "rich STATE TCP media persistent save V3"
+  ],
+  "endpoint_recheck_changes": [],
+  "document_links_checked": 13,
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "final_build_exit_code": 0
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "profile": "native400-interactive-host-review/1",
+  "date": "2026-11-03",
+  "source_kind": "original-test",
+  "license_ref": "MIT",
+  "scope": "offline-validation-only",
+  "fixture_bytes": 29360128,
+  "fixture_description": "Original sparse metadata/payload fixture; not a real role/install image.",
+  "device_evidence": false,
+  "tests": {
+    "focused": 42,
+    "isolated": 42,
+    "full": 1395,
+    "check": "syntax-only-passed",
+    "build": "passed"
+  },
+  "isolation": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 4222,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "400-14-01 controls are opaque opt-in with independent stable identity and bounded policy",
+    "400-14-02 ordinary source review remains readonly without interactive owner",
+    "400-14-03 concurrent election constructs only one controller and attached clients get no grant issuer",
+    "400-14-04 readonly and different controls policy cannot attach or upgrade existing instance",
+    "400-14-05 global status and descriptor never contain private channel or selected reference",
+    "400-14-06 existing IPC bearer alone and wrong review token cannot read or control private channel",
+    "400-14-07 owner issued channel without explicit source selection grants no read or write target",
+    "400-14-08 exact UDS start admission deduplicates without reread or second commit",
+    "400-14-09 trusted fresh selection allows historical revalidation without changing revision",
+    "400-14-10 targeted cancel waits actual source I/O exit and preserves uncommitted journal",
+    "400-14-11 owner revocation rejects old channel and cannot be used to revoke its replacement",
+    "400-14-12 expired monotonic authority fails closed without polling renewal",
+    "400-14-13 pinned scoped client refuses replacement instance before sending old review credential",
+    "400-14-14 no IPC or page route can authorize choose reopen repair or set approval",
+    "400-14-15 absent page provider keeps default plugin readonly even for holder of IPC client",
+    "400-14-16 GET requires private page identity and does not issue or renew selections",
+    "400-14-17 POST exact origin host and same-origin fetch metadata gate all precede admission",
+    "400-14-18 origin alone cannot create page identity and GET cross-origin also refuses",
+    "400-14-19 provider requires fixed concrete loopback origin not arbitrary website or origin aliases",
+    "400-14-20 real HTTP to authenticated UDS reaches actual reader and persistent source result",
+    "400-14-21 strict HTTP rejects duplicate fields bad UTF8 and oversize bodies with bounded safe errors",
+    "400-14-22 strict UDS independently rejects duplicate JSON before controller admission",
+    "400-14-23 page cannot smuggle filesystem selection approvals or budgets in a start",
+    "400-14-24 private response envelope strips injected paths and rejects incoherent grant identity",
+    "400-14-25 proxy independently rejects malformed private response without leaking internal errors",
+    "400-14-26 unload before delayed identity resolution never forwards an admitted write",
+    "400-14-27 proxy unloading does not cancel admitted shared work or stop owner",
+    "400-14-28 owner shutdown fences writes and retains socket until actual I/O exits",
+    "400-14-29 unknown commit projects blocked then only historical reopen can recover",
+    "400-14-30 original wire golden and original map identity remain unchanged",
+    "400-14-31 shared component uses private proxy transport for explicit review with no grant in render tree",
+    "400-14-32 shared component readonly fallback has no active buttons or path input",
+    "400-14-33 lost accepted response retains exact request and manual confirmation never rereads or recommits",
+    "400-14-34 rejected start clears pending without automatic new write and does not claim completion",
+    "400-14-35 component cancel uses displayed job and keeps cancelling until actual I/O exit",
+    "400-14-36 component unmount aborts only its request and never invokes shared cancellation",
+    "400-14-37 replacement private session disables old uncertain request confirmation",
+    "400-14-38 delayed polling response cannot overwrite a newer admitted operation view",
+    "400-14-39 built plugin candidate mounts controls through settings slot and executes actual HTTP UDS review",
+    "400-14-40 old ACK replay never consumes a newer trusted selected reference",
+    "400-14-41 incomplete authorized HTTP body expires without admitting work",
+    "400-14-42 body-reader own cancellation exits immediately without waiting for peer end"
+  ],
+  "source_comparison": {
+    "existing_files": 339,
+    "unchanged": 332,
+    "changed": [
+      "apps/dsh-plugin/client.mjs",
+      "apps/dsh-plugin/index.mjs",
+      "packages/runtime/client.mjs",
+      "packages/runtime/native400-source-review-host.mjs",
+      "packages/runtime/service.mjs",
+      "packages/ui/index.mjs",
+      "scripts/build.mjs"
+    ],
+    "added": [
+      "packages/ui/native400-review-controls.mjs",
+      "packages/core/native400-review-access.mjs",
+      "packages/runtime/native400-review-channel.mjs",
+      "scripts/verify-native400-14.mjs",
+      "tests/native400-14.test.mjs"
+    ],
+    "deleted": []
+  },
+  "fixed_wire": {
+    "packages/core/native400-wire-contract.json": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "docs/protocol/vectors/native400-03-wire-v1.json": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "original_map_sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+  "not_validated": [
+    "real-browser-react-dom",
+    "DSH-user-identity",
+    "native-file-picker",
+    "interactive-DSH-profile-load-reload-unload",
+    "real-media-usage-approval",
+    "device-or-production-admission"
+  ],
+  "defaults": {
+    "controls": "absent-unless-trusted-programmatic-opt-in",
+    "plugin_review_provider": "absent",
+    "device_transport": false,
+    "production_listener": false
+  }
+}

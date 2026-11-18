@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "internal-bridge-event-review-only-not-joint-wire",
+  "tests": {
+    "specialized_and_isolated": 21,
+    "explicit_cpp_header_suite": 21,
+    "final_full_with_build": 1482,
+    "syntax_check": "passed",
+    "final_full_exit_code": 0,
+    "observed_full_wall_ms": 101974.28725,
+    "build": "dist candidate built; not installed or enabled"
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 82,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "BR01 opt-in and exact four recovered identities required",
+    "BR02 WholeSha source0 does not imply CRC or first frame",
+    "BR03 FrameReady binds source/mail only after file stage",
+    "BR04 Presented exact full stamp records View completion not scan/I/O",
+    "BR05 remote Completed cycles do not require repeated SHA/FrameReady or create new Presented",
+    "BR06 touch FrameReady is not touch Presented; Completed is not actual I/O exit",
+    "BR07 ConnectionClosed is not Touch Completed; old transport telemetry ignored",
+    "BR08 old close and overflow hint cannot invalidate new transport",
+    "BR09 old token/cycle/source cannot replace latest frame stage",
+    "BR10 invalidation and failure are history, never physical exit proof",
+    "BR11 connected/ACK ignore playback stamp and do not manufacture progress",
+    "BR12 unknown current schema fails closed without raw error leakage",
+    "BR13 duplicate completion not repeated; uint64 beyond2^53 preserved",
+    "BR14 close preserves historical observation, rejects further events",
+    "BR15 impossible View completion time fails closed",
+    "BR16 explicit endpoint header host events can be consumed, without copying/running firmware",
+    "BR17 later loop cannot manufacture a second Presented for the same remote token",
+    "BR18 orphan remote Completed does not manufacture a verified stage",
+    "BR19 local random cycle may complete without suppressed local stage telemetry",
+    "BR20 wrong remote session/request cannot poison correlated current target",
+    "BR21 remote stage requires trusted local target selection, not an event claim"
+  ],
+  "source_sha256": {
+    "packages/core/native400-bridge-events.mjs": "a1d5bb1abfdc091c6e82e2d38e1a9f4e5d390c2e06996e1b0c9170a21eeacdfb",
+    "tests/native400-bridge-events.test.mjs": "f46f90a16605b07104696f3bcbde7865f421bf638d11311aaad61565bf38ae8e",
+    "scripts/verify-native400-bridge-events.mjs": "ed9b3300c4a724a8683737a9f24a8a7ce4e9e06d5121d22ba0cfddd765a813a7",
+    "native/native400-bridge-events-check.cpp": "44de6e1e1dffce0c4bdf111df5ff2d1472f38f1507c15f7ebce27f4c2946e7e1"
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "cb3f525b5d2516a6493db0b865acef0336d6e3fb04d43aca85a613f923f27bb9",
+    "docs/context/current-system.md": "0fff1d4027de33710a6ce9408154e7101b938e4683d9110b635202f8c3f27da5",
+    "docs/context/current-todos.md": "5486f0df85a0fd888fc3cb0ebb278b98c26954957dfd84608751b0852d3d0a88",
+    "docs/protocol/round-pet400-control-bridge.md": "52d073115d63c24fe82d4fc5c29c1f00e8b912b5e80ab3fe31e515e4fefc665a",
+    "docs/protocol/round-pet400-tcp-control-draft.md": "ee6cdc521b97d7e752dcc647673206b4187a305b4e95de91877b2b4bbbc0b7ba",
+    "apps/round-pet/reports/2026-11-04-400-control-bridge.md": "fe090bbcefa802a84d9b55d58ab61e1d7dd04d323dabc08f69b48a373951cc91",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_bridge.h": "5aedf656a73f191f65dcf6fef294e4da3b46ce9c7e2eb049eec109480912d828",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/tcp_control_draft.h": "fb0f94b687af6a74d6a32e1c98767df5a744906d0d592632cde72848fafcfb12",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/app_main.cpp": "1071f74322aa02ea9b148c2e173648057a2144ad81d04755ed46b2bc998679ad",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_transport.h": "48697e51de0d9d25f8efd968f7fda02a1aae7d7930528ac29c8df91f45a86e09",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/CMakeLists.txt": "937235a5ec1f4e97098b6f352929a1db89de824f766e2a52213111063dcd8607"
+  },
+  "prior_sources_unchanged": {
+    "tcp02": true,
+    "tcp03": true
+  },
+  "explicit_cpp": {
+    "executed": true,
+    "original_driver_readonly_external_header": true,
+    "asserted_counts": {
+      "Presented": 1,
+      "Completed": 3,
+      "WholeSha": 2
+    },
+    "worker_source_decoder_view_flash_executed": false,
+    "firmware_scripts_executed": false,
+    "new_binary_vectors": false,
+    "compiled_with": "Apple clang 21.0.0 / C++17"
+  },
+  "wire_types_allocated": false,
+  "owner_integrated": false,
+  "new_loopback_interop": false,
+  "esp_verified": false,
+  "production_enabled": false,
+  "whole_media_proof": false,
+  "saved_or_offline_inventory": false,
+  "upstream_report_not_rerun": {
+    "default_image_sha256": "f2cfaa4a9b83c6a04a404277c6fc2a0c27aa8c7e599cb295a83d1fdb3a6e0063",
+    "adapter_image_sha256": "9dc15171339eb72b9ae92c71da47298b232e18f50dff8438c311ba5ba8dc58ea",
+    "both_undeployed": true,
+    "board_prefix": "f5538cb9",
+    "static_control_bytes": 3896,
+    "dram_delta_bytes": 3904,
+    "explicit_psram_bytes": 4439288,
+    "tool_tests": 174,
+    "lvgl_pixel_checks": [
+      1564,
+      725
+    ],
+    "spsc_tsan_events": 50000
+  },
+  "unreported_draft_source": "control_transport.h read-only v0 callback Core; not executed/compiled by this phase and not included by app_main in observed source",
+  "not_covered": [
+    "joint wire/capability/length and report ordering/snapshot contract",
+    "real namespace/index/mapping and usage approval",
+    "TCP02 owner integration and new binary/loopback interop",
+    "actual socket owner/drain and Wi-Fi resources/tasks/deadlines",
+    "physical touch/View/ESP/LAN/400@24",
+    "TCP media stream/persistence/V3"
+  ],
+  "readonly_snapshot_rechecked_unchanged": true
+}

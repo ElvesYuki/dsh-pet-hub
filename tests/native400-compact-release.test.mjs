@@ -1,0 +1,20 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mkdirSync,mkdtempSync,writeFileSync,readFileSync,rmSync} from 'node:fs';import {join} from 'node:path';
+import {sha256} from '../packages/runtime/material-import.mjs';import {planCompactRelease,finalizeCompact,COMPACT_RECIPE} from '../scripts/finalize-native400-compact.mjs';import {MERGED_RECIPE} from '../scripts/merge-native400-candidates.mjs';
+function fixture(){
+ const base={profile:'native400-candidate-v1',recipe:MERGED_RECIPE,license_ref:'dsh-pet-nc-86181ce',catalog_sha256:sha256('source catalog'),geometry:{crop:[124,-6,400,400],display:[466,466],offset:[33,33],extra_mask:false},actions:Array.from({length:78},(_,id)=>({id,name:'action'+id,source_sha256:sha256('source'+id),bytes:1000,sha256:sha256('base'+id),index_sha256:sha256('index'+id),rgb565_sha256:sha256('rgb'+id),frames:id===42?118:241}))};
+ const review={schema:'native400-preprocess-review/1',profile:base.profile,license_ref:base.license_ref,baseline_manifest_sha256:sha256(JSON.stringify(base)),geometry:structuredClone(base.geometry),tiers:[{key:'compact',spatial:18,temporal:5,colorCap:128,colorRatio:0.75}],validation:{all_frames_crc_and_pixel_hashes:true,actions:78,variants:78,candidate_frames:18675},actions:base.actions.map(a=>({id:a.id,name:a.name,source_sha256:a.source_sha256,frames:a.frames,fps:24,baseline:{bytes:a.bytes,sha256:a.sha256,index_sha256:a.index_sha256,rgb565_sha256:a.rgb565_sha256,palette_colors:256},variants:[{key:'compact',recipe:'source400-flat-smoothing-bounded-temporal-palette-hc12-v1',parameters:{spatial:18,temporal:5,max_colors:128},bytes:900,bytes_saved:100,within_legacy_limit:true,sha256:sha256('compact'+a.id),index_sha256:sha256('compact-index'+a.id),rgb565_sha256:sha256('compact-rgb'+a.id),verification:'independent_js_all_frames_crc_index_rgb565_size_sha_seeks_and_source_black'}]}))};return {base,review};
+}
+function plan(base,review,override={}){const raw=JSON.stringify(review);return planCompactRelease(JSON.stringify(base),raw,{approvedReviewSha256:sha256(raw),approveVisuals:true,...override});}
+test('compact release binds all78 visual approval and preserves new pixels, source, geometry and actual118 timing',()=>{
+ const {base,review}=fixture(),m=plan(base,review);assert.equal(m.recipe,COMPACT_RECIPE);assert.equal(m.actions.length,78);assert.equal(m.actions[42].frames,118);assert.equal(m.total_bytes,70200);assert.equal(m.visual_approval.action_ids.length,78);assert.equal(m.review_manifest_sha256,sha256(JSON.stringify(review)));
+ for(const a of m.actions){assert.equal(a.sha256,review.actions[a.id].variants[0].sha256);assert.equal(a.source_sha256,base.actions[a.id].source_sha256);assert.equal(a.verified_lossless_rgb565,false);assert.equal(a.palette_mae_rgb,undefined);}
+ assert.throws(()=>plan(base,review,{approveVisuals:false}),/visual_approval_required/);assert.throws(()=>plan(base,review,{approvedReviewSha256:sha256('different reviewed manifest')}),/review_approval_sha/);
+});
+test('compact release rejects identity, missing actions, timing, processing drift, cap and invalid proofs',()=>{
+ const mutations=[r=>{r.baseline_manifest_sha256=sha256('other parent');},r=>{r.actions.pop();},r=>{r.actions[42].frames=241;},r=>{r.actions[0].source_sha256=sha256('wrong source');},r=>{r.actions[0].baseline.sha256=sha256('wrong original');},r=>{r.geometry.crop[0]++;},r=>{r.actions[0].variants[0].parameters.temporal=8;},r=>{r.actions[0].variants[0].parameters.max_colors=64;},r=>{r.actions[0].variants[0].bytes=5865473;},r=>{r.validation.all_frames_crc_and_pixel_hashes=false;}];
+ for(const mutate of mutations){const {base,review}=fixture();mutate(review);assert.throws(()=>plan(base,review));}
+});
+test('compact release refuses output overwrite before any source access',()=>{
+ mkdirSync('.cache',{recursive:true});const dir=mkdtempSync(join(process.cwd(),'.cache','compact-release-test-'));
+ try{writeFileSync(join(dir,'keep'),'original');assert.throws(()=>finalizeCompact('missing','missing',dir,{}),/output_exists/);assert.equal(readFileSync(join(dir,'keep'),'utf8'),'original');}finally{rmSync(dir,{recursive:true,force:true});}
+});

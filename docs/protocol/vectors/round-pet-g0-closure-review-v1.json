@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "status": "read_only_evidence_review_not_approval",
+  "review_date": "2026-11-02",
+  "scope": "native360 single-device; no hardware or production operations",
+  "automated_admission_gate": false,
+  "joint_g0_closed": false,
+  "g1_full_maintenance_passed": false,
+  "g2_device_tls_verified": false,
+  "device_admitted": false,
+  "production_enabled": false,
+  "approval_created": false,
+  "cas_import": false,
+  "firmware": {
+    "head": "9816317ae5ac6f86c982ef773461de595f407747",
+    "dirty_entries_at_initial_read": 186,
+    "selected_evidence_files": 38,
+    "initial_snapshot_all_files_stable": false,
+    "concurrent_context_changes": [
+      {
+        "path": "docs/context/current-status.md",
+        "initial_sha256": "978ce73d02bf86e38bd77f63c959536487b9df517779ccca93f21ed6d8c96e97",
+        "reviewed_sha256": "05310a80322a02c1acf48f2f4dc91c9d1d90d755f1e67c99d8da708bd77dac29"
+      },
+      {
+        "path": "docs/context/current-todos.md",
+        "initial_sha256": "fc99b132d693ae65b921bf176a4fc80dc950e27713ec961016cd6a80266d3359",
+        "reviewed_sha256": "8853c478f394156da2655f415fa3cc4820c6fee45ba8b5d15921ff90be58ebe9"
+      }
+    ],
+    "new_report_read_after_change": [
+      "apps/round-pet/reports/2026-11-02-400-pipeline-ack.md",
+      "apps/round-pet/reports/2026-11-02-400-pipeline-ack.json"
+    ],
+    "comparison_to_R1": {
+      "common_files": 21,
+      "changed_common_files": [
+        "docs/context/current-status.md"
+      ]
+    },
+    "evidence_sha256": {
+      "docs/context/current-status.md": "05310a80322a02c1acf48f2f4dc91c9d1d90d755f1e67c99d8da708bd77dac29",
+      "docs/protocol/round-pet-native360-g0-reply.md": "7adfa069f50681ccff81fe402ee690e09e81d2a7552d714d7ac87b695b640d0a",
+      "docs/protocol/vectors/round-pet-native360-g0-inputs.json": "f17e65805ff9ffcc2a1856c8b9abceb7a5a3df3fd18c1ee5cd100805b21f10a5",
+      "docs/context/plans/round-pet-hub-baseline-alignment.md": "40ee5eab82b1c64e689dffa8afb91184bd5b6348a01ea1c04a083664c469f95b",
+      "docs/context/plans/round-pet-hub-single-device-spec.md": "27672f1765fcefaf0a12f4733ae7b3160a7271dd166986da41c9d87f90df0d8e",
+      "docs/context/plans/round-pet-hub-single-device-diff.md": "862ad99bb4a7ec41b322367fdd69ecd2a4a30e009000e5420c82f1c105e9020e",
+      "docs/context/plans/round-pet-network-buffer-ab-spec.md": "89a257d4e672be5b632822ee7a7f1d4674facecda10b5e1f98d905244f149e8b",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/assets/pet_native360_store.h": "220b9804a5c0db6324fd9c575a40969b8a2bc97ae0a8b88e91e34a282cdf50b3",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/assets/pet_native360_profile.h": "457f580224d1bcb1b6932a3a8d33f4af78858433f105c134236c348c0efdf174",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/assets/assets.cpp": "1da29227e899c9ba617e289e15e1e0c34694743807920b91ab66ed100d7164b0",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/playback/playback.cpp": "b0915ed0d7db8e29a4a0e62df154ba796db978e5c05ab3fd5537191b67ff5b6d",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/playback/pet_native360_policy.h": "4b1b8d92c83071ef7a4cf70534e41d44d08091a7806eba01b826c9aae161e5f4",
+      "apps/round-pet/common/playback_logic/pet_playback.h": "1d5f6d3ae1620d8cedc5141ba776ec6a08ad90a2782b9a95e910583508ce45d2",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control/control.cpp": "97405ace1374543e82ff59fd2e559b1b70404246951be73f95539c25763a5e00",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control/http_request.cpp": "e5669db7ada8d316e266013306a47bac60af163dbfa35db7fa8dd6c8c029d449",
+      "tools/round-pet/THIRD_PARTY.md": "ca0ef3e1933cd63da41fa06747943bec8d39820e7a6974cd6bfb5cc5faaa211f",
+      "tools/round-pet/media_contract.py": "e311a51498c34b8347cf99420f7941221b690602590de08dcebecc354da7d729",
+      "tools/round-pet/export_hub_materials.py": "6122a3c13e2753091774e933020be016fdfe201445e9f5747e5ae2798eb1a73c",
+      "tools/round-pet/native360_assets.py": "70665c2d785c1c7746292ca59ead979b0fa01216288f6b8d18f30edd88fcdf1d",
+      "apps/round-pet/reports/2026-10-30-native360-online-g1-lite.md": "89c51db87315cbfd1a042217ff06cf9e759e472de5e78f3e11794e78bd990495",
+      "apps/round-pet/reports/2026-10-30-network-memory.md": "7a9da02628173f725254828fb44ce434b8dba3f27c68b79ffc0acd0fe54aa9bd",
+      "AGENTS.md": "159d30985dd20b8251dafba4ac55b85e99eab8d3d581417a5dd855e71c038a23",
+      "docs/context/current-todos.md": "8853c478f394156da2655f415fa3cc4820c6fee45ba8b5d15921ff90be58ebe9",
+      "docs/context/plans/round-pet-hub-g0-reply-spec.md": "c5dc9edf7737abadffd9aa95106f00c3064150e22de8f7b4dacd5d1c0f0132a5",
+      "apps/round-pet/reports/2026-10-30-native360-online-g1.json": "b35ae82613e6612f6f557fbeb766b1c105fe823c92d75004677d60681b5046a8",
+      "apps/round-pet/reports/2026-10-30-native360-online-g1-lite.json": "6f6985c1b913abd50512c920803a2127295047e3e71c841977f808506663c2b3",
+      "apps/round-pet/reports/2026-10-30-network-memory.json": "af3656dfbaedcc48d02f66747207af9e468ba3ac326b287098860d613cb648f6",
+      "apps/round-pet/reports/2026-11-02-400-compact78-device.md": "da9b9e893f13caaf6a3eacc500fc4040ff5fc9fd180adb37aef69dc319099090",
+      "apps/round-pet/reports/2026-11-02-400-compact78-device.json": "5d66252e4588d27ab40ec41411f46ee9c1dde59e8d1162f26bad99ed0f732f39",
+      "apps/round-pet/reports/2026-11-02-400-window-device.md": "9fbf1526094964016145d3e068465e60a5581dbfacc56acb80e18c7fa9ce380d",
+      "apps/round-pet/reports/2026-11-02-400-window-device.json": "3c5d4162467555d919a5050925df2c610af7f381ff56c728362be022c90b886e",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/runtime_internal.h": "26778daf53fa346483e532fa1fc694a84278315bac7a346675de15fd925563b3",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/CMakeLists.txt": "ef8d936287c846548966eea2583fb0cddc2298bfc065a7d03533cc0da9ba5bb9",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/CMakeLists.txt": "490b152333e97da4330d33b56bfdc12d0cb58a4d7b352d30619c93195f4338b4",
+      "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "apps/round-pet/common/vendor/lz4/LICENSE": "8b58c446121a109ccf32edc094bba3010a3d85e4ee3702950db55e4d3e87736c",
+      "apps/round-pet/reports/2026-11-02-400-pipeline-ack.md": "58365b21f6fab0af6d259499cf5def09616c9d966c817f0f1c9190bede6983a0",
+      "apps/round-pet/reports/2026-11-02-400-pipeline-ack.json": "7d26d772a67bed53ae4c61605c2d768270c1731535438e817674a77cf0e9130c"
+    },
+    "reviewed_files_stable_at_final_check": true
+  },
+  "hub_wire": {
+    "contract_revision": 2,
+    "contract_sha256": "ca218da7d3d05c2a8d6b30990a7ae195685caa078c652396108f36ec905209d0",
+    "vectors_sha256": "8d12093609ef1225ab44f053bfb43fffdbdfe5d6f69794a723baf7da88fe40ee",
+    "positive": 80,
+    "negative": 62,
+    "firmware_joint_acceptance_record_found": false,
+    "firmware_new_wire_owner_implemented_in_reviewed_production_paths": false
+  },
+  "material_review": {
+    "identity": {
+      "firmware_package_sha256": "3afe4578cba08cd036c70483befaca1324e1d62e76649ace5557a758e0aef754",
+      "hub_manifest_sha256": "9045bd6b99b365a86e3adf3762bebb635984d4839f6c203c7a9cf7c13b05299d",
+      "namespace": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6",
+      "source_manifest_sha256": "a6a2ddae50a8fe4ddf15ff07a3a228dccf865bb91a037693ce0a72232204c39e"
+    },
+    "raw_sha256": {
+      "manifest": "a6a2ddae50a8fe4ddf15ff07a3a228dccf865bb91a037693ce0a72232204c39e",
+      "package": "c76f476c25d70bba9d4600ed0b38ac788ed688ad437a86dba7313dceb7d6fbbd",
+      "catalog": "73e4c86132737819fdb3ee1faf160d6e751b8ae14859a2688a2f8d0564313771"
+    },
+    "license_ref": "upstream-reference-only",
+    "actions": 46,
+    "asset_bytes": 225509627,
+    "assets_match_prior_F": true,
+    "full_crc_index_redecoded": false,
+    "full_crc_index_evidence": "docs/protocol/vectors/round-pet-g0-real360-review-v1.json",
+    "source_videos_reread": false,
+    "missing_approval_rejected": true,
+    "approval_created": false,
+    "cas_import": false,
+    "upstream_readme_sha256": "20bfd7f6d1b588fe34048bbb7a4379e8a8bfaa9b2651b29639d8195a0115a3a0",
+    "upstream_license_sha256": "22757dc9c895b2729a2fc684d227cadfb54d5af3dd300029926839e8c4e269ce"
+  },
+  "license_evidence": {
+    "upstream_commit": "86181ce1660a57ab27336630bab5b344de71b28c",
+    "readme_url": "https://github.com/PC2005-cloud/dsh-pet/blob/86181ce1660a57ab27336630bab5b344de71b28c/README.md",
+    "readme_sha256_matches_R1": true,
+    "license_url": "https://github.com/PC2005-cloud/dsh-pet/blob/86181ce1660a57ab27336630bab5b344de71b28c/LICENSE",
+    "original_statement_url": "https://www.bilibili.com/opus/1247156596114456581",
+    "original_statement_directly_read": true,
+    "original_statement_displayed_edit_date": "2026-09-20",
+    "cc_deed_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans",
+    "cc_legalcode_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.zh-hans",
+    "cc_official_pages_directly_read": true,
+    "usage_review_input_still_required": true,
+    "legal_authorization_created": false
+  },
+  "reported_device_snapshot": {
+    "evidence_only_not_fresh_device_read": true,
+    "window_closed": true,
+    "effective_app_sha256": "cbdf316906bfa66752b586c7438ba9f2d943be98bfa91dd2a876cb1b1b30acc9",
+    "effective_app_bytes": 1318752,
+    "full_2MiB_app_area_sha256": "c3085e0d363afe9b54412f7acfbcf70a106dcd447dffc5a84b96ba558eb56400",
+    "pre_normal_boot_full_rom_sha256": "7a4fb43bc12d96e84f4c17b26871355241e49c3f428fcab202bb61ba76107402",
+    "full_rom_bytes": 33554432,
+    "post_normal_boot_full_rom_reread": false,
+    "reported_cache_root_seq": "5",
+    "reported_cache_actions": [
+      0,
+      4,
+      1,
+      11
+    ],
+    "reported_cache_crc_frames": 964,
+    "historical_67_reported_as_current": false,
+    "serial_released_per_report": true,
+    "latest_400_pipeline_candidates_reported_deployed": false
+  },
+  "gates": {
+    "G0": {
+      "result": "pending_joint_review",
+      "missing": [
+        "A2 independent usage review input",
+        "firmware adoption or revision of hub revision2 and HTTP appendix",
+        "atomic cancellation gate, unknown/recovery I/O classification and credential revocation boundary",
+        "single owner, trusted time and durable credentials/control source design"
+      ]
+    },
+    "G1": {
+      "result": "not_passed_full_maintenance",
+      "candidate_prefix": "fc557a09",
+      "internal_gate_bytes": 49152,
+      "sdk_historical_minimum_bytes": 46527,
+      "deficit_bytes": 2625,
+      "save_attempts": 0,
+      "remaining_cases": [
+        "M1 remaining cached actions",
+        "M2 download/persist",
+        "M3 download cancel",
+        "M4 save cancel",
+        "M5 faults",
+        "M6 eviction",
+        "M7 business offline restart"
+      ],
+      "later_AB_scope": "A admission/idle only; no switch/touch or B results"
+    },
+    "G2": {
+      "result": "no_delivered_device_evidence_found_in_reviewed_scope",
+      "minimum_internal_bytes": 49152,
+      "minimum_psram_bytes": 1048576,
+      "minimum_psram_largest_block_bytes": 524288,
+      "minimum_main_stack_remaining_bytes": 1024,
+      "tls_internal_largest_block_gate": null,
+      "new_task_stack_gates": null,
+      "worst_case_delay_and_cleanup_bounds": null,
+      "formal_explicit_psram_bytes": 6916777,
+      "read_ahead_included_bytes": 65536,
+      "app_partition_bytes": 2097152,
+      "app_headroom_target_bytes": 262144
+    }
+  },
+  "notes": [
+    "No firmware imports/build/tests or new credential/config reads.",
+    "Existing R7 synchronous model and 940-test baseline retained; source identity checked separately.",
+    "Evidence JSON is not a trusted A2 approval, executable gate, device inventory or firmware response.",
+    "Concurrent upstream context changes were re-read; 400 USB ACK V2 is a separate version axis from hub JSON revision2."
+  ],
+  "hub_sources_preserved_count": 285,
+  "validation": {
+    "check_exit_code": 0,
+    "test_exit_code": 0,
+    "tests": 940,
+    "passed": 940,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 112771.655292,
+    "new_tests": 0,
+    "checked_markdown_documents": 20,
+    "checked_local_links": 609,
+    "link_errors": 0,
+    "static_link_audit_is_admission_gate": false
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "passed": true,
+  "layer": "finite-A-hold-run-lifecycle",
+  "cases": [
+    "RUN01 explicit opt-in, closed inputs and construction have no client side effects",
+    "RUN02 one-shot start owns only source/bridge/timers and leaves host window live after close",
+    "RUN03 page authority must independently cover full run and safety budget",
+    "RUN04 lane remainder cannot borrow longer page or observation lifetime",
+    "RUN05 startup query roundtrip is deducted and never resets the deadline",
+    "RUN06 pre-existing manual intent cannot be adopted at startup",
+    "RUN07 long touch spans leases, accepts latest base, and does not shorten shared owner",
+    "RUN08 45 second deadline cancels only own target and closes own resources",
+    "RUN09 delayed timer cannot permit new poll or base after monotonic deadline",
+    "RUN10 deadline across controls await denies late BASE while allowing self cleanup",
+    "RUN11 manual takeover stops polling, keeps manual target after run close",
+    "RUN12 source failure stops without extending or reopening observation generation",
+    "RUN13 unknown freezes polling; exact-body confirmation resumes same bounded run",
+    "RUN14 stale unknown confirmation cannot revive old source sample",
+    "RUN15 unknown at deadline remains finite and never confirms or resubmits after close",
+    "RUN16 close aborts actual HTTP read and no late result can submit",
+    "RUN17 close during startup waits ignored client await and rejects late source creation",
+    "RUN18 independent run clock rollback fails closed without closing external window",
+    "RUN19 actual short wall-clock timer closes finite run while owner remains live",
+    "RUN20 close before start is idempotent, never authorizes, reads, or submits",
+    "RUN21 abort stops only its own active run and external client remains authorized",
+    "RUN22 close waits actual cleanup query exit before reporting closed",
+    "RUN23 start timestamp precedes microtasks; a delayed first query cannot get a new deadline",
+    "RUN24 unknown confirmation after manual takeover never withdraws the manual target"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 9093,
+  "scope": "Borrowed genuine shared client, original HTTP/UDS/loopback endpoint and virtual clock, 45s bounded slice plus actual 1s wall timer; startup/three budgets, late timer and await fences, touch/renewal, manual priority, source failure, exact unknown, actual in-flight close and owned cleanup. No new authority/listener, real pet, DSH/profile or ESP.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "full_suite": {
+    "tests": 1940,
+    "passed": 1940,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 103980.282542
+  },
+  "checks": {
+    "syntax_exit": 0,
+    "standard_build_exit": 0,
+    "isolated_candidate_build_exit": 0
+  },
+  "source_hashes": {
+    "packages/runtime/native400-pet-hold-run.mjs": "24a14535ce9b56e8caa6c0f2c2628e22a3661db4910fc1109579096a384ad5a0",
+    "packages/runtime/index.mjs": "24638a7eb34430a1f6fa66603b1e4d7759a938dfc132337ac6a7ce3f9b0b1145",
+    "tests/fixtures/native400-pet-hold-run.mjs": "10eb6f52c34b28df1c8209dc469aeeb5103a9deba6d320f42116da564e1b7ea1",
+    "tests/native400-pet-hold-run.test.mjs": "09dbb7376d1ba2d6e2f6043fabd2ceb4ab4cab07493e3a843ba8af0ccd1e20c8",
+    "scripts/verify-native400-pet-hold-run.mjs": "6aebf6cd4eb208dfb2a07ac3c5b6a3c6f1df4857af7f91f920914a85e27c9954"
+  },
+  "TCP26_pinned_sources_and_entries_unchanged": {
+    "packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/core/native400-scheduling.mjs": "b890a418c7d9378ded7cd433c2de5a3fefa59481348a52a426ae217a5c11731e",
+    "packages/core/protocol.mjs": "12582ab3ae0d2a4ed96e29da24601842b8f8167d7aba1cf06cf915c2b09d91c1",
+    "packages/core/pet4.mjs": "5717a7ecd90004540cb0025124f50a311db2276d228ee08b8834eb6103fa60c5",
+    "packages/core/crc32.mjs": "626dff165498b1eba1080a9692992f58784946534d35b3db58b7737737c6577d",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-tcp-owner.mjs": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8",
+    "packages/runtime/native400-pet-hold-source.mjs": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+    "packages/runtime/native400-pet-bridge.mjs": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+    "packages/runtime/native400-node-control-channel.mjs": "db3b3a4caa34673464ffe8830d5d4bf7c1cf64d11e1ad38c2d82b17bc6fe2fd6",
+    "packages/core/native400-node-control-access.mjs": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+    "packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7",
+    "tests/fixtures/native400-endpoint-hold.mjs": "3c65d7dbcf13b1ebeffea6f7490a1bf617aec86f47d0849d4297777700eedd8a",
+    "tests/fixtures/native400-preserving-renewal.mjs": "bed5287f669032e97f26358bee0dbd14ea1ad14359633634077611127bb6d019",
+    "tests/native400-endpoint-hold.test.mjs": "ed9a7f531277a1d2ba0a74357d4d38a005ff8ca8624cc068f840c1b2b96815c2",
+    "tests/native400-preserving-renewal.test.mjs": "a649b2081694465f7b89056a66e89b06c04f2a0a411dadacc9a738d75e385a57",
+    "scripts/verify-native400-preserving-renewal.mjs": "a0b23f4ac4b7c29209264ea2f909a3c0c182c63a917a7730ebf1854b1f40c96b",
+    "scripts/verify-native400-endpoint-hold.mjs": "210aea1961adfe3e1a861da5844728f858c7d538f8e0dbf90ffff04edc239080",
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+    "dist-dsh022/packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "dist-dsh022/packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7"
+  },
+  "candidate_artifacts": {
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/packages/runtime/index.mjs": "24638a7eb34430a1f6fa66603b1e4d7759a938dfc132337ac6a7ce3f9b0b1145",
+    "dist-dsh022/packages/runtime/native400-pet-hold-run.mjs": "24a14535ce9b56e8caa6c0f2c2628e22a3661db4910fc1109579096a384ad5a0"
+  },
+  "actual_candidate_import": {
+    "passed": true,
+    "scope": "private candidate finite-run module import only, constructor/start not invoked",
+    "receipt": {
+      "schema_version": 1,
+      "profile": "native400-node-import-receipt/1",
+      "ok": true,
+      "node_version": "v24.14.1",
+      "snapshot_sha256": "e1b572996f40e398a0b6afa7a9a88fbcbec1ba64203af05f66e6bd20746c9dac",
+      "bootstrap_sha256": "985bbd24ad8478deefe4d56a6305934bc0caa3dc76a2fc532f493205cc0abda6",
+      "bootstrap_builtins": [
+        "node:crypto",
+        "node:fs",
+        "node:module",
+        "node:path",
+        "node:url"
+      ],
+      "entry": {
+        "path": "packages/runtime/native400-pet-hold-run.mjs",
+        "role": "manager",
+        "root": "candidate"
+      },
+      "loaded": [
+        {
+          "root": "candidate",
+          "bytes": 4807,
+          "path": "packages/core/native400-node-control-access.mjs",
+          "sha256": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 7469,
+          "path": "packages/runtime/native400-pet-bridge.mjs",
+          "sha256": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 6393,
+          "path": "packages/runtime/native400-pet-hold-run.mjs",
+          "sha256": "24a14535ce9b56e8caa6c0f2c2628e22a3661db4910fc1109579096a384ad5a0",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 1570,
+          "path": "packages/runtime/native400-pet-hold-source.mjs",
+          "sha256": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 1476,
+          "path": "packages/source-pet/index.mjs",
+          "sha256": "f14edc2c827ff8e6308fbb336912de79721952156cfaaedd2e581d93b25161ba",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 433,
+          "path": "packages/source-pet/page.mjs",
+          "sha256": "e1d750be6c70ea639930303ce36f9583b9796554061abd132b24b9fc7f0c4b3a",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 562,
+          "path": "packages/source-pet/schema.mjs",
+          "sha256": "19e8e1cba99c3a0f667e8fded591dbc48455f24ef0f7474c37d56c32fcb8f4a1",
+          "format": "module"
+        }
+      ],
+      "builtins": [
+        "node:crypto",
+        "node:http"
+      ],
+      "exports": [
+        "createNative400PetHoldRun"
+      ],
+      "coverage": "observed-node-imports",
+      "device_evidence": false
+    },
+    "runtime": {
+      "kind": "node",
+      "sha256": "35d4bc736bbe4161f0c074aa140ddb74586e46969bc2ad63d32c838bec4463ff",
+      "bytes": 119168512
+    },
+    "snapshot_sha256": "e1b572996f40e398a0b6afa7a9a88fbcbec1ba64203af05f66e6bd20746c9dac",
+    "declared_files": 144,
+    "cleanup": {
+      "audit": {
+        "child_running": false,
+        "streams_open": false,
+        "timers": 0,
+        "snapshot_lease": false
+      },
+      "snapshot_removed": true,
+      "temporary_environment_removed": true
+    },
+    "service_started": false,
+    "bridge_started": false,
+    "device_admission": false
+  },
+  "policy": {
+    "default_off": true,
+    "explicit_run_max_ms": 45000,
+    "default_source_ms": 60000,
+    "default_start_budget_ms": 52500,
+    "default_poll_ms": 500,
+    "deadline_anchored_before_microtask": true,
+    "post_BASE_deadline_guard": true,
+    "unknown_confirmation_explicit_same_body": true,
+    "source_generation_reopened": false,
+    "authority_issued": false,
+    "host_window_owned": false,
+    "manual_target_survives_run_close": true
+  },
+  "resources": {
+    "max_poll_timers": 1,
+    "max_deadline_timers": 1,
+    "max_serial_operation": 1,
+    "source_and_bridge_instances": 1,
+    "own_timers_source_and_pending_after_close": 0,
+    "external_window_kept_alive": true,
+    "wall_timer_case_ms": 1000,
+    "virtual_deadline_case_ms": 45000,
+    "ESP_dynamic_resources_or_network_worst_delay_measured": false
+  },
+  "unverified": {
+    "fixed_snapshot_host_process_launcher": true,
+    "actual_DSH_and_pet_runtime_identity": true,
+    "natural_pet_transition": true,
+    "fresh_live_approval": true,
+    "device_app_and_peer": true,
+    "ESP_display_and_dynamic_resources": true,
+    "cycle_mail_wire_observation": true,
+    "device_cleanup_and_exact_restore": true
+  },
+  "cleanup": {
+    "specialized_environment_removed": true,
+    "import_environment_removed": true,
+    "own_HTTP_TCP_UDS_fixtures_closed": true,
+    "production_listener_started": false,
+    "real_pet_sampled": false,
+    "existing_service_or_profile_changed": false,
+    "plugin_installed_or_enabled": false,
+    "upstream_written": false,
+    "upstream_scripts_run": false,
+    "ESP_USB_access": false,
+    "credentials_read": false,
+    "commit_push": false
+  },
+  "document_audit": {
+    "relative_links": 720,
+    "broken": 0,
+    "trailing_whitespace": 0
+  }
+}

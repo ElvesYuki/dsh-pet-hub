@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-hold-window-preparation.test.mjs'],expected:7,timeoutMs:30000,layer:'non-admitting-hold-window-preparation',prefix:'tcp27-',scope:'Copied source and locally built isolated candidate, exact TCP26 source/candidate pins, existing snapshot/Node import-only audit; drift/missing/symlink/unknown option/no overwrite and actual child/stream/lease/temp cleanup. No bridge/service/listener/DSH/pet/device start and no real runtime identity claim.'});

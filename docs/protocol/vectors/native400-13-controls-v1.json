@@ -1,0 +1,80 @@
+{
+  "schema": "native400-review-controller-evidence/1",
+  "date": "2026-11-03",
+  "scope": "original MIT sparse source only; internal operations, no routes/devices/real source/firmware",
+  "observations": {
+    "duplicate_ack_identical": true,
+    "completed_retry_no_extra_reads": true,
+    "old_cancel_does_not_cancel_new_job": true,
+    "latest_job_status": "completed",
+    "request_high_water": "2",
+    "source_revision": "1",
+    "source_map_sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+    "media_validation": "not-performed",
+    "device_evidence": false,
+    "closed_resources": {
+      "closed": true,
+      "busy": false,
+      "sessions": 0,
+      "selections": 0,
+      "jobs": 0,
+      "terminal_jobs": 0,
+      "request_acks": 0,
+      "timers": 0,
+      "open_files": 0,
+      "uncertain": false
+    }
+  },
+  "sources": {
+    "baseline": 335,
+    "unchanged": 333,
+    "modified": [
+      {
+        "path": "packages/core/native400-source-review-view.mjs",
+        "sha256_before": "98624a4af8538511f529b270ece27bb12909053ec1a6e0351566db60b7f3cfbe",
+        "sha256_after": "ef2a00164c9dbecd6c5fbf359b37417ef0198d5a41c4278cfb65c2fe6e294a2e"
+      },
+      {
+        "path": "packages/runtime/native400-review-manager.mjs",
+        "sha256_before": "9f4867cf5dd44ebfa0f234b39e5deab2d88e74d8ff7c3bcecef21a2626d1e244",
+        "sha256_after": "7d504f48ff919b224634a05b4a14e80ef96ce7e2f2f10f94f043a54962c9a8da"
+      }
+    ],
+    "added": [
+      {
+        "path": "packages/core/native400-review-controls-view.mjs",
+        "sha256": "6a97a1e8efb886c19725eccbe3c0bf122870be40bbcab5a9ba24cea767813b9b"
+      },
+      {
+        "path": "packages/runtime/native400-review-controller.mjs",
+        "sha256": "2599f5a27927e0a726c31375fa2c4f931e06d5b368fda936f6362074920cdd7b"
+      },
+      {
+        "path": "scripts/verify-native400-13.mjs",
+        "sha256": "5ab4db7b92d15e35dfbf058dfb6cf7ced12b23fe6bbaf8869d230184e3a48e21"
+      },
+      {
+        "path": "tests/native400-13.test.mjs",
+        "sha256": "9f90f97ba1b503f3098f858c5f99b32b3ea8f4d003885ac34dc4523bd11f6790"
+      }
+    ]
+  },
+  "compatibility": {
+    "wire_sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "golden_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "verification": {
+    "focused": 45,
+    "full": 1353,
+    "syntax_check": "passed; syntax only",
+    "full_observed_wall_ms": 104174,
+    "isolated": {
+      "passed": true,
+      "timeout": false,
+      "interrupted": false,
+      "observed_wall_ms": 9445,
+      "temporary_environment_removed": true
+    },
+    "scope": "internal controller; no HTTP/IPC/UI/native identity provider or physical device acceptance"
+  }
+}

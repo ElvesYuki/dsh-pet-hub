@@ -1,0 +1,1193 @@
+{
+  "contract": "native400-wire-review-table/1",
+  "revision": 1,
+  "profile": "round-pet-native400-wire-review/1",
+  "max_body_bytes": 4096,
+  "max_header_bytes": 8192,
+  "max_range_bytes": 32768,
+  "page_limit": 4,
+  "paths": {
+    "hello": "/hub-device/native400-review/v1/hello",
+    "exchange": "/hub-device/native400-review/v1/exchange",
+    "manifest": "/hub-device/native400-review/v1/manifests/",
+    "assets": "/hub-device/native400-review/v1/assets/"
+  },
+  "defs": {
+    "id": {
+      "type": "string",
+      "format": "id"
+    },
+    "u64": {
+      "type": "string",
+      "format": "u64"
+    },
+    "positive": {
+      "type": "string",
+      "format": "positive"
+    },
+    "sha": {
+      "type": "string",
+      "format": "sha"
+    },
+    "boolean": {
+      "type": "boolean"
+    },
+    "nil": {
+      "type": "null"
+    },
+    "duration": {
+      "type": "integer",
+      "min": 1,
+      "max": 30000
+    },
+    "context": {
+      "type": "object",
+      "fields": {
+        "device_id": "id",
+        "binding_id": "id",
+        "binding_epoch": "u64",
+        "boot_id": "id",
+        "session_id": "id",
+        "controller_id": "id",
+        "service_instance_id": "id"
+      }
+    },
+    "control": {
+      "type": "object",
+      "fields": {
+        "controller_id": "id",
+        "service_instance_id": "id",
+        "control_epoch": "positive",
+        "lease_id": "id"
+      }
+    },
+    "target": {
+      "type": "object",
+      "fields": {
+        "command_id": "id",
+        "revision": "positive",
+        "character_id": "id",
+        "variant_id": "id",
+        "manifest_sha256": "sha",
+        "action_id": "action",
+        "asset_sha256": "sha"
+      }
+    },
+    "bytes": {
+      "type": "integer",
+      "min": 544,
+      "max": 5865472
+    },
+    "action": {
+      "type": "integer",
+      "min": 0,
+      "max": 77
+    },
+    "package": {
+      "type": "object",
+      "fields": {
+        "namespace_scope": {
+          "const": "offline-candidate"
+        },
+        "namespace": {
+          "const": "dd0f19bfdc4bed608ddf18baf095fd6c8b53217bbb59d8f0238e51460e2c0ff8"
+        },
+        "firmware_package_sha256": "sha",
+        "hub_manifest_sha256": "sha"
+      }
+    },
+    "versions": {
+      "const": {
+        "capabilities": 3,
+        "control": 1,
+        "lease": 1,
+        "playback": 3,
+        "display": 3,
+        "storage": 0,
+        "inventory": 0,
+        "touch": 1,
+        "cancel": 2,
+        "error": 1
+      }
+    },
+    "capabilities": {
+      "const": {
+        "schema_version": 3,
+        "profile": "round-pet-native400-window-review/1",
+        "execution_model": "frame_window",
+        "display": {
+          "width": 466,
+          "height": 466,
+          "pixel_format": "RGB565",
+          "shape": "circle"
+        },
+        "media": {
+          "width": 400,
+          "height": 400,
+          "offset": [
+            33,
+            33
+          ],
+          "fps": 24,
+          "max_frames": 241,
+          "key_interval": 12,
+          "codec_flag": 1,
+          "tile_rows": 20,
+          "extra_keyframes": true
+        },
+        "max_asset_bytes": 5865472,
+        "working_set": {
+          "compressed_window_bytes": 1048576,
+          "rgb_frames": 3,
+          "rgb_frame_bytes": 320000,
+          "history_bytes": 160000,
+          "tile_bytes": 8000,
+          "packed_scratch_bytes": 8064,
+          "metadata_max_bytes": 2464,
+          "frame_receipt_max_bytes": 7712
+        },
+        "persistent": null
+      }
+    },
+    "policy": {
+      "const": "verified-replay"
+    },
+    "execution": {
+      "const": "native400-full-offline-review/1"
+    },
+    "descriptor": {
+      "type": "object",
+      "fields": {
+        "bytes": "bytes",
+        "width": {
+          "const": 400
+        },
+        "height": {
+          "const": 400
+        },
+        "fps": {
+          "const": 24
+        },
+        "frames": {
+          "enum": [
+            118,
+            241
+          ]
+        },
+        "codec_flag": {
+          "const": 1
+        },
+        "key_interval": {
+          "const": 12
+        },
+        "tile_rows": {
+          "const": 20
+        },
+        "index_sha256": "sha",
+        "rgb565_sha256": "sha",
+        "extra_keyframes": {
+          "type": "integer",
+          "min": 0,
+          "max": 220
+        }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "fields": {
+        "evidence": {
+          "const": "whole_file_and_media"
+        },
+        "file_sha256": "sha",
+        "index_sha256": "sha",
+        "rgb565_sha256": "sha",
+        "frames": {
+          "enum": [
+            118,
+            241
+          ]
+        },
+        "extra_keyframes": {
+          "type": "integer",
+          "min": 0,
+          "max": 220
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "fields": {
+        "action_id": "action",
+        "asset_sha256": "sha"
+      }
+    },
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "lease.acquire"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "request_id": "id",
+                "request_seq": "positive",
+                "expected_epoch": "u64",
+                "lease_id": "nil",
+                "lease_ms": "duration"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "lease.renew"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "request_id": "id",
+                "request_seq": "positive",
+                "expected_epoch": "u64",
+                "lease_id": "id",
+                "lease_ms": "duration"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "playback.set"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "control": "control",
+                "target": "target",
+                "package_ref": "package",
+                "asset_descriptor": "descriptor",
+                "mode": {
+                  "enum": [
+                    "base_loop",
+                    "once_hold"
+                  ]
+                },
+                "integrity_policy": "policy"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "playback.cancel"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "operation_id": "id",
+                "control": "control",
+                "target": "target",
+                "package_ref": "package"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "query.display"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "query_id": "id"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "query.storage"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "query_id": "id"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "binding.revoke"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "operation_id": "id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "actual": {
+      "type": "object",
+      "fields": {
+        "origin": {
+          "enum": [
+            "remote",
+            "local"
+          ]
+        },
+        "source_context": "context",
+        "control": {
+          "oneOf": [
+            "nil",
+            "control"
+          ]
+        },
+        "source_target": {
+          "oneOf": [
+            "nil",
+            "target"
+          ]
+        },
+        "asset_ref": "asset",
+        "frame_index": {
+          "type": "integer",
+          "min": 0,
+          "max": 240
+        },
+        "first_frame_commit_seq": "positive",
+        "commit_seq": "positive",
+        "first_frame_committed": {
+          "const": true
+        },
+        "display_integrity": {
+          "const": "verified"
+        },
+        "historical": "boolean",
+        "verification_seq": "positive"
+      }
+    },
+    "record": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "control": "control",
+            "target": "target",
+            "package_ref": "package",
+            "asset_descriptor": "descriptor",
+            "phase": {
+              "const": "accepted"
+            },
+            "integrity": {
+              "const": "pending"
+            },
+            "admission": {
+              "enum": [
+                "ready",
+                "deferred_local"
+              ]
+            },
+            "verification": "nil",
+            "failure_code": "nil",
+            "verification_seq": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "control": "control",
+            "target": "target",
+            "package_ref": "package",
+            "asset_descriptor": "descriptor",
+            "phase": {
+              "const": "verifying"
+            },
+            "integrity": {
+              "const": "pending"
+            },
+            "admission": "nil",
+            "verification": "nil",
+            "failure_code": "nil",
+            "verification_seq": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "control": "control",
+            "target": "target",
+            "package_ref": "package",
+            "asset_descriptor": "descriptor",
+            "phase": {
+              "const": "verified"
+            },
+            "integrity": {
+              "const": "verified"
+            },
+            "admission": "nil",
+            "verification": "proof",
+            "failure_code": "nil",
+            "verification_seq": "positive"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "control": "control",
+            "target": "target",
+            "package_ref": "package",
+            "asset_descriptor": "descriptor",
+            "phase": {
+              "const": "failed"
+            },
+            "integrity": {
+              "const": "failed"
+            },
+            "admission": "nil",
+            "verification": "nil",
+            "failure_code": {
+              "enum": [
+                "integrity_failed",
+                "incompatible_asset",
+                "deadline_exceeded",
+                "cancelled"
+              ]
+            },
+            "verification_seq": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "control": "control",
+            "target": "target",
+            "package_ref": "package",
+            "asset_descriptor": "descriptor",
+            "phase": {
+              "const": "cancelled"
+            },
+            "integrity": {
+              "const": "pending"
+            },
+            "admission": "nil",
+            "verification": "nil",
+            "failure_code": "nil",
+            "verification_seq": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "package_ref": "package",
+            "desired": {
+              "oneOf": [
+                "nil",
+                "target"
+              ]
+            },
+            "display_state": {
+              "enum": [
+                "unknown",
+                "playing",
+                "held"
+              ]
+            },
+            "maintenance": {
+              "enum": [
+                "none",
+                "verifying",
+                "priming",
+                "buffering",
+                "failed"
+              ]
+            },
+            "actual": {
+              "oneOf": [
+                "nil",
+                "actual"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "storage.status"
+            },
+            "storage_seq": "positive",
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "package_ref": "package",
+            "capability": {
+              "const": "unsupported"
+            },
+            "inventory_known": {
+              "const": false
+            },
+            "saved": "nil",
+            "offline_available": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "cancel.report"
+            },
+            "cancel_seq": "positive",
+            "operation_id": "id",
+            "control": "control",
+            "target": "target",
+            "package_ref": "package",
+            "outcome": {
+              "enum": [
+                "cancelled",
+                "already_terminal"
+              ]
+            },
+            "execution_invalidated": {
+              "const": true
+            },
+            "io_exited": "boolean"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "touch.event"
+            },
+            "event_seq": "positive",
+            "action_id": {
+              "const": 4
+            },
+            "stage": {
+              "enum": [
+                "started",
+                "ended"
+              ]
+            },
+            "base_target": {
+              "oneOf": [
+                "nil",
+                "target"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "control.receipt"
+            },
+            "receipt_seq": "positive",
+            "operation_id": "id",
+            "result": {
+              "const": "revoked_local"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "native400-review-lease/1"
+            },
+            "type": {
+              "const": "lease.granted"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "kind": {
+              "enum": [
+                "acquire",
+                "renew"
+              ]
+            },
+            "control": "control",
+            "lease_ms": "duration"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "type": {
+              "const": "asset.verified"
+            },
+            "verification_seq": "positive",
+            "package_ref": "package",
+            "asset_ref": "asset",
+            "asset_descriptor": "descriptor",
+            "verification": "proof"
+          }
+        }
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "fields": {
+        "dispatch_id": {
+          "oneOf": [
+            "nil",
+            "id"
+          ]
+        },
+        "record": "record"
+      }
+    },
+    "manifest_permit": {
+      "type": "object",
+      "fields": {
+        "kind": {
+          "const": "manifest"
+        },
+        "permit_id": "id",
+        "control": "control",
+        "package_ref": "package",
+        "offset": {
+          "type": "integer",
+          "min": 0,
+          "max": 77
+        },
+        "limit": {
+          "type": "integer",
+          "min": 1,
+          "max": 4
+        },
+        "remaining_ms": "duration"
+      }
+    },
+    "asset_permit": {
+      "type": "object",
+      "fields": {
+        "kind": {
+          "const": "asset"
+        },
+        "permit_id": "id",
+        "control": "control",
+        "package_ref": "package",
+        "target": "target",
+        "range_start": {
+          "type": "integer",
+          "min": 0,
+          "max": 5865471
+        },
+        "range_end": {
+          "type": "integer",
+          "min": 0,
+          "max": 5865471
+        },
+        "total_bytes": "bytes",
+        "remaining_ms": "duration"
+      }
+    },
+    "permit": {
+      "oneOf": [
+        "manifest_permit",
+        "asset_permit"
+      ]
+    },
+    "message": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.begin"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "nil",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "boot_id": "id",
+                "capabilities": "capabilities",
+                "versions": "versions",
+                "package_ref": "package",
+                "integrity_policy": "policy"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.challenge"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "challenge_id": "id",
+                "versions": "versions",
+                "package_ref": "package",
+                "integrity_policy": "policy",
+                "execution_profile": "execution"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.confirm"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "challenge_id": "id",
+                "versions": "versions",
+                "package_ref": "package",
+                "integrity_policy": "policy"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.ready"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "versions": "versions",
+                "package_ref": "package",
+                "integrity_policy": "policy",
+                "execution_profile": "execution"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "exchange.request"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "observation": {
+                  "oneOf": [
+                    "nil",
+                    "observation"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "exchange.response"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "control": {
+                  "oneOf": [
+                    "nil",
+                    "command"
+                  ]
+                },
+                "read_permit": {
+                  "oneOf": [
+                    "nil",
+                    "permit"
+                  ]
+                },
+                "poll_after_ms": {
+                  "type": "integer",
+                  "min": 0,
+                  "max": 500
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "manifest.page"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "package_ref": "package",
+                "permit_id": "id",
+                "offset": {
+                  "type": "integer",
+                  "min": 0,
+                  "max": 77
+                },
+                "total_actions": {
+                  "const": 78
+                },
+                "next_offset": {
+                  "oneOf": [
+                    "nil",
+                    {
+                      "type": "integer",
+                      "min": 1,
+                      "max": 77
+                    }
+                  ]
+                },
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "fields": {
+                      "action_id": "action",
+                      "asset_sha256": "sha",
+                      "asset_descriptor": "descriptor"
+                    }
+                  },
+                  "min": 1,
+                  "max": 4
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native400-wire-review/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "error"
+            },
+            "request_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "request_seq": {
+              "oneOf": [
+                "nil",
+                "positive"
+              ]
+            },
+            "context": {
+              "oneOf": [
+                "nil",
+                "context"
+              ]
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "code": {
+                  "enum": [
+                    "invalid_message",
+                    "unsupported_encoding",
+                    "authentication_failed",
+                    "stale_binding",
+                    "unapproved_package",
+                    "touch_only",
+                    "first_window_action",
+                    "stale_session",
+                    "stale_control",
+                    "stale_revision",
+                    "idempotency_conflict",
+                    "unsupported_profile",
+                    "unsupported_feature",
+                    "lease_expired",
+                    "deadline_exceeded",
+                    "message_too_large",
+                    "incompatible_asset",
+                    "queue_full",
+                    "maintenance_busy",
+                    "temporarily_unavailable",
+                    "integrity_failed",
+                    "unsupported_integrity_policy"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "errors": {
+    "invalid_message": {
+      "http": 400,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unsupported_encoding": {
+      "http": 400,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "authentication_failed": {
+      "http": 401,
+      "recovery": "new_session",
+      "automatic_retry": false
+    },
+    "stale_binding": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unapproved_package": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "touch_only": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "first_window_action": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "stale_session": {
+      "http": 409,
+      "recovery": "new_session",
+      "automatic_retry": false
+    },
+    "stale_control": {
+      "http": 409,
+      "recovery": "new_session",
+      "automatic_retry": false
+    },
+    "stale_revision": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "idempotency_conflict": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unsupported_profile": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unsupported_feature": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "lease_expired": {
+      "http": 412,
+      "recovery": "renew_then_new",
+      "automatic_retry": false
+    },
+    "deadline_exceeded": {
+      "http": 412,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "message_too_large": {
+      "http": 413,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "incompatible_asset": {
+      "http": 422,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "queue_full": {
+      "http": 429,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "maintenance_busy": {
+      "http": 503,
+      "recovery": "query_only",
+      "automatic_retry": false
+    },
+    "temporarily_unavailable": {
+      "http": 503,
+      "recovery": "bounded_read_same_session",
+      "automatic_retry": false
+    },
+    "integrity_failed": {
+      "http": 422,
+      "recovery": "new_target",
+      "automatic_retry": false
+    },
+    "unsupported_integrity_policy": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    }
+  }
+}

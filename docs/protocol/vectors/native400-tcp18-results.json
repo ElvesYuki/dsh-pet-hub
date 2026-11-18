@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "source-bound-manual-UI-IPC-HTTP-and-loopback-host-only",
+  "tests": {
+    "isolated": 25,
+    "targeted_after_fix": 61,
+    "check": "passed",
+    "full_with_build": 1755,
+    "full_exit_code": 0,
+    "full_wall_ms": 104920.357375,
+    "final_build_exit_code": 0,
+    "sequential_full_runs": 2,
+    "first_full": {
+      "tests": 1754,
+      "pass": 1753,
+      "fail": 1,
+      "failure": "400-10-13 synchronous source fence delayed by unconditional await of absent channel"
+    },
+    "fix": "await new channel only if present; retain original synchronous default-path fence; capture real owner fence/close and add public replacement negative"
+  },
+  "cases": [
+    "CONTROL01 no access stays readonly; completed genuine request is mandatory",
+    "CONTROL02 loopback requires original-test approval and cannot export device config",
+    "CONTROL03 private token required; global status and descriptor never contain it",
+    "CONTROL04 actual private IPC submits action, separate model frame0 is historical only",
+    "CONTROL05 exact confirmation never resends BASE or renews original TTL",
+    "CONTROL06 sequence revision session and instance are bound with no side effects",
+    "CONTROL07 scope rejects remote4 TTL overflow unknown fields and unsafe uint64",
+    "CONTROL08 revoke and rotate invalidate old credentials and cancel their target",
+    "CONTROL09 session expires without new input, latest target is cancelled",
+    "CONTROL10 closed source audit permanently fences control transport",
+    "CONTROL11 closing request invalidates scope without USB config consumption",
+    "CONTROL12 HTTP defaults to readonly and exact provider authorization is required",
+    "CONTROL13 HTTP Origin JSON marker and raw JSON budgets reject before submit",
+    "CONTROL14 HTTP-to-UDS-to-TCP round trip and cancel use existing private client",
+    "CONTROL15 attached window has no issuer and readonly profile cannot be upgraded",
+    "CONTROL16 real source option cannot be attached to another independent window",
+    "CONTROL17 shared component submits only permitted actions via real HTTP and IPC",
+    "CONTROL18 unknown UI result keeps exact request and never auto-renews on confirmation",
+    "CONTROL19 unmount aborts own UI only; window remains and no command is emitted",
+    "CONTROL20 built client exports the new shared controls without Node or Python",
+    "CONTROL21 old scoped client never sends credentials to a replacement instance",
+    "CONTROL22 new UI session invalidates an uncertain old request instead of replaying it",
+    "CONTROL23 source revocation fences active TCP through the timer without another request",
+    "CONTROL24 idle session expiry cancels target through timer without status polling",
+    "CONTROL25 source fence uses captured real owner, not replaceable public methods"
+  ],
+  "isolated": {
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 5420,
+    "temporary_environment_removed": true
+  },
+  "source_sha256": {
+    "packages/ui/index.mjs": "5fdd6a57cf01a8484d00b542e0465a17a72fac8241071d06a3f3c6912f970cd4",
+    "packages/runtime/native400-reviewed-lan-request.mjs": "35496494572ca90d5946d5c4669ab2203f4d599d6f1f4f309ab1d68c86956f00",
+    "packages/runtime/native400-node-control-window.mjs": "8e65133fc070ca2c0c1b60f28475f814993eb73cc9f01e98b561f71e07c73d1f",
+    "packages/runtime/native400-tcp-lan-request.mjs": "851f03919c844cf852bd739369ebe48950ffd0be8d35e20f0b3f3a276197ce62",
+    "packages/runtime/index.mjs": "7714006b96861b3b46195f0576d6bd89f3ca7e999b730ef0d1d38f10342f1f1e",
+    "packages/runtime/native400-tcp-lan-host.mjs": "632bd8da4688a53844f43aade94a74eda1aa130b059fe102bcdd1f39317ae41f",
+    "packages/runtime/service.mjs": "64f9806954cee61f9bc407de20999e248fc8640623d0caba8e0aea49e27368ac",
+    "apps/dsh-plugin/client.mjs": "31a8511b752e2f7d3298c5592b6d0298621e9936c554369c33335d335ff75617",
+    "apps/dsh-plugin/index.mjs": "004ac692df4b65c821f6165b5eed07f011660e954c48a8326ce1d16d03c35159",
+    "scripts/build.mjs": "19a5b71599811d0c54cac2a5fe23ad59c6e7556fa4281135275e847ef69b1940",
+    "packages/core/native400-node-control-access.mjs": "3d7ea73e572d238caa32e6b952e24cd2ace4f2fbaec86f3274efb474847a72fe",
+    "packages/runtime/native400-node-control-channel.mjs": "805b711c972ebe41a1f17bc7a0fa8e01eb32de3d43ff39f7d6cc79d60987d9b2",
+    "packages/ui/native400-node-controls.mjs": "1780f10bb63dc7e3eecbc138ece2549509c3fe5a7e9a7f489e1c4d1183580f8c",
+    "tests/native400-node-control-channel.test.mjs": "9f1c8101df63043a456e40532b10cd19c7188181296712ca1b93395631ff29e2",
+    "scripts/verify-native400-node-control-channel.mjs": "cde3efd56a41d578eeea2419302f01d3f0263cced7fddc0336d14c3ec26bf862"
+  },
+  "existing_source_changes": [
+    "packages/ui/index.mjs",
+    "packages/runtime/native400-reviewed-lan-request.mjs",
+    "packages/runtime/native400-node-control-window.mjs",
+    "packages/runtime/native400-tcp-lan-request.mjs",
+    "packages/runtime/index.mjs",
+    "packages/runtime/native400-tcp-lan-host.mjs",
+    "packages/runtime/service.mjs",
+    "apps/dsh-plugin/client.mjs",
+    "apps/dsh-plugin/index.mjs",
+    "scripts/build.mjs"
+  ],
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "796dccb9106c9d7c40ff6068057240208c87c59a4a5f3dc53f9e2b956c340a66",
+    "docs/context/current-todos.md": "c1cdbe3d6ee5ba325d84da9bd45041005bd2a932edde4705c8bb5101e88c72c3"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "c3f5e5aaca67cb6117d5394a725ed5c0c99addc1da4f5d125fff21510f948cc2",
+    "docs/context/current-todos.md": "b3acb093e3071bed42fe70a2b002dd434a000d91c94951cec67581b4f5eeaa95"
+  },
+  "endpoint_changes_during_turn": [
+    "docs/context/current-status.md",
+    "docs/context/current-todos.md"
+  ],
+  "additional_readonly_reference_sha256": {
+    "apps/round-pet/reports/2026-11-05-400-startup-capture.md": "4c75cd5bc332124b2916b9759c830c63394682581683c64f2262214d520e450b"
+  },
+  "actual_original_metadata_cache_payload_audit": true,
+  "actual_independent_review_and_window_bound_to_exact_request": true,
+  "loopback_review_restricted_to_original_test": true,
+  "device_config_handoff_remains_LAN_only": true,
+  "actual_UDS_private_Bearer_instance_and_scope_client": true,
+  "actual_HTTP_exact_Origin_provider_and_body_budgets": true,
+  "actual_shared_React_hook_through_HTTP_UDS_and_TCP": true,
+  "actual_loopback_binary_protocol_and_model_frame0": true,
+  "exact_duplicate_does_not_reissue_BASE_or_renew_TTL": true,
+  "source_and_session_timer_invalidation_without_new_requests": true,
+  "captured_owner_exit_not_public_replacement": true,
+  "private_credentials_not_in_descriptor_global_status_or_render_tree": true,
+  "default_plugin_and_service_readonly_without_provider": true,
+  "actual_browser_DOM_or_installed_DSH_login_provider": false,
+  "actual_LAN_ESP_frame_refresh_or_real_media_SHA_evidence": false,
+  "Python_or_upstream_USB_script_executed": false,
+  "real_credentials_materials_or_inventory_read": false,
+  "production_listener_or_profile_changes": false,
+  "approval_issued_for_real_media_or_device": false,
+  "TCP_core_codec_owner_wire_and_TTL_implementation_unchanged": true,
+  "upstream_evidence_separate": {
+    "f553_restored_and_user_playback_touch_confirmed": true,
+    "current_fluency_accepted_strict24_not_gate": true,
+    "host_startup_capture_tools_offline_complete": true,
+    "real_startup_capture_or_TCP_not_accepted": true,
+    "executed_by_this_task": false
+  },
+  "not_covered": [
+    "Real browser DOM and installed DSH trusted login/provider/native picker integration",
+    "Reviewed upstream source with actual LAN success and real ESP first-frame/cancel/link loss",
+    "Live device resource/worst latency/startup capture and regression observations",
+    "Product pairing/BLE/STATE/media/persistence/V3"
+  ],
+  "document_links_checked": 16,
+  "dist_runtime_matches_source": true,
+  "dist_license_current": true,
+  "unchanged_TCP_source_sha256": {
+    "packages/runtime/native400-tcp-owner.mjs": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/core/native400-tcp-control.mjs": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384"
+  }
+}

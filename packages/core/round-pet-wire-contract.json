@@ -1,0 +1,1762 @@
+{
+  "contract": "round-pet-wire-table/1",
+  "profile": "round-pet-native360-wire/1",
+  "max_body_bytes": 4096,
+  "max_header_bytes": 8192,
+  "defs": {
+    "id": {
+      "type": "string",
+      "format": "id"
+    },
+    "u64": {
+      "type": "string",
+      "format": "u64"
+    },
+    "positive": {
+      "type": "string",
+      "format": "positive"
+    },
+    "sha": {
+      "type": "string",
+      "format": "sha"
+    },
+    "boolean": {
+      "type": "boolean"
+    },
+    "nil": {
+      "type": "null"
+    },
+    "elapsed": {
+      "type": "integer",
+      "min": 0,
+      "max": 2147483647
+    },
+    "duration": {
+      "type": "integer",
+      "min": 1,
+      "max": 30000
+    },
+    "action": {
+      "type": "integer",
+      "min": 0,
+      "max": 77
+    },
+    "bytes": {
+      "type": "integer",
+      "min": 544,
+      "max": 5865472
+    },
+    "context": {
+      "type": "object",
+      "fields": {
+        "device_id": "id",
+        "binding_id": "id",
+        "binding_epoch": "u64",
+        "boot_id": "id",
+        "session_id": "id",
+        "controller_id": "id",
+        "service_instance_id": "id"
+      }
+    },
+    "control": {
+      "type": "object",
+      "fields": {
+        "controller_id": "id",
+        "service_instance_id": "id",
+        "control_epoch": "positive",
+        "lease_id": "id"
+      }
+    },
+    "package": {
+      "type": "object",
+      "fields": {
+        "namespace": {
+          "const": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6"
+        },
+        "firmware_package_sha256": "sha",
+        "hub_manifest_sha256": "sha"
+      }
+    },
+    "target": {
+      "type": "object",
+      "fields": {
+        "command_id": "id",
+        "revision": "positive",
+        "character_id": "id",
+        "variant_id": "id",
+        "manifest_sha256": "sha",
+        "action_id": "action",
+        "asset_sha256": "sha"
+      }
+    },
+    "descriptor": {
+      "type": "object",
+      "fields": {
+        "bytes": "bytes",
+        "width": {
+          "const": 360
+        },
+        "height": {
+          "const": 360
+        },
+        "fps": {
+          "const": 24
+        },
+        "frames": {
+          "const": 241
+        },
+        "codec_flag": {
+          "const": 1
+        },
+        "key_interval": {
+          "const": 12
+        },
+        "tile_rows": {
+          "const": 20
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "fields": {
+        "namespace": {
+          "const": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6"
+        },
+        "action_id": "action",
+        "asset_sha256": "sha",
+        "bytes": "bytes"
+      }
+    },
+    "entry": {
+      "type": "object",
+      "fields": {
+        "action_id": "action",
+        "asset_sha256": "sha",
+        "bytes": "bytes",
+        "object_generation": "positive"
+      }
+    },
+    "versions": {
+      "type": "object",
+      "fields": {
+        "capabilities": {
+          "const": 2
+        },
+        "control": {
+          "const": 1
+        },
+        "lease": {
+          "const": 1
+        },
+        "playback": {
+          "const": 2
+        },
+        "display": {
+          "const": 2
+        },
+        "storage": {
+          "const": 2
+        },
+        "inventory": {
+          "const": 1
+        },
+        "touch": {
+          "const": 1
+        },
+        "cancel": {
+          "const": 1
+        },
+        "error": {
+          "const": 1
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "fields": {
+        "schema_version": {
+          "const": 2
+        },
+        "protocols": {
+          "type": "array",
+          "items": {
+            "const": "hub-device/1"
+          },
+          "min": 1,
+          "max": 1
+        },
+        "firmware_version": "id",
+        "board_profile": "id",
+        "display": {
+          "type": "object",
+          "fields": {
+            "width": {
+              "const": 466
+            },
+            "height": {
+              "const": 466
+            },
+            "shape": {
+              "const": "circle"
+            },
+            "pixel_format": {
+              "const": "RGB565"
+            }
+          }
+        },
+        "presentation_modes": {
+          "type": "array",
+          "items": {
+            "const": "center"
+          },
+          "min": 1,
+          "max": 1
+        },
+        "codecs": {
+          "type": "array",
+          "items": {
+            "const": "PET4"
+          },
+          "min": 1,
+          "max": 1
+        },
+        "cache": {
+          "type": "object",
+          "fields": {
+            "playback_bytes": {
+              "const": 5865472
+            },
+            "persistent": {
+              "type": "object",
+              "fields": {
+                "active_slots": {
+                  "const": 4
+                },
+                "staging_slots": {
+                  "const": 1
+                },
+                "slot_bytes": {
+                  "const": 5865472
+                }
+              }
+            }
+          }
+        },
+        "max_asset_bytes": {
+          "const": 5865472
+        },
+        "max_downloads": {
+          "const": 1
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "const": "touch"
+          },
+          "min": 1,
+          "max": 1
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "const": "display"
+          },
+          "min": 1,
+          "max": 1
+        },
+        "extensions": {
+          "type": "object",
+          "fields": {
+            "round_pet": {
+              "type": "object",
+              "fields": {
+                "profile": {
+                  "const": "round-pet-native360/1"
+                },
+                "namespace": {
+                  "const": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6"
+                },
+                "media": "media",
+                "versions": "versions"
+              }
+            }
+          }
+        }
+      }
+    },
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "lease.acquire"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "request_id": "id",
+                "request_seq": "positive",
+                "expected_epoch": "u64",
+                "lease_id": "nil",
+                "lease_ms": "duration"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "lease.renew"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "request_id": "id",
+                "request_seq": "positive",
+                "expected_epoch": "u64",
+                "lease_id": "id",
+                "lease_ms": "duration"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "playback.set"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "control": "control",
+                "target": "target",
+                "package_ref": "package",
+                "asset_descriptor": "descriptor",
+                "mode": {
+                  "const": "base_loop"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "storage.save"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "operation_id": "id",
+                "target": "target",
+                "package_ref": "package",
+                "victim_action_id": {
+                  "oneOf": [
+                    "nil",
+                    "action"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "playback.cancel"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "operation_id": "id",
+                "target": "target",
+                "control": "control"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "binding.revoke"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "operation_id": "id"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "query.display"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "query_id": "id"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "dispatch_id": "id",
+            "kind": {
+              "const": "query.inventory"
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "query_id": "id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "maintenance": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "phase": {
+              "const": "none"
+            },
+            "generation": "u64",
+            "reason": {
+              "const": "none"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "phase": {
+              "const": "loading"
+            },
+            "generation": "u64",
+            "reason": {
+              "const": "loading"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "phase": {
+              "const": "verifying"
+            },
+            "generation": "u64",
+            "reason": {
+              "const": "verifying"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "phase": {
+              "const": "saving"
+            },
+            "generation": "u64",
+            "reason": {
+              "const": "saving"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "phase": {
+              "const": "recovering"
+            },
+            "generation": "u64",
+            "reason": {
+              "const": "recovering"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "phase": {
+              "const": "blocked"
+            },
+            "generation": "u64",
+            "reason": {
+              "const": "blocked"
+            }
+          }
+        }
+      ]
+    },
+    "record": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "accepted"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": {
+              "enum": [
+                "ready",
+                "deferred_local"
+              ]
+            },
+            "first_frame": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "downloading"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": "nil",
+            "first_frame": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "verified"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": "nil",
+            "first_frame": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "playing"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": "nil",
+            "first_frame": {
+              "type": "object",
+              "fields": {
+                "refresh_generation": "positive",
+                "first_frame_seq": "positive"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "failed"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": "nil",
+            "first_frame": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "cancelled"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": "nil",
+            "first_frame": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "playback.report"
+            },
+            "report_seq": "positive",
+            "target": "target",
+            "control": "control",
+            "package_ref": "package",
+            "phase": {
+              "const": "ended"
+            },
+            "elapsed_ms": "elapsed",
+            "admission": "nil",
+            "first_frame": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "origin": {
+              "const": "local"
+            },
+            "asset_ref": "nil",
+            "source_command": "nil",
+            "refresh_generation": "u64",
+            "frame_seq": "u64",
+            "elapsed_ms": "elapsed",
+            "maintenance": "maintenance",
+            "display_state": {
+              "const": "unknown"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "origin": {
+              "const": "remote"
+            },
+            "asset_ref": "nil",
+            "source_command": "nil",
+            "refresh_generation": "u64",
+            "frame_seq": "u64",
+            "elapsed_ms": "elapsed",
+            "maintenance": "maintenance",
+            "display_state": {
+              "const": "unknown"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "origin": {
+              "const": "local"
+            },
+            "asset_ref": "asset",
+            "source_command": "nil",
+            "refresh_generation": "positive",
+            "frame_seq": "positive",
+            "elapsed_ms": "elapsed",
+            "maintenance": "maintenance",
+            "display_state": {
+              "const": "held_last_valid"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "origin": {
+              "const": "remote"
+            },
+            "asset_ref": "asset",
+            "source_command": {
+              "type": "object",
+              "fields": {
+                "context": "context",
+                "target": "target"
+              }
+            },
+            "refresh_generation": "positive",
+            "frame_seq": "positive",
+            "elapsed_ms": "elapsed",
+            "maintenance": "maintenance",
+            "display_state": {
+              "const": "held_last_valid"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "origin": {
+              "const": "local"
+            },
+            "asset_ref": "asset",
+            "source_command": "nil",
+            "refresh_generation": "positive",
+            "frame_seq": "positive",
+            "elapsed_ms": "elapsed",
+            "maintenance": "maintenance",
+            "display_state": {
+              "const": "playing"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "display.report"
+            },
+            "display_seq": "positive",
+            "kind": {
+              "enum": [
+                "event",
+                "snapshot"
+              ]
+            },
+            "query_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "origin": {
+              "const": "remote"
+            },
+            "asset_ref": "asset",
+            "source_command": {
+              "type": "object",
+              "fields": {
+                "context": "context",
+                "target": "target"
+              }
+            },
+            "refresh_generation": "positive",
+            "frame_seq": "positive",
+            "elapsed_ms": "elapsed",
+            "maintenance": "maintenance",
+            "display_state": {
+              "const": "playing"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "saved"
+            },
+            "commit_stage": {
+              "const": "confirmed"
+            },
+            "commit": {
+              "type": "object",
+              "fields": {
+                "evidence": {
+                  "const": "root_commit"
+                },
+                "root_seq": "positive",
+                "object_generation": "positive"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "already_available"
+            },
+            "commit_stage": {
+              "const": "not_started"
+            },
+            "commit": {
+              "type": "object",
+              "fields": {
+                "evidence": {
+                  "const": "inventory_reference"
+                },
+                "root_seq": "positive",
+                "object_generation": "positive"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "deferred"
+            },
+            "commit_stage": {
+              "const": "pre_gate"
+            },
+            "commit": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "failed"
+            },
+            "commit_stage": {
+              "const": "pre_gate"
+            },
+            "commit": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "failed"
+            },
+            "commit_stage": {
+              "const": "post_gate"
+            },
+            "commit": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "cancelled_pre_gate"
+            },
+            "commit_stage": {
+              "const": "pre_gate"
+            },
+            "commit": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 2
+            },
+            "type": {
+              "const": "storage.report"
+            },
+            "storage_seq": "positive",
+            "operation_id": "id",
+            "source_target": "target",
+            "package_ref": "package",
+            "status": {
+              "const": "outcome_unknown"
+            },
+            "commit_stage": {
+              "const": "marker_attempted"
+            },
+            "commit": "nil"
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "inventory.snapshot"
+            },
+            "inventory_seq": "positive",
+            "query_id": "id",
+            "known": {
+              "const": false
+            },
+            "namespace": {
+              "const": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6"
+            },
+            "root_seq": "nil",
+            "root_state": "nil",
+            "active": {
+              "type": "array",
+              "items": "entry",
+              "min": 0,
+              "max": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "inventory.snapshot"
+            },
+            "inventory_seq": "positive",
+            "query_id": "id",
+            "known": {
+              "const": true
+            },
+            "namespace": {
+              "const": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6"
+            },
+            "root_seq": "u64",
+            "root_state": {
+              "enum": [
+                "EMPTY",
+                "IDLE_READY",
+                "OFFLINE_READY"
+              ]
+            },
+            "active": {
+              "type": "array",
+              "items": "entry",
+              "min": 0,
+              "max": 4
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "touch.event"
+            },
+            "event_seq": "positive",
+            "local_token": "positive",
+            "phase": {
+              "const": "requested"
+            },
+            "refresh_generation": "u64",
+            "elapsed_ms": "elapsed",
+            "base_target": {
+              "oneOf": [
+                "nil",
+                "target"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "touch.event"
+            },
+            "event_seq": "positive",
+            "local_token": "positive",
+            "phase": {
+              "const": "playing"
+            },
+            "refresh_generation": "positive",
+            "elapsed_ms": "elapsed",
+            "base_target": {
+              "oneOf": [
+                "nil",
+                "target"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "touch.event"
+            },
+            "event_seq": "positive",
+            "local_token": "positive",
+            "phase": {
+              "const": "ended"
+            },
+            "refresh_generation": "u64",
+            "elapsed_ms": "elapsed",
+            "base_target": {
+              "oneOf": [
+                "nil",
+                "target"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "cancel.report"
+            },
+            "cancel_seq": "positive",
+            "operation_id": "id",
+            "target": "target",
+            "control": "control",
+            "effect": {
+              "enum": [
+                "cancelled_pre_gate",
+                "playback_only",
+                "outcome_unknown"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "control.receipt"
+            },
+            "receipt_seq": "positive",
+            "operation_id": "id",
+            "kind": {
+              "const": "binding.revoke"
+            },
+            "result": {
+              "const": "fenced_local"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "native360-v5-lease/1"
+            },
+            "type": {
+              "const": "lease.granted"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "kind": {
+              "enum": [
+                "acquire",
+                "renew"
+              ]
+            },
+            "control": "control",
+            "lease_ms": "duration"
+          }
+        }
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "fields": {
+        "dispatch_id": {
+          "oneOf": [
+            "nil",
+            "id"
+          ]
+        },
+        "record": "record"
+      }
+    },
+    "permit": {
+      "type": "object",
+      "fields": {
+        "id": "id",
+        "target": "target",
+        "package_ref": "package",
+        "remaining_ms": "duration"
+      }
+    },
+    "message": {
+      "oneOf": [
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.begin"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "nil",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "boot_id": "id",
+                "capabilities": "capabilities",
+                "versions": "versions",
+                "package_ref": "package"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.challenge"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "challenge_id": "id",
+                "versions": "versions",
+                "package_ref": "package",
+                "execution_profile": {
+                  "enum": [
+                    "first-window-review/1",
+                    "full-offline-review/1"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.confirm"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "challenge_id": "id",
+                "versions": "versions",
+                "package_ref": "package"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "hello.ready"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "versions": "versions",
+                "package_ref": "package",
+                "execution_profile": {
+                  "enum": [
+                    "first-window-review/1",
+                    "full-offline-review/1"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "exchange.request"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "observation": {
+                  "oneOf": [
+                    "nil",
+                    "observation"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "exchange.response"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "control": {
+                  "oneOf": [
+                    "nil",
+                    "command"
+                  ]
+                },
+                "read_permit": {
+                  "oneOf": [
+                    "nil",
+                    "permit"
+                  ]
+                },
+                "poll_after_ms": {
+                  "type": "integer",
+                  "min": 0,
+                  "max": 500
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "manifest.page"
+            },
+            "request_id": "id",
+            "request_seq": "positive",
+            "context": "context",
+            "payload": {
+              "type": "object",
+              "fields": {
+                "package_ref": "package",
+                "offset": {
+                  "type": "integer",
+                  "min": 0,
+                  "max": 45
+                },
+                "total_actions": {
+                  "const": 46
+                },
+                "next_offset": {
+                  "oneOf": [
+                    "nil",
+                    {
+                      "type": "integer",
+                      "min": 1,
+                      "max": 45
+                    }
+                  ]
+                },
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "fields": {
+                      "action_id": "action",
+                      "asset_sha256": "sha",
+                      "asset_descriptor": "descriptor"
+                    }
+                  },
+                  "min": 1,
+                  "max": 8
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "fields": {
+            "protocol": {
+              "const": "hub-device/1"
+            },
+            "profile": {
+              "const": "round-pet-native360-wire/1"
+            },
+            "schema_version": {
+              "const": 1
+            },
+            "type": {
+              "const": "error"
+            },
+            "request_id": {
+              "oneOf": [
+                "nil",
+                "id"
+              ]
+            },
+            "request_seq": {
+              "oneOf": [
+                "nil",
+                "positive"
+              ]
+            },
+            "context": {
+              "oneOf": [
+                "nil",
+                "context"
+              ]
+            },
+            "payload": {
+              "type": "object",
+              "fields": {
+                "code": {
+                  "enum": [
+                    "invalid_message",
+                    "unsupported_encoding",
+                    "authentication_failed",
+                    "stale_binding",
+                    "unapproved_package",
+                    "touch_only",
+                    "first_window_action",
+                    "stale_session",
+                    "stale_control",
+                    "stale_revision",
+                    "idempotency_conflict",
+                    "unsupported_profile",
+                    "unsupported_feature",
+                    "cache_busy",
+                    "lease_expired",
+                    "deadline_exceeded",
+                    "message_too_large",
+                    "incompatible_asset",
+                    "queue_full",
+                    "maintenance_busy",
+                    "storage_outcome_unknown",
+                    "temporarily_unavailable"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "media": {
+      "type": "object",
+      "fields": {
+        "width": {
+          "const": 360
+        },
+        "height": {
+          "const": 360
+        },
+        "fps": {
+          "const": 24
+        },
+        "frames": {
+          "const": 241
+        },
+        "codec_flag": {
+          "const": 1
+        },
+        "key_interval": {
+          "const": 12
+        },
+        "tile_rows": {
+          "const": 20
+        }
+      }
+    }
+  },
+  "errors": {
+    "invalid_message": {
+      "http": 400,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unsupported_encoding": {
+      "http": 400,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "authentication_failed": {
+      "http": 401,
+      "recovery": "new_session",
+      "automatic_retry": false
+    },
+    "stale_binding": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unapproved_package": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "touch_only": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "first_window_action": {
+      "http": 403,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "stale_session": {
+      "http": 409,
+      "recovery": "new_session",
+      "automatic_retry": false
+    },
+    "stale_control": {
+      "http": 409,
+      "recovery": "new_session",
+      "automatic_retry": false
+    },
+    "stale_revision": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "idempotency_conflict": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unsupported_profile": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "unsupported_feature": {
+      "http": 409,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "cache_busy": {
+      "http": 409,
+      "recovery": "query_only",
+      "automatic_retry": false
+    },
+    "lease_expired": {
+      "http": 412,
+      "recovery": "renew_then_new",
+      "automatic_retry": false
+    },
+    "deadline_exceeded": {
+      "http": 412,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "message_too_large": {
+      "http": 413,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "incompatible_asset": {
+      "http": 422,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "queue_full": {
+      "http": 429,
+      "recovery": "none",
+      "automatic_retry": false
+    },
+    "maintenance_busy": {
+      "http": 503,
+      "recovery": "query_only",
+      "automatic_retry": false
+    },
+    "storage_outcome_unknown": {
+      "http": 503,
+      "recovery": "query_only",
+      "automatic_retry": false
+    },
+    "temporarily_unavailable": {
+      "http": 503,
+      "recovery": "bounded_read_same_session",
+      "automatic_retry": false
+    }
+  },
+  "paths": {
+    "hello": "/hub-device/v1/hello",
+    "exchange": "/hub-device/v1/exchange",
+    "manifest": "/hub-device/v1/manifests/",
+    "assets": "/hub-device/v1/assets/"
+  },
+  "revision": 2
+}

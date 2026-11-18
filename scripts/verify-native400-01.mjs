@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-01.test.mjs'],expected:30,timeoutMs:120000,layer:'native400-offline-identity-import',prefix:'h401-',scope:'Original 78-description 400 PET4/241 and118 frames, explicit candidate recipe/N/independent approval, private CAS and workers. No real assets imported, firmware/device, production listener, existing configuration or namespace migration.'});

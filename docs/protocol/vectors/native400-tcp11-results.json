@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "real-historical-source-audit-not-live-device-or-material-approval",
+  "tests": {
+    "specialized_and_isolated": 18,
+    "check": "passed",
+    "full_with_build": 1586,
+    "full_exit_code": 0,
+    "full_wall_ms": 100148.238583,
+    "final_build_exit_code": 0
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 1194,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "INPUT01 fresh metadata and full cache/payload hashes produce historical evidence only after fd exit",
+    "INPUT02 pure headers preserve old approved inspector behavior without allowing metadata override",
+    "INPUT03 independent metadata cache and mapping pins reject wrong digest domains",
+    "INPUT04 degraded roots remain diagnostic in old inspector but are not input-audit success",
+    "INPUT05 selected uint64 sequence stays decimal precise and floor/equal roots reject",
+    "INPUT06 whole-cache self hash cannot conceal a corrupt payload against candidate identity",
+    "INPUT07 later cache read detects mutation of an earlier metadata fd before publication",
+    "INPUT08 symlinks hardlinks unsafe cache and writable metadata reject without repair",
+    "INPUT09 same-byte cache path replacement cannot substitute for the pinned fd",
+    "INPUT10 close immediately fences publication but waits an ignored-abort real fd hook",
+    "INPUT11 abort during cache work keeps all fd ownership until actual hook exit",
+    "INPUT12 deadline invalidates a held hook without pretending that I/O exited",
+    "INPUT13 explicit 32MiB historical container offset reads only its 28MiB cache interval",
+    "INPUT14 invalid offsets/source extents and mismatched actual file size reject",
+    "INPUT15 eight-semantic index cannot silently replace complete78 even with a matching raw SHA",
+    "INPUT16 repeated audit performs new bytes read and cannot upgrade a prior historical result",
+    "INPUT17 malformed JSON duplicate keys and unknown expected fields are not self-approval",
+    "INPUT18 pre-aborted audit opens no file and private source path never appears in stable error"
+  ],
+  "source_sha256": {
+    "packages/core/native400-bootstrap.mjs": "01565ac17c61c5b2ff0e59be879fe130bacdd2f0a34837f641094f7d86a59c79",
+    "packages/runtime/native400-lan-input-audit.mjs": "800cdc2152d954dc3cd3ce646b41869c0026522ddbbf5f13249899af7d27b83c",
+    "tests/native400-lan-input-audit.test.mjs": "aed98bc68c002f44a2513b67b69bfec5851ba4d44ab8a46c24575ad28c39562e",
+    "scripts/verify-native400-lan-input-audit.mjs": "56c16d2607d07fd25bf2f6daead2712c6af15784a4724e8ee578d4b55129fbc2"
+  },
+  "previous_source_changed": [
+    "packages/core/native400-bootstrap.mjs"
+  ],
+  "unchanged_transport_service_sha256": {
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-tcp-owner.mjs": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+    "packages/runtime/native400-tcp-lan-profile.mjs": "664cf33e2ba53d48042bcd87d8a5a5c8f1c091e510e3df5acd0b98d5c4764410",
+    "packages/runtime/native400-tcp-lan-host.mjs": "df374669a4c11ed661a8ef279fbb8655ceb6b5c392728959a5c0ee1b7abfbc20",
+    "packages/runtime/native400-tcp-lan-request.mjs": "7dca9133089f975f099c2c70447160c198f5db88260b248ad4d67fddc784d4df",
+    "packages/runtime/service.mjs": "e1f83c1bbb63f23ee7ac9b79b5500b9fc744509a5f781f7b1925930cfdf79e44"
+  },
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "apps/round-pet/reports/2026-11-05-400-lan-input-preflight.md": "f0b2c69b2a8c3e268022c1c244d6cd89658adb291b1db7566b9f094ff540548c",
+    "apps/round-pet/reports/2026-11-05-400-lan-input-preflight.json": "19bbd97973651a4f924770435831136d7282af69fc09d17967b6484bac56de00",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.cpp": "a7d642f0d00d94202be9fe4e655dbb410a71e32fb343fd24dc14d476eecbaf87"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "apps/round-pet/reports/2026-11-05-400-lan-input-preflight.md": "f0b2c69b2a8c3e268022c1c244d6cd89658adb291b1db7566b9f094ff540548c",
+    "apps/round-pet/reports/2026-11-05-400-lan-input-preflight.json": "19bbd97973651a4f924770435831136d7282af69fc09d17967b6484bac56de00",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.cpp": "a7d642f0d00d94202be9fe4e655dbb410a71e32fb343fd24dc14d476eecbaf87"
+  },
+  "endpoint_changes_during_turn": [],
+  "real_historical_audit": {
+    "passed": true,
+    "date": "2026-11-05",
+    "evidence": {
+      "recipe": "native400-lan-input-evidence/1",
+      "sha256": "2a4567ac1c705b28d225a728e730bf32c3d35ba349d43f5e5f5fa42c594d480f",
+      "content": {
+        "schema_version": 1,
+        "scope": "offline-input-audit",
+        "identity": {
+          "namespace_sha256": "a34d0c7ba6e7ede9fb9973977dd31fb8a7eb7dc92158cff0308da2640c226e2a",
+          "source_manifest_sha256": "a1c7c2a6a6a5ffeb113e403262252739271afc18db0a6d53ab40f1ebbab94ae5",
+          "hub_index_sha256": "5bd657d47a288b055c4806e4245c07c470ad9057edf37338c75d8450fe19df29",
+          "records": [
+            {
+              "action": 0,
+              "bytes": 4607051,
+              "frames": 241,
+              "asset_sha256": "c4f7ef90127f02bfb617da30811dfdb429de93369b2c3a8b5563564b6ab4c3fb"
+            },
+            {
+              "action": 1,
+              "bytes": 3568101,
+              "frames": 241,
+              "asset_sha256": "8a408b12da9f2161917e9a15cc5bc40c77f557b62a62132e94c006261af73d76"
+            },
+            {
+              "action": 4,
+              "bytes": 3972049,
+              "frames": 241,
+              "asset_sha256": "35ce44888bcc2263d7e9d8aca8e55527833523a6e4985ba650877febf34e7980"
+            },
+            {
+              "action": 11,
+              "bytes": 4172848,
+              "frames": 241,
+              "asset_sha256": "e13c50b66a3d8240b8ceeda7da18223ca1176d03a58206e15f76c5b42ac025ce"
+            }
+          ]
+        },
+        "mapping_sha256": "cc2802e46d2b3be147ee8733e0914fb8169109c0ae8400723f611707f1c20848",
+        "cache": {
+          "bytes": 29360128,
+          "sha256": "57ae06ed061b5aa82a55f498dd736c89f169ec5c6d582416cbc45c0909832965",
+          "source_file_bytes": 33554432,
+          "offset": 4194304,
+          "historical_only": true
+        },
+        "selection": {
+          "sector": 1,
+          "sequence": "2",
+          "minimum_sequence": "0",
+          "degraded_roots": false,
+          "fallback_from_newer": false,
+          "roots": [
+            {
+              "sector": 0,
+              "valid": true,
+              "sequence": "1",
+              "error": null
+            },
+            {
+              "sector": 1,
+              "valid": true,
+              "sequence": "2",
+              "error": null
+            }
+          ]
+        },
+        "checks": {
+          "catalog_metadata": true,
+          "payload_sha256": true,
+          "media_validation": "not-performed"
+        },
+        "current_device_inventory": false,
+        "material_usage_approved": false,
+        "device_evidence": false,
+        "authenticated": false
+      }
+    },
+    "resources_after_ready": {
+      "closed": false,
+      "open_files": 0,
+      "metadata_bytes_max": 2097152,
+      "stream_buffer_max": 65536,
+      "retained_cache_bytes": 0
+    },
+    "whole_backup_rehashed": false,
+    "all78_assets_rehashed": false,
+    "media_redecoded": false,
+    "credential_file_read": false,
+    "firmware_scripts_executed": false,
+    "device_operations": false,
+    "resources_after_close": {
+      "closed": true,
+      "open_files": 0,
+      "metadata_bytes_max": 2097152,
+      "stream_buffer_max": 65536,
+      "retained_cache_bytes": 0
+    }
+  },
+  "actual_LAN_bind": false,
+  "real_USB_STA_ESP": false,
+  "current_device_inventory_verified": false,
+  "new_usage_decision_or_config_issued": false,
+  "credential_file_read": false,
+  "firmware_scripts_executed": false,
+  "upstream_preflight_rerun": false,
+  "existing_services_or_profiles_changed": false,
+  "not_covered": [
+    "Independent material purpose decision and source/index responsibility agreement",
+    "Private credential/file and single USB session caller lifecycle",
+    "Fresh device inventory and same-device full backup",
+    "Live LAN config handoff and actual STA resources/worst latency/worker-View/cleanup/400fps",
+    "STATE media streaming persistence V3"
+  ],
+  "document_links_checked": 15,
+  "source_hashes_match": true,
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "endpoint_final_recheck_changes": []
+}

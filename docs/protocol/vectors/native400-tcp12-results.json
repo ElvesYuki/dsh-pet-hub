@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "independent-decisions-source-context-association-offline-only",
+  "tests": {
+    "specialized_and_isolated": 18,
+    "check": "passed",
+    "full_with_build": 1604,
+    "full_exit_code": 0,
+    "full_wall_ms": 98408.443417,
+    "final_build_exit_code": 0
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 1592,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "REVIEW01 actual completed audit binds independent decisions without NIC or listener I/O",
+    "REVIEW02 unfinished failed and closed audit have no assembly context",
+    "REVIEW03 rehashed JSON public snapshots and fake ready tasks cannot stand in for actual source I/O",
+    "REVIEW04 internal context is copied and does not trust replaced public task properties",
+    "REVIEW05 source references cannot be replaced by cache manifest raw index or mapping digest",
+    "REVIEW06 differing mapping or material review identifier rejects independently matching looking records",
+    "REVIEW07 metadata source license cannot be renamed even if both decisions use the new string",
+    "REVIEW08 credits and order must match each independent decision, without duplicate author claims",
+    "REVIEW09 remote4 media distribution persistent writes and alternate index policy are outside review scope",
+    "REVIEW10 absent unknown or old approval records do not self-migrate into a material review",
+    "REVIEW11 audit close revokes request source binding and handoff without closing someone else service",
+    "REVIEW12 request close is idempotent and leaves its caller-owned audit available",
+    "REVIEW13 actual UDS election stays unstarted and attached clients cannot obtain a handoff handle",
+    "REVIEW14 input mutations after assembly cannot change the bound opaque host identity",
+    "REVIEW15 source revoked inside trusted clock preparation cannot publish a request",
+    "REVIEW16 source binding does not extend an expired transport window or imply a device fact",
+    "REVIEW17 public request snapshot contains no endpoint digest review identity or source path",
+    "REVIEW18 existing TCP10 remains separate and a failed audit cannot be relabeled successful"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-lan-input-audit.mjs": "e39bcd808588abad915fd8e0786a4f923061936159995726ea2c0a768b7ec64f",
+    "packages/runtime/native400-reviewed-lan-request.mjs": "6625d53ab4e3d7d34fd384e58fc19279ec6df0b448dd8beccd1afb35a12f2c2f",
+    "tests/native400-reviewed-lan-request.test.mjs": "9d25f271e6bb2c11d3af1613c02738c73696917f2b6fa4e2b9f9ced7842af289",
+    "scripts/verify-native400-reviewed-lan-request.mjs": "688f9745d7adca5497a9259e307a89e5786c630fe8d80d9ca78800f62e2a9054"
+  },
+  "existing_source_changes": [
+    "packages/runtime/native400-lan-input-audit.mjs"
+  ],
+  "unchanged_lower_transport_service_sha256": {
+    "packages/runtime/native400-tcp-lan-request.mjs": "7dca9133089f975f099c2c70447160c198f5db88260b248ad4d67fddc784d4df",
+    "packages/runtime/native400-tcp-lan-profile.mjs": "664cf33e2ba53d48042bcd87d8a5a5c8f1c091e510e3df5acd0b98d5c4764410",
+    "packages/runtime/native400-tcp-lan-host.mjs": "df374669a4c11ed661a8ef279fbb8655ceb6b5c392728959a5c0ee1b7abfbc20",
+    "packages/runtime/native400-tcp-owner.mjs": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/service.mjs": "e1f83c1bbb63f23ee7ac9b79b5500b9fc744509a5f781f7b1925930cfdf79e44"
+  },
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "apps/round-pet/reports/2026-11-05-400-lan-input-preflight.md": "f0b2c69b2a8c3e268022c1c244d6cd89658adb291b1db7566b9f094ff540548c",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.cpp": "a7d642f0d00d94202be9fe4e655dbb410a71e32fb343fd24dc14d476eecbaf87",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_identity.h": "459c2d768f8f2f4473fe0b3b4e864cf13681c08f88bd5fb74b2415a38b8adbed"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "apps/round-pet/reports/2026-11-05-400-lan-input-preflight.md": "f0b2c69b2a8c3e268022c1c244d6cd89658adb291b1db7566b9f094ff540548c",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.cpp": "a7d642f0d00d94202be9fe4e655dbb410a71e32fb343fd24dc14d476eecbaf87",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_identity.h": "459c2d768f8f2f4473fe0b3b4e864cf13681c08f88bd5fb74b2415a38b8adbed"
+  },
+  "endpoint_changes_during_turn": [],
+  "license_review": {
+    "registered_local_readme_sha256": "20bfd7f6d1b588fe34048bbb7a4379e8a8bfaa9b2651b29639d8195a0115a3a0",
+    "fixed_upstream_ref": "86181ce1660a57ab27336630bab5b344de71b28c",
+    "new_online_fetch": "raw-and-blob-unavailable-cache-miss",
+    "new_rights_or_real_review_issued": false,
+    "real_purpose_document": "draft-only"
+  },
+  "original_synthetic_audit_to_request_assembly": true,
+  "actual_temporary_UDS": true,
+  "actual_new_TCP_listener": false,
+  "actual_LAN_config_handoff": false,
+  "real_material_record_or_window_decision_issued": false,
+  "real_source_reaudit": false,
+  "real_USB_STA_ESP": false,
+  "credential_file_read": false,
+  "firmware_scripts_or_builds_executed": false,
+  "current_device_inventory_or_backup_read": false,
+  "existing_service_or_DSH_profile_changed": false,
+  "not_covered": [
+    "Real independent material review and firmware index-trust acceptance",
+    "Private credential file and single USB caller lifecycle",
+    "Actual successful LAN config handoff plus post-handoff invalidation/second-call branches",
+    "Fresh device inventory/backup and actual STA resources latency worker-View cleanup 400fps",
+    "STATE media streaming persistence V3"
+  ],
+  "document_links_checked": 15,
+  "source_hashes_match": true,
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "endpoint_final_recheck_changes": []
+}

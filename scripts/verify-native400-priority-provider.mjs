@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-priority-provider.test.mjs'],expected:17,timeoutMs:30000,layer:'offline-priority-poll-draft-and-sticky-provider',prefix:'tcp24-',scope:'Pure capability/snapshot payloads and connection-bound priority provider; replay/order/expiry/generation, A/B touch semantics and genuine shared IPC/loopback model race. Default wire/owner unchanged; firmware contract remains draft; no ESP.'});

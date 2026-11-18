@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-tcp-host.test.mjs'],expected:13,timeoutMs:30000,layer:'native400-tcp-single-instance-host',prefix:'tcp07-',scope:'Explicit temporary UDS winner owns fresh original PC-file review and temporary loopback TCP; attached clients status only. No LAN/STA/ESP/real media, production services/config/profile or firmware script changes. No new wire or current device proof.'});

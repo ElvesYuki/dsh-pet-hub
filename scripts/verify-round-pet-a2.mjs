@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/round-pet-a2.test.mjs'],expected:35,layer:'round-pet-identity-streaming-import',prefix:'ha2-',scope:'Original synthetic 46-description real PET4, strict F/M/P/N/I recipes, independent test approval, temporary CAS/provenance, worker/quota/cancellation faults; no upstream media, firmware execution, listener, credentials or device.'});

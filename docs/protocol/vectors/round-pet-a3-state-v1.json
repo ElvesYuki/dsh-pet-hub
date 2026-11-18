@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "model": "round-pet-observation-candidate/1",
+  "scope": "original object-semantics only; no wire/certificate/device interoperation",
+  "steps": [
+    {"event":"request", "request_status":"requested", "playback_phase":null, "actual_action":null},
+    {"event":"sent", "request_status":"sent", "playback_phase":null, "actual_action":null},
+    {"event":"accepted", "request_status":"sent", "playback_phase":"accepted", "actual_action":null},
+    {"event":"verified", "request_status":"sent", "playback_phase":"verified", "actual_action":null},
+    {"event":"playing", "request_status":"sent", "playback_phase":"playing", "actual_action":null},
+    {"event":"display", "request_status":"sent", "playback_phase":"playing", "actual_action":0}
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "schema": "native400-cycle-budget-evidence/1",
+  "review_date": "2026-11-03",
+  "scope": "original media, disposable loopback TLS and injected independent virtual-clock cost; no real device or physical latency measurement",
+  "before_trace": {
+    "scope": "actual original driver, private TLS and explicit real local reader with injected dual-clock cost",
+    "last_checked_remaining_ms": 6001,
+    "interval_ms": 499,
+    "local_read_ms": 999,
+    "host_now": 8571,
+    "remaining_ms": 4503,
+    "result": "ECONNRESET",
+    "session": 0,
+    "peer_online": false
+  },
+  "after_trace": {
+    "scope": "current driver, early renew, private TLS and real local reader with injected dual-clock cost",
+    "original_remaining_before_touch_ms": 6001,
+    "new_trigger_ms": 6720,
+    "interval_ms": 499,
+    "local_read_ms": 999,
+    "host_now": 8571,
+    "remaining_ms": 11576,
+    "result": "success",
+    "session": 1,
+    "peer_online": true
+  },
+  "declared_budget": {
+    "poll_ms": 500,
+    "compute_ms": 100,
+    "exchange_ms": 500,
+    "source_ms": 1000,
+    "cleanup_ms": 100,
+    "margin_ms": 10,
+    "ack_ms": 4000,
+    "renew_floor_ms": 4510,
+    "silent_ms": 2200,
+    "renew_trigger_ms": 6720
+  },
+  "planned_job": {
+    "real_max_arithmetic": {
+      "fits_declared_plan": false,
+      "required_ms": 904242,
+      "job_ms": 120000,
+      "segments_per_pass": 170,
+      "initial_pages": 20,
+      "read_cycles": 360,
+      "compute_steps": 1310,
+      "play_ms": 10042,
+      "indefinite_loop": false
+    },
+    "original_dense": {
+      "fits_declared_plan": false,
+      "required_ms": 904242,
+      "job_ms": 120000,
+      "segments_per_pass": 170,
+      "initial_pages": 20,
+      "read_cycles": 360,
+      "compute_steps": 1310,
+      "play_ms": 10042,
+      "indefinite_loop": false
+    },
+    "short_original": {
+      "fits_declared_plan": true,
+      "required_ms": 112877,
+      "job_ms": 120000,
+      "segments_per_pass": 4,
+      "initial_pages": 20,
+      "read_cycles": 28,
+      "compute_steps": 486,
+      "play_ms": 4917,
+      "indefinite_loop": false
+    }
+  },
+  "dense_execution": {
+    "bytes": 5564915,
+    "frames": 241,
+    "segments_per_pass": 170,
+    "per_segment_injected_ms": 999,
+    "original_job_ms": 120000,
+    "observed": "failed before whole verified/first-frame and before170 segments; valid lease/one socket retained",
+    "case": "400-07-18"
+  },
+  "baseline_original_fixture_bytes_and_metadata_unchanged": true,
+  "source_audit": {
+    "paths_before": 314,
+    "changed": [
+      {
+        "path": "packages/runtime/native400-wire-review.mjs",
+        "sha256_before": "ce193b7bdf17431ffb9f2c152f64370756f951aa3d93d2041893a07d6d0720be",
+        "sha256_after": "20d081e5d7fdd42ec5536c152eaa610f766ba250e3e4468aee285222883ce4cf"
+      },
+      {
+        "path": "packages/simulator/native400-window-fixture.mjs",
+        "sha256_before": "fba4a5b85068523d0603fa857c9a7fae6aec09810b5f84ee00fb9ceea1cf7de0",
+        "sha256_after": "0b7cde955d86d6ce6cbbfe2bc4da44c3b39cc0d29a9a62249182c7cba0868d2a"
+      },
+      {
+        "path": "packages/simulator/native400-scheduling-driver.mjs",
+        "sha256_before": "ceb491db6ea007bcc6a0c30ba5e17b3096cd1c37a87880c7c646f6a5bc170782",
+        "sha256_after": "fc92fd0944075a815270fa8446cabe4ad22fc3a48a1f587a387afb7abd59cad7"
+      },
+      {
+        "path": "tests/native400-05.test.mjs",
+        "sha256_before": "9a5576d9857e30520c48ba0037e0433e3f7706cc6b5996d84f85bc16f5087685",
+        "sha256_after": "5ac9661d3758195b4d57e9aad7be642de8f2a05923a47c7ddbd00734ae9ef332"
+      },
+      {
+        "path": "tests/fixtures/native400-scheduling-lab.mjs",
+        "sha256_before": "fec49ba6d6786a4951319f70452796f91768df8195ca964a85a3aeca4386f902",
+        "sha256_after": "d8bb4892798dedc6d34af448e2ca075d84404aa3541b10a6939f4c66b404d931"
+      },
+      {
+        "path": "tests/fixtures/native400-review-lab.mjs",
+        "sha256_before": "847e4411c43ff0510e8526874a4df0ec70fc28c4948d37101e58701b5e9bcf7b",
+        "sha256_after": "ee7527f0ed70ef1055fc61ff5c9d0fe2efafea89736ecdcf92b36f63adead1f6"
+      }
+    ],
+    "new_files": [
+      {
+        "path": "packages/core/native400-cycle-budget.mjs",
+        "sha256": "e69c2b4782ec7c2364490a77341f40133f44133f9eea87f7d419810515dafad2"
+      },
+      {
+        "path": "tests/native400-07.test.mjs",
+        "sha256": "ba45c223e49b99f072736d587c817e27c04fd815a0e597985781f1d41168e487"
+      },
+      {
+        "path": "scripts/verify-native400-07.mjs",
+        "sha256": "c3671b6440ca8e33b5350ad36240d67a058d2c370228ff5ac6293bce2bef5a65"
+      }
+    ]
+  },
+  "fixed_contract": {
+    "sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "vectors_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "validation": {
+    "syntax_passed": true,
+    "full_build_tests": 1150,
+    "new_cases": 24,
+    "isolated_passed": true,
+    "temporary_environment_removed": true,
+    "cases": [
+      "400-07-01 derived early trigger preserves ACK floor and a full declared silent interval",
+      "400-07-02 actual6001 then499 plus999 local-read trace now renews and keeps one socket",
+      "400-07-03 pre-read exchange catches sub-poll interval before999ms local I/O",
+      "400-07-04 complete control flush499ms is accepted without hiding multiple HTTP exchanges",
+      "400-07-05 aggregate control exchange500ms fails even though individual HTTPs succeeded",
+      "400-07-06 local source at its exact1000ms deadline cannot be supplied or shown",
+      "400-07-07 synchronous decode101ms fails before verified or visible commit publication",
+      "400-07-08 synchronous decode100ms remains within declaration and keeps original deadline",
+      "400-07-09 exact GET deadline stops checked write and never supplies a whole segment",
+      "400-07-10 pre-read renew and999ms GET retain target without parallel HTTP",
+      "400-07-11 pending acceptance ACK deadline is not rescued by early renew",
+      "400-07-12 cancellation takes precedence over queued renewal at early threshold",
+      "400-07-13 close holds a timed-out abort-ignoring control operation until actual exit",
+      "400-07-14 operation budget cannot hide credential revocation during checked GET",
+      "400-07-15 finite planned admission rejects170 segments without calling a transport",
+      "400-07-16 explicit strict admission preserves active frame queue and revision on rejection",
+      "400-07-17 an admitted short plan still requires actual validation and independent first frame",
+      "400-07-18 actual170-segment original PET4 exceeds job before full validation despite valid renews",
+      "400-07-19 independent host clock expiry is still rejected despite unchanged peer clock",
+      "400-07-20 over-budget submit cannot publish a fresh frame or replace known host actual",
+      "400-07-21 bounded-plan options cannot claim an indefinite loop or silently lengthen job",
+      "400-07-22 GET-only boundary consumes the permit from the preceding complete exchange",
+      "400-07-23 recovery exchange failure after genuine bad local media also fences context",
+      "400-07-24 two synchronous60ms steps exceed the total100ms burst before display publication"
+    ]
+  },
+  "uncovered": [
+    "physical device worst time/ESP resources",
+    "formal negotiated schedule/job/proof policy",
+    "real material use approval and import",
+    "400 Flash writer and recovery",
+    "production listener/plugin/IPC/real pet integration"
+  ]
+}

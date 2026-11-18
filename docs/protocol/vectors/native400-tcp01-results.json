@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-04",
+  "status": "offline-candidate-not-jointly-frozen",
+  "tests": {
+    "endpoint_header_host_oracle": 16,
+    "full_including_build": 1421,
+    "check": "syntax-passed"
+  },
+  "layers": {
+    "node_model": true,
+    "cpp_host": true,
+    "real_loopback_tcp": true,
+    "esp_device": false,
+    "production_listener": false
+  },
+  "source_sha256": {
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/core/native400-tcp-control.mjs": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+    "packages/runtime/native400-tcp.mjs": "5d1b828408eb41396ecc15365aeab0463d2ee14db6b4996d9dd09a4f840d274d",
+    "native/native400-tcp-check.cpp": "2ea7a63c0b0246c6dc8008c368a9263b1abb6388b2257c3bc0fe22442cc91356",
+    "tests/native400-tcp.test.mjs": "d926e49804546157283dc08ec65ffe7b625a7b621d8a03e5d800d6dc2978943e"
+  },
+  "endpoint_sources_rechecked_unchanged": true,
+  "shared_vectors": 7,
+  "real_media_read": false,
+  "authentication": "none-plaintext-LAN",
+  "verified_report": "not-in-draft",
+  "current_display": "unknown-without-STATE",
+  "not_implemented": [
+    "STATE/VERIFIED/EXIT/ERROR wire extensions",
+    "production owner and automatic reconnect",
+    "DSH device-control routes",
+    "TCP media streaming",
+    "runtime persistent write",
+    "V3",
+    "ESP socket/worker/View integration"
+  ],
+  "rollback": "close owned sockets/listener; invalidate generation; preserve old candidates; no config or storage migration"
+}

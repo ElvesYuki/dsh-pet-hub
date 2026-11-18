@@ -53,3 +53,25 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Local hub state and private inputs
+.DS_Store
+node_modules/
+dist/
+coverage/
+.cache/
+.runtime/
+.env
+.env.*
+*.token
+*.pem
+*.key
+*.pet
+*.webm
+*.mov
+
+.playwright-mcp/
+
+dist-dsh022/
+dist-dsh022-rc3/
+dist-dsh022-rc3-combined/

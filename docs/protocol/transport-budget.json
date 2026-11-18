@@ -1,0 +1,46 @@
+{
+  "status": "native360_selected_dynamic_tls_budget_not_measured",
+  "target_profile": "175c_native360_production",
+  "device_switch_confirmed_by_user": true,
+  "deployed_firmware_sha256": null,
+  "source_static_host_report": {
+    "flash_physical_bytes": 33554432,
+    "psram_physical_bytes": 8388608,
+    "display_width": 466,
+    "display_height": 466,
+    "asset_width": 360,
+    "asset_height": 360,
+    "encoded_psram_bytes": 5865472,
+    "rgb_and_history_psram_bytes": 907200,
+    "catalogs_psram_bytes": 9612,
+    "clip_psram_bytes": 3420,
+    "control_json_psram_bytes": 65537,
+    "decoder_download_internal_scratch_bytes": 30848,
+    "worker_control_stack_bytes": 20480,
+    "dma_internal_bytes": 37280,
+    "tls_rx_record_bytes": 16384,
+    "tls_tx_record_bytes": 4096,
+    "reported_app_partition_bytes": 2097152,
+    "reported_app_image_bytes": 1284288,
+    "reported_assets_partition_bytes": 29360128,
+    "reported_nvs_partition_bytes": 860160,
+    "cache_activation_slots": 4,
+    "cache_staging_slots": 1
+  },
+  "dynamic_measurements": {
+    "internal_download_free_bytes": null,
+    "internal_tls_peak_bytes": null,
+    "internal_largest_free_block_bytes": null,
+    "qualifier": "No production-native360 device measurements in this repository; do not substitute old128 or RAM-eval samples"
+  },
+  "candidate_envelope_not_measurement": {
+    "concurrent_tls_connections": 1,
+    "tls_peak_internal_allowance_bytes": 98304,
+    "additional_control_bytes": 4096,
+    "additional_worker_stack_bytes": 8192,
+    "required_internal_reserve_bytes": 32768,
+    "control_message_max_bytes": 4096,
+    "asset_range_max_bytes": 32768,
+    "asset_read_buffer_bytes": 4096
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "real-original-process-and-UDS-cleanup-barrier-host-only",
+  "tests": {
+    "specialized_and_isolated": 28,
+    "check": "passed",
+    "full_with_build": 1656,
+    "full_exit_code": 0,
+    "full_wall_ms": 105071.5365,
+    "final_build_exit_code": 0,
+    "sequential_full_runs": 3,
+    "prior_full_runs": [
+      {
+        "exit_code": 0,
+        "passed": 1656
+      },
+      {
+        "exit_code": 1,
+        "error": "incomplete_window in existing wall memory smoke; timer rounded fractional deadline early"
+      }
+    ],
+    "rerun_reason": "rejected async factory regression then monotonic sampling deadline fix; unchanged acceptance thresholds"
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 1390,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "PROC01 default disabled and invalid endpoints reject before any child exists",
+    "PROC02 actual original child consumes private JSON and closes before reporting queued",
+    "PROC03 malformed output duplicate fields extra fields and invalid UTF8 never become success",
+    "PROC04 repeated queued status-before-queued and truncated final lines are refused",
+    "PROC05 failed report and nonzero process exit preserve unknown without rerun",
+    "PROC06 wrong pin changed script or unsafe entry never spawn the consumer",
+    "PROC07 close-before-run and pre-aborted run cannot start a process",
+    "PROC08 cancellation waits for the real child and stdio close before private-file cleanup",
+    "PROC09 SIGTERM-ignoring owned child is killed after grace and actually reaped",
+    "PROC10 exit alone is insufficient while descendant inherited stdio remains open",
+    "PROC11 bounded stdout stderr and raw secret text are discarded with stable state",
+    "PROC12 ordinary bounded stderr is discarded and spawn errors are safe unknown",
+    "OWN13 only genuine sessions can transfer once and another owner cannot steal one",
+    "OWN14 closing during synchronous creation waits its already reserved registration",
+    "OWN15 fence rejects new work without closing a task that was never adopted",
+    "OWN16 successful or failed-but-clean sessions release capacity without creating another attempt",
+    "OWN17 replacing public methods cannot fake owned cleanup completion",
+    "SERVICE18 UDS and descriptor remain until a held consumer exits, then all owned files exit",
+    "SERVICE19 actual owned process joins service shutdown, with no live child or private lock after close",
+    "SERVICE20 uncertain cleanup retains UDS/503 until explicit session cleanup and manual service close",
+    "SERVICE21 attached close has no configuration handle and cannot stop the elected consumer",
+    "SERVICE22 closing rejects later adoption and never acquires caller-owned unrelated work",
+    "SERVICE23 service cleanup ignores replaced public session and lanConfig resource accessors",
+    "SERVICE24 default mode lacks config owner and LAN IPC remains read-only without new public slot",
+    "SERVICE25 startReviewed rejects fake requests and does not create a private staging file",
+    "SERVICE26 caller cannot override owner config or guard through the reviewed start options",
+    "OWN27 single-active admission rejects a second factory before it can allocate resources",
+    "PROC28 abort after queued history still yields unknown delivery and actual process exit"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-usb-process-consumer.mjs": "c95fbd41ad5b1f977afbb49121316396996779f3be7106e004c04ecc988ed641",
+    "packages/runtime/native400-config-owner.mjs": "a8cf77786b1de2b8754c65afd7dfe3b4c493f77cbe0db8ae339e07b2c6fb5591",
+    "packages/runtime/native400-private-config-session.mjs": "69f5c110e765a5ae24f65dc70da251b593d5fa6e2ceed1b98b417a8400fcce27",
+    "packages/runtime/service.mjs": "bb1dbc31dfc9ad6599aef798735c4c11968acf9c2c181ca02148ae2d7ef330dd",
+    "tests/fixtures/native400-config-child.mjs": "bf2b25b1687e60545c58379bcc780f38960be50cfdc58aca957b3cfded2054be",
+    "tests/native400-config-process-owner.test.mjs": "1884aa2c0d6103cfe07f54585d6b7be413dcbd33ed336ebf70233097c9185616",
+    "scripts/verify-native400-config-process-owner.mjs": "e7e52e27c9d79633ac73d2f94e5af48c072122e530b69ad910d2d396368044d8",
+    "packages/simulator/wall-memory.mjs": "214677471fd7d983954b4223b2a5b6c15fc0a8d9d9d1d90ba486bb7ba3434d4c"
+  },
+  "existing_source_changes": [
+    "packages/runtime/native400-private-config-session.mjs",
+    "packages/runtime/service.mjs",
+    "packages/simulator/wall-memory.mjs"
+  ],
+  "unchanged_lower_transport_and_source_sha256": {
+    "packages/runtime/native400-reviewed-lan-request.mjs": "b6224c9f35d5e1b241e70815141b655c30935e6e52dcf07cd35d6eba24d09d6e",
+    "packages/runtime/native400-tcp-lan-host.mjs": "db71e6d9a85f4824a0699d4d1c633516be02250bdfb0bca10bef6f3f1ede6d00",
+    "packages/runtime/native400-tcp-lan-request.mjs": "7dca9133089f975f099c2c70447160c198f5db88260b248ad4d67fddc784d4df",
+    "packages/runtime/native400-tcp-owner.mjs": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-lan-input-audit.mjs": "e39bcd808588abad915fd8e0786a4f923061936159995726ea2c0a768b7ec64f"
+  },
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "b2f2a2c29b2777e67b2ed5da4118f437455eda9d15baa8f4ea2c62ce808d3ab2",
+    "docs/context/current-todos.md": "b0a49258229a51633e6ba210fc5ed0bfa63a0746ffdcd0f2789f344b331a22aa",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "docs/protocol/round-pet400-lan-input-contract.md": "47e0af9139da29ea4e656212fab4a9444989b189bb4c2829c70d216e9335bfcc",
+    "apps/round-pet/reports/2026-11-05-400-lan-device.md": "648b0d425e49fb006847ddf9f6b028f617010a5ecc47b704c61100260da14ea6",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "5c906914f3a617d93ca8c1eb52e29fe52c804b705512c33b90d53ca5cf4f8a48",
+    "docs/context/current-todos.md": "5e4a7340d2f58888b4191171133a65ba9fdacd7fe344ec9cb2e9f2c1914f52fe",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "docs/protocol/round-pet400-lan-input-contract.md": "47e0af9139da29ea4e656212fab4a9444989b189bb4c2829c70d216e9335bfcc",
+    "apps/round-pet/reports/2026-11-05-400-lan-device.md": "648b0d425e49fb006847ddf9f6b028f617010a5ecc47b704c61100260da14ea6",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9"
+  },
+  "endpoint_changes_during_turn": [
+    "docs/context/current-status.md",
+    "docs/context/current-todos.md"
+  ],
+  "actual_original_Node_child_processes": true,
+  "actual_child_and_stdio_close_observed": true,
+  "actual_UDS_and_private_file_ownership_barrier": true,
+  "unknown_holds_UDS_until_explicit_cleanup": true,
+  "rejected_async_factory_regression": true,
+  "wall_sampling_deadline_rechecked": true,
+  "service_close_barrier_integrated": true,
+  "process_entry_script_SHA_pinned": true,
+  "full_import_closure_frozen": false,
+  "slice_TCP_LAN_listener_started": false,
+  "actual_upstream_Python_or_serial_executed": false,
+  "slice_USB_STA_ESP": false,
+  "real_credentials_read_or_current_device_inventory_probed": false,
+  "real_review_record_issued_by_this_run": false,
+  "firmware_scripts_or_builds_executed": false,
+  "existing_service_profile_changes": false,
+  "upstream_evidence": {
+    "independent_real_USB_STA_partial": true,
+    "TCP_business_accepted": false,
+    "first_window_peer_mismatch": true,
+    "second_window_PMU_read_failure_before_network": true,
+    "PMU_esp_err_known": false,
+    "restored_application_prefix": "f5538cb9",
+    "fresh_backup_sha256": "cf617bdd1ca07c88ce1ee6338721d9aa0c424172ee8ccd1cb2ce24f46a64eb80",
+    "SDK_low_water_bytes_without_TCP_business": 55715,
+    "fresh_human_touch_confirmation": "confirmed_by_user_per_final_upstream_summary",
+    "PMU_probe_host_build_complete": true,
+    "PMU_new_default_prefix": "20f4af21",
+    "PMU_new_station_prefix": "e2a66c0c",
+    "PMU_new_candidates_deployed": false,
+    "raw_index_trust_local_provider_contract_explicit": true,
+    "runtime_no_compiled_index_pin": true,
+    "rerun_by_this_task": false
+  },
+  "not_covered": [
+    "Execution of real Python/serial consumer and current composite LAN success",
+    "Full actual interpreter/import closure freeze and execution proof",
+    "Stable PMU startup, current peer and fresh window device state",
+    "Real TCP OPEN/ACK/PRESENTED/CANCEL/reconnect and business resources/worst delay/400fps",
+    "Detached descendants beyond group/stdio ownership, device STA cleanup and media/persistence/V3"
+  ],
+  "additional_endpoint_readonly_sha256": {
+    "apps/round-pet/reports/2026-11-05-400-pmu-probe.md": "c43243611f1e928a9e82c0640f38a5e4718b7150f824dbb2027d9c1cd1a7d568"
+  },
+  "document_links_checked": 15,
+  "source_hashes_match": true,
+  "dist_matches_source": true,
+  "simulator_excluded_from_candidate_as_designed": true,
+  "dist_license_current": true
+}

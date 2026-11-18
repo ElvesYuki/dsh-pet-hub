@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-pet-continuity.test.mjs'],expected:4,timeoutMs:30000,layer:'pet-event-versus-continuous-state',prefix:'tcp22-',scope:'Existing event bridge, virtual clock with real authorized IPC and loopback TCP/model. Same counter expires; distinct event renews finite target; manual ownership and authority expiry. Hold policy is a proposal, not implemented.'});

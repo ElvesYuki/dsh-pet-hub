@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "offline-PC-source-binding-and-v0-first-window-proposal-not-joint-production-contract",
+  "tests": {
+    "specialized_and_isolated": 17,
+    "full_with_build": 1499,
+    "syntax_check": "passed",
+    "build": "dist candidate built; not installed/enabled",
+    "full_exit_code": 0,
+    "observed_full_wall_ms": 115470.577833
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 7203,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "BIND01 opaque preparation and opt-in reject before source access",
+    "BIND02 raw approved index is distinct from normalized index P M and namespace",
+    "BIND03 fresh pinned source becomes bounded snapshot with no automatic listener",
+    "BIND04 independently pinned source map and mapping reject wrong domains before listener",
+    "BIND05 valid degraded-root source is reviewable but not admitted to cached-control candidate",
+    "BIND06 payload corruption is checked on actual fresh read not prior map assertion",
+    "BIND07 same-byte path replacement during read cannot satisfy selected fd identity",
+    "BIND08 close fences immediately and waits ignored-abort source hook actual exit",
+    "BIND09 external abort during review waits real I/O and never opens owner",
+    "BIND10 external abort after bind closes actual listener timers and socket ownership",
+    "BIND11 fresh review does not authorize LAN production ports or implicit start",
+    "BIND12 start close race drains owned listener and does not revive closed task",
+    "BIND13 fresh file binding drives actual loopback accepted and first-frame history only",
+    "BIND14 mismatched HELLO mapping cannot use a valid PC source decision",
+    "BIND15 option reuse performs fresh review and rejects changed unreferenced cache bytes",
+    "BIND16 prepare snapshots decisions and keeps selected root uint64 precision",
+    "BIND17 Node and original C++ match recipe bytes and digest vectors, reject malformed fields"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-tcp-binding.mjs": "828a16ed14203db799706ba1c0240936ebcae41dbb8bd0c869f7dc7571ac8d3a",
+    "tests/native400-tcp-binding.test.mjs": "3387720464e305c678f5482488ebd79b04ee250216fee93d8f7ab2f62a982b57",
+    "scripts/verify-native400-tcp-binding.mjs": "fb061a3865328df88050e113c8637f7ad35b658447d33684014e90bee219b5e6",
+    "native/native400-tcp-mapping-check.cpp": "7433dc6ef917a61a4b6bbd907d6f9d2d18077fc37935054cb5f2a1922ec5e1d0",
+    "docs/protocol/vectors/native400-tcp05-mapping.json": "adecda49a519edef5c27c8fe6ee715961ca08568fe01aeac2a430058d24829b2"
+  },
+  "prior_sources_unchanged": {
+    "tcp02": true,
+    "tcp03": true,
+    "tcp04": true
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "6872c1be6801794228b5abde0a0ab151fc2ee7376cc42f24f32113f7356fce33",
+    "docs/context/current-system.md": "b90be823b5916cd4e78609a2d60ecec8878e7d68fb1c45ce6bfaa13b0af62ce7",
+    "docs/context/current-todos.md": "b8a844d9fbcef147cc806fe324c3ec3303f437790935f3613353e76da5c60c61",
+    "docs/protocol/round-pet400-transport-core.md": "7cbe2acd8b49b4591ef085b322ec8f164ab8d19d75fce434c9da27d3e0860eb1",
+    "docs/protocol/round-pet400-tcp-control-draft.md": "ee6cdc521b97d7e752dcc647673206b4187a305b4e95de91877b2b4bbbc0b7ba",
+    "docs/context/plans/round-pet-400-socket-owner-spec.md": "18c6ce37fa16b5d802a8f33fc0e6e07715db30d52cfddb3bb905369f983c412e",
+    "docs/context/plans/round-pet-400-socket-owner-diff.md": "97cccc6af91b84e63b5d749a8323e6b42fc60b320532ae53b216dc3c7f264504",
+    "apps/round-pet/reports/2026-11-05-400-transport-core.md": "09627baa3527026b097153834f1265829bc4c934001777873929532ff6fde100",
+    "apps/round-pet/reports/2026-11-04-400-control-bridge.md": "fe090bbcefa802a84d9b55d58ab61e1d7dd04d323dabc08f69b48a373951cc91",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_transport.h": "48697e51de0d9d25f8efd968f7fda02a1aae7d7930528ac29c8df91f45a86e09",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_bridge.h": "0ab8887baf4c836edfd915b48d3e9be4baf755d38025e66add2cae99da93967c",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/tcp_control_draft.h": "fb0f94b687af6a74d6a32e1c98767df5a744906d0d592632cde72848fafcfb12",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/app_main.cpp": "adf4db388e6d82b689e86e8263c56dc4e702ea3731c2082117a74011fbfbf4bb",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/CMakeLists.txt": "1ff1024fe0a710bf1fad9289ed06857f3e68fbd086056465d62935a087a939b1",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_identity.h": "459c2d768f8f2f4473fe0b3b4e864cf13681c08f88bd5fb74b2415a38b8adbed",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner.h": "1ae2b81af3cbdb9975c9bc8fab7022cb3825e8002dfaf17fb6e2d07c500eab3f",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.h": "f9e6f5236dfaff3ff188cdaa2e1cd8ae185c716f980388375a190ee6be48d4f9",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.cpp": "bcd4d79848d2364c83a01576ad40b0e6aca8fc6d35694e5eb64ac47f7aaa6b4e",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_socket.h": "4c0c06d189aa0552b2f1b37156a15c5c5a11f1bf13c14729b2a5ac6723e12a8a",
+    "apps/round-pet/reports/2026-11-05-400-socket-owner.md": "c67d8790d345d32f617bd57f1c80d48e53fd3bbf28b8dfed0559e7f552c19db6",
+    "docs/protocol/round-pet400-socket-owner.md": "ecc23fdfe79a0936b77a388ccc7ef0edb39fad3ad936286db14fb07c07138ff9"
+  },
+  "endpoint_changes_since_tcp04": {
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_bridge.h": {
+      "before": "5aedf656a73f191f65dcf6fef294e4da3b46ce9c7e2eb049eec109480912d828",
+      "observed": "0ab8887baf4c836edfd915b48d3e9be4baf755d38025e66add2cae99da93967c",
+      "unchanged": false
+    },
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/tcp_control_draft.h": {
+      "before": "fb0f94b687af6a74d6a32e1c98767df5a744906d0d592632cde72848fafcfb12",
+      "observed": "fb0f94b687af6a74d6a32e1c98767df5a744906d0d592632cde72848fafcfb12",
+      "unchanged": true
+    },
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/app_main.cpp": {
+      "before": "1071f74322aa02ea9b148c2e173648057a2144ad81d04755ed46b2bc998679ad",
+      "observed": "adf4db388e6d82b689e86e8263c56dc4e702ea3731c2082117a74011fbfbf4bb",
+      "unchanged": false
+    },
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_transport.h": {
+      "before": "48697e51de0d9d25f8efd968f7fda02a1aae7d7930528ac29c8df91f45a86e09",
+      "observed": "48697e51de0d9d25f8efd968f7fda02a1aae7d7930528ac29c8df91f45a86e09",
+      "unchanged": true
+    }
+  },
+  "concurrent_worktree_scope": "Endpoint owner progressed during this phase. Final owner report/interface and actual identity/owner/Bridge/app sources reread. Completed host/build evidence is upstream-only, not rerun here; all images undeployed and no real arm/link/STA caller. Never infer device integration or dynamic RAM from static plans.",
+  "recipe_vectors": {
+    "positive": 3,
+    "malformed_cases": 6,
+    "cpp_executed": true,
+    "cpp_reconstructs_preimage_only": true,
+    "digest_computed_by": "Node SHA256; fixed expected vectors generated independently with Python hashlib/struct",
+    "new_wire_bytes": false
+  },
+  "new_owned_loopback": {
+    "executed": true,
+    "path": "fresh original private PC source review to TCP02 owner to synthetic JS peer",
+    "flow": [
+      "HELLO",
+      "OPEN",
+      "BASE",
+      "ACK",
+      "PRESENTED",
+      "CANCEL"
+    ],
+    "independent_sha_report": false,
+    "current_display": "unknown",
+    "real_device_evidence": false,
+    "actual_owner_resources_after_close": {
+      "sockets": 0,
+      "sessions": 0,
+      "timers": 0,
+      "listening": false,
+      "active": 0
+    }
+  },
+  "upstream_completed_report_not_rerun": {
+    "date": "2026-11-05",
+    "scope": "socket-owner candidate",
+    "tool_tests": 177,
+    "asan_ubsan": true,
+    "tsan": true,
+    "cpp_node_actual_mapping_compared": true,
+    "endpoint_owner_cpp_manager_loopback_six_messages": true,
+    "worker_evidence_synthetic": true,
+    "images": [
+      {
+        "kind": "default",
+        "bytes": 606752,
+        "sha256": "56b0482e89af773b47009d67dcc69488cc0b8390df74b9b0484f85d0ebc07b63"
+      },
+      {
+        "kind": "adapter",
+        "bytes": 625072,
+        "sha256": "c192c75b5cd269867b6c87f52628a93b261e1113199eba7505f6156336bf3db5"
+      },
+      {
+        "kind": "socket-owner",
+        "bytes": 716784,
+        "sha256": "dee8e3319c8ca7fad649c9a42d8607d457e0cbbaf83c4dbb51208d65252f5e1d"
+      }
+    ],
+    "all_undeployed": true,
+    "board_prefix": "f5538cb9",
+    "owner_explicit_bytes": 9420,
+    "owner_static_stack_bytes": 8192,
+    "dram_increase_from_default": 15184,
+    "explicit_psram_bytes": 4439288,
+    "dynamic_wifi_resources_verified": false,
+    "real_arm_link_sta_callers": false
+  },
+  "wire_types_allocated": false,
+  "dsh_ui_integrated": false,
+  "esp_connected": false,
+  "production_listener_enabled": false,
+  "real_media_or_device_cache_read": false,
+  "firmware_scripts_executed": false,
+  "whole_media_proof": false,
+  "production_usage_approved": false,
+  "not_covered": [
+    "real trusted Config/mapping identity role usage approval and controlled LAN/STA assembly",
+    "ESP Wi-Fi/lwIP dynamic RAM stacks heartbeat cancellation disconnect and worst-case control delay",
+    "actual device worker/View first-frame or currently-playing evidence",
+    "richer STATE verification and exit wire contract",
+    "TCP media streaming persistence V3"
+  ],
+  "documentation_links_checked": 13,
+  "readonly_endpoint_recheck_changes": [],
+  "v0_policy_text_aligned_from_readonly_reply": true,
+  "joint_production_admission": false,
+  "final_build_exit_code": 0,
+  "dist_new_module_matches_source": true,
+  "dist_license_matches_source": true
+}

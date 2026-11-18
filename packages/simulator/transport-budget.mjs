@@ -1,0 +1,3 @@
+import {leaseDelayBudget} from './lease-delay.mjs';import {leaseSendBudget} from '../core/lease-budget.mjs';
+/** Explicit illustrative service bounds, not measured maxima. Queue includes prior controls (including active) plus dispatch. The last row conservatively charges both an active control and a residual segment. */
+export function transportBudgetExamples(){return [[0,0],[4,300],[8,1000]].map(([ahead,control_ms])=>{const queue_ms=100+ahead*control_ms,b=leaseDelayBudget({queue_ms,segment_ms:1000,poll_ms:500,network_ms:200,process_ms:100},{host_ppm:500}),send_horizon_ms=leaseSendBudget(15000,{...b,host_ppm:500,device_ppm:500,margin_ms:10,max_lease_ms:15000});return {ahead,control_ms,queue_ms,...b,send_horizon_ms,worst_rtt_fits:b.max_round_trip_ms<send_horizon_ms};});}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-04",
+  "status": "temporary-offline-owner-only",
+  "tests": {
+    "specialized_and_isolated": 18,
+    "full_with_build": 1439,
+    "syntax_check": "passed"
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 211,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "OWNER01 no automatic listener; explicit isolated opt-in rejects LAN and production ports",
+    "OWNER02 fragmented real TCP HELLO opens and owner dispatches original cached action",
+    "OWNER03 one active controller socket cannot be replaced by a parallel connection",
+    "OWNER04 periodic owner PING keeps lease but not BASE lifetime and emits cancel on expiry",
+    "OWNER05 HELLO timeout automatically closes real TCP without user tick",
+    "OWNER06 ACK timeout closes instead of retrying BASE or extending TTL",
+    "OWNER07 reconnect uses new session and never automatically replays old BASE",
+    "OWNER08 expired previous target cannot be reapplied after reconnect",
+    "OWNER09 latest coalesces while ACK is pending; original deadline limits new request",
+    "OWNER10 pause/resume closes old session; no automatic BASE on fresh connection",
+    "OWNER11 malformed TCP fails closed with actual socket cleanup",
+    "OWNER12 close immediately fences commands and waits real connections, idempotently",
+    "OWNER13 close during bind does not leave late listener or timer",
+    "OWNER14 delayed write callback after old lane close cannot wake a replacement session",
+    "OWNER15 failed handshake enters bounded reconnect admission backoff",
+    "OWNER16 explicit cancel supersedes queued latest without replaying it after ACK",
+    "OWNER17 absolute clock regression fences active owner and cannot be resumed",
+    "OWNER18 disconnect preserves only historical frame0 report, not current playback"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-tcp.mjs": "ce3b1ece5fd498103960df02540fff551691d8f19f3254a6b6b43dc54890a4ed",
+    "packages/runtime/native400-tcp-owner.mjs": "fe9f8d1b232137d70118c638cd9d1615c2afc30e152131e36596f23b0ef50d21",
+    "tests/native400-tcp-owner.test.mjs": "fd767545670f409a9b9a85f696a80a3cefb58cd184f2a31d03b52791f85fda1d",
+    "scripts/verify-native400-tcp-owner.mjs": "b69bb4a21c336686eb705f99b7fab195f2510e7806ecec40b00501cf069fbec1"
+  },
+  "real_loopback_tcp": true,
+  "esp_verified": false,
+  "production_listener": false,
+  "protocol_changed": false,
+  "device_authentication": false,
+  "not_covered": [
+    "production LAN/config/DSH write integration",
+    "OS suspend events",
+    "ESP socket/worker/View and WiFi resource measurement",
+    "STATE/integrity/EXIT/ERROR extensions",
+    "TCP material streaming and persistence"
+  ]
+}

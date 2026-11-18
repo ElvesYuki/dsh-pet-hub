@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-tcp-lan-request.test.mjs'],expected:18,timeoutMs:30000,layer:'native400-lan-private-request-and-RAM-handoff',prefix:'tcp10-',scope:'Original synthetic private request files, separate local decisions, pure device JSON/UTF8 vectors, real UDS and owned loopback rejection/exit. No actual LAN bind, successful live LAN handoff, USB/STA/ESP, real credentials/material approval or firmware script execution. No production service, plugin or existing configuration changes.'});

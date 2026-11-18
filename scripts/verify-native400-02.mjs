@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-02.test.mjs'],expected:48,timeoutMs:120000,layer:'native400-window-core',prefix:'h402-',scope:'Pure core local review schema3; original >1MiB PET4/241 and118 frames, nonzero XOR/extra keys, bounded ring, SHA receipts/replay and explicit progressive comparison, virtual clock, software frame submit, local deadline/generation and actual synchronous exit. No network, real assets/device, Flash, production listener, firmware or existing service/configuration changes.'});

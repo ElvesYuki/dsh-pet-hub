@@ -1,0 +1,261 @@
+{
+  "passed": true,
+  "layer": "native400-Connection-candidate-contract-and-shared-controls",
+  "cases": [
+    "CONNECTION01 default factory registers nothing and invalid enabled policy fails",
+    "CONNECTION02 exact routes use streamed POST and buffered GET; unload removes both",
+    "CONNECTION03 independent resolver must authorize even after owner dispatch",
+    "CONNECTION04 genuine scoped IPC preserves exact request deduplication and CAS",
+    "CONNECTION05 missing JSON marker and bad content type fail before resolver",
+    "CONNECTION06 declared and observed body limits reject without executing a command",
+    "CONNECTION07 malformed JSON, UTF8 and closed business body do not call IPC command",
+    "CONNECTION08 query and wrong method reject before authority resolution",
+    "CONNECTION09 unload fences a late resolver before it can dispatch IPC",
+    "CONNECTION10 aborted slow stream exits without calling a command",
+    "CONNECTION11 hanging authority lookup has a bounded overall deadline",
+    "CONNECTION12 unload does not cancel backend logical target or own the service",
+    "CONNECTION13 source loss still fences the genuine IPC rather than trusting the carrier",
+    "CONNECTION14 real HTTP contract carrier requires host owner and separate hub permission",
+    "CONNECTION15 real HTTP regrant after page expiry keeps logical group and remaining target",
+    "CONNECTION16 Connection candidate bundle loads once with existing React and slot contract",
+    "CONNECTION17 malformed scoped responses and internal errors never expose private fields",
+    "CONNECTION18 slow body deadline cancels the stream before any IPC dispatch",
+    "CONNECTION19 partial route registration failure removes its first registration",
+    "CONNECTION20 browser harness CLI drains trusted stdin then removes its private resources"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 6087,
+  "scope": "Original audited metadata/cache, independent bounded window, real scoped IPC and temporary HTTP; injected rc.5 Connection contract, separate fixture host-owner admission and hub grants; streaming limits, cancellation/unload, CAS/idempotency, page regrant and candidate loader. Not installed DSH authentication or ESP.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-05",
+  "toolchain": {
+    "node": "24.14.1",
+    "npm": "11.11.0",
+    "new_dependencies": 0
+  },
+  "checks": {
+    "syntax_exit_code": 0,
+    "full_command": "npm test",
+    "includes_build": true,
+    "tests": 1804,
+    "pass": 1804,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 104527.30225,
+    "full_exit_code": 0,
+    "final_build_exit_code": 0
+  },
+  "initial_focused": {
+    "tests": 16,
+    "passed": 13,
+    "failed": 3,
+    "cause": "Error.message stable IPC codes were initially omitted from whitelist mapping; fixed, original 401/409 assertions retained"
+  },
+  "browser": {
+    "engine": "Chrome156",
+    "method": "connected Playwright tools; CLI offline cache absent; no install",
+    "react": "18.3.1 fixed existing local seed, not rc.5 frontend validation",
+    "seed_sha256": "42132116b0399614471d950ca2c915ca97048e6b87ed9515f32244e43c190bf5",
+    "cases": [
+      {
+        "id": "B01",
+        "case": "unauthorized DOM disabled, fixture admission denied",
+        "passed": true
+      },
+      {
+        "id": "B02",
+        "case": "independent contexts share group; reload adds no BASE",
+        "attachments": 2,
+        "revision": "1",
+        "passed": true
+      },
+      {
+        "id": "B03",
+        "case": "lost HTTP ACK explicitly confirmed using same body",
+        "http_posts": 3,
+        "base_records": 2,
+        "remaining_ms": 4800,
+        "revision": "2",
+        "passed": true
+      },
+      {
+        "id": "B04",
+        "case": "both grants expire then trusted regrant clears warnings and retains target",
+        "remaining_ms": 3800,
+        "revision": "2",
+        "passed": true
+      },
+      {
+        "id": "B05",
+        "case": "fresh real loopback HELLO/OPEN restores once",
+        "remaining_ms": 3600,
+        "recovery_attempts": "1",
+        "revision": "2",
+        "passed": true
+      },
+      {
+        "id": "B06",
+        "case": "unload/reload and closing one context preserve backend target",
+        "route_counts": [
+          2,
+          0,
+          2
+        ],
+        "passed": true
+      },
+      {
+        "id": "B07",
+        "case": "explicit cancel and trusted group end disable controls",
+        "cancel_records": 1,
+        "passed": true
+      },
+      {
+        "id": "B08",
+        "case": "final candidate footer and independent model PRESENTED history",
+        "frame0_history_action": 11,
+        "verified": null,
+        "current_display": "unknown",
+        "device_evidence": false,
+        "passed": true
+      },
+      {
+        "id": "B09",
+        "case": "owned authorized contexts and harness resources closed, private states removed",
+        "temporary_environment_removed": true,
+        "passed": true
+      }
+    ],
+    "private_state_files_removed": true,
+    "production_dsh_authentication": false
+  },
+  "installed_snapshot": {
+    "version": "0.2.1-rc.5",
+    "method": "read-only ASAR JavaScript and manifest review",
+    "source_hashes_unchanged_at_close": true,
+    "declared_types_obtained": false,
+    "sources": [
+      {
+        "path": "package.json",
+        "sha256": "ee6ab2f7c6ac6a052cb2944ec5c95d9beb0145070acf58127efe40367d12dc7a",
+        "bytes": 797
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-client-connection/package.json",
+        "sha256": "b8d418791f737f73b9a69d011c0d2b10393b1e04cc846a044cf8a7aa6f680b7b",
+        "bytes": 1767
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-client-connection/lib/index.js",
+        "sha256": "0ebcca7583e082716f79b0b55bc1749d48269cc8db2989b043b321b57abd3684",
+        "bytes": 44434
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-web-frontend/package.json",
+        "sha256": "145ed6c0222b0239bdfaf743614cbe448898e293423f288d463e891b25cc9bee",
+        "bytes": 2609
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-host-webserver/lib/index.js",
+        "sha256": "08907285802f0edd3aeb68c91fb443be2804879ab3d41104c4600424be06f3ab",
+        "bytes": 21436
+      }
+    ]
+  },
+  "source_audit": {
+    "before": 425,
+    "after": 430,
+    "unchanged": 420,
+    "changed": {
+      "packages/ui/index.mjs": {
+        "before_sha256": "5fdd6a57cf01a8484d00b542e0465a17a72fac8241071d06a3f3c6912f970cd4",
+        "final_sha256": "b1941e1f717fc852000725836adb7a9344003777b58fbc8c93b341cce76f70ca"
+      },
+      "apps/dsh-plugin/client.mjs": {
+        "before_sha256": "31a8511b752e2f7d3298c5592b6d0298621e9936c554369c33335d335ff75617",
+        "final_sha256": "9ed58283640345ca24cdcc775066941c858e47e38b97224b418cd19c8bc73e6c"
+      },
+      "apps/dsh-plugin/index.mjs": {
+        "before_sha256": "004ac692df4b65c821f6165b5eed07f011660e954c48a8326ce1d16d03c35159",
+        "final_sha256": "5148451dcaf81d65503b5e6606229cd82345fde551c343365b55f9e9fd5973a5"
+      },
+      "apps/dsh-plugin/package.template.json": {
+        "before_sha256": "86a7220510c8cac5892952033684143829210f1a3ffc09b862cde7b6b4ce8fcf",
+        "final_sha256": "c6fabf946ed279389d048f9005d58b250ebce44f9ee10b97b3a4b315925b4d93"
+      },
+      "scripts/build.mjs": {
+        "before_sha256": "19a5b71599811d0c54cac2a5fe23ad59c6e7556fa4281135275e847ef69b1940",
+        "final_sha256": "3d40ea11b44e5f7aa732601fb678537f5b983bb952f318f087d7bb2a4c98208b"
+      }
+    },
+    "new": {
+      "apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+      "scripts/verify-native400-connection-controls.mjs": "5ccfe6630899705e21d2764c85a4d2325fd0ce4337b722c52af275b597038787",
+      "scripts/native400-connection-browser.mjs": "4da3fd10d01e9d59d356dd6019ef039dac72f0a7c2b788c43312ae7c9413bedb",
+      "tests/native400-connection-controls.test.mjs": "b0f447ccfafab589fed143ad305a9627feae24c258f9f11b4f044d71acc84813",
+      "tests/fixtures/native400-connection-harness.mjs": "856f63cfd759db884dc356dd9642c84557eeca35e1a985e73894d5a20f7a5b6c"
+    },
+    "unchanged_business_and_wire": {
+      "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+      "packages/core/native400-tcp-control.mjs": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+      "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+      "packages/runtime/native400-node-control-channel.mjs": "b49b26f97824ef55d65e97edec7e47e90fc3b0ce6512ce0bd62ca194cd598cbc",
+      "packages/runtime/native400-tcp-owner.mjs": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8",
+      "packages/runtime/service.mjs": "64f9806954cee61f9bc407de20999e248fc8640623d0caba8e0aea49e27368ac"
+    }
+  },
+  "artifact_audit": {
+    "copied_modules_match": {
+      "packages/ui/index.mjs": true,
+      "apps/dsh-plugin/index.mjs": true,
+      "apps/dsh-plugin/node-control-connection.mjs": true
+    },
+    "candidate_exports_files_match": true,
+    "raw_default_preserved": true,
+    "rc3_peer_preserved": true,
+    "third_party_copy_matches": true,
+    "raw_bundle_sha256": "09d5582c390e2ebe4456d56aeb33132a1c3eb42d3e3a79b2b3af39ccc93d74a2",
+    "connection_bundle_sha256": "29c266595a04eedd8de818663829ffe1c11a42e6e38c6ebaf070a65c11c04275"
+  },
+  "document_audit": {
+    "relative_links_checked": 723,
+    "broken": 0,
+    "trailing_whitespace": 0,
+    "sha256": {
+      "README.md": "81317d3947020adbedf72b65a589bc8174f7f4d58fe8065df2fe34f4deb2a1b6",
+      "THIRD_PARTY.md": "fde17580ec4dc065dd4f3015b9d9491e2d75026c79e74ce6ba189ac004ae0f81",
+      "docs/context/index.md": "24c77a7c76660decb5bcbd662c051ec82aa1475f89a605c4f30fe6f96f4c2680",
+      "docs/context/current-system.md": "87809245e00a0381b67d6c6ccee796ff0749dc07a2047cbb4af10cf2344244ca",
+      "docs/context/current-todos.md": "6f98cbc5eff2cda54c81382d041378f535e819a8ad8435e67ebcd8491058cb1b",
+      "docs/context/native400-baseline.md": "b4d9ecdf334cf848669b5ce9c8020c9167e75cd80e07ac13e6a088f4e3707d89",
+      "docs/context/decisions.md": "4f80130dbc66ec5f17bfcc8063ddd67e7345218a21dc29ed037de042516f4d41",
+      "docs/context/plans/round-pet-g0-handoff.md": "70cffb6946604aee5cc93234240c6691c43fc62cab913c507c5dae38d0878ea1",
+      "docs/context/plans/tcp20-spec.md": "33b74760820fd58a64c5af959f284bfa75d9b28077949572cb17b378afbb64b9",
+      "docs/context/plans/tcp20-diff.md": "538db56365c88c097df9576f938978e472fd0d4791d0f17a394fc62080dbec1c",
+      "docs/context/history/tcp20-evolution.md": "bb94f66a9403ae64496f9611e81a05f1b455b0c88e172cf74478d0b1c7817a18",
+      "docs/protocol/native400-shared-control.md": "4f5960c18c1921aef61cb098eac9bcedf340317fda1158f1fd7c4113b51ae2fd",
+      "docs/protocol/native400-node-control-window.md": "4daaec4a28dc85272ca2366f48e899e593500caf4dc9beb3e8165547ebd88253",
+      "docs/protocol/native400-connection-controls.md": "ae853df374e25c4de1063dbcea8a7bb67df7c16d1cf2e4570ee5239dfc6a1769",
+      "docs/reports/2026-11-05-tcp20.md": "868298400554310ee496d50bbb8b5ff787f9897ca1c61ff3ef14ec567ef36d81"
+    }
+  },
+  "evidence_levels": {
+    "offline_model": true,
+    "real_loopback_tcp_http_uds": true,
+    "react_dom_browser": true,
+    "injected_Connection_contract": true,
+    "dynamic_dsh_profile": false,
+    "desktop_custom_scheme": false,
+    "esp_device": false
+  },
+  "boundaries": {
+    "production_listener_started": false,
+    "plugin_installed_or_enabled": false,
+    "existing_configuration_changed": false,
+    "firmware_repo_written_or_scripts_executed": false,
+    "real_materials_copied": false,
+    "git_commit_or_push": false,
+    "source_window_extended": false
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "passed": true,
+  "layer": "preserving-renewal-contract-oracles-and-loopback-hold",
+  "cases": [
+    "END01 arbitration is explicit; event and observed-local defaults remain",
+    "END02 long touch crosses four bounded renewals, EOF presents latest working request",
+    "END03 cancellation during touch preserves local until EOF then local",
+    "END withdrawal HTTP failure cannot revive remote at touch EOF",
+    "END withdrawal closed source cannot revive remote at touch EOF",
+    "END withdrawal page budget cannot revive remote at touch EOF",
+    "END withdrawal observation budget cannot revive remote at touch EOF",
+    "END08 manual takeover during touch is neither overwritten nor cancelled",
+    "END paused permits authorized cleanup but refuses BASE",
+    "END down permits authorized cleanup but refuses BASE",
+    "END11 lost local ACK confirms exact renewal body without extending deadline",
+    "END12 true target expiry during touch is not revived by fresh unchanged source",
+    "END reconnect retains touch, autoRecover=true uses original remaining lease only",
+    "END reconnect retains touch, autoRecover=false uses original remaining lease only",
+    "END15 late prior request receipt and old touch completion cannot replace latest intent",
+    "END16 same-action renewal preserves playback and needs an actual new cycle frame0 for latest request",
+    "END17 expired old target cannot autoRecover through new connection",
+    "END18 CAS race after controls read cannot overwrite or cancel a manual target",
+    "END19 exact lost-ACK confirmation cannot cancel later manual takeover",
+    "END20 lane source window remains independent of long page and observation windows",
+    "END21 pre-renewal pending draw is consumed without a false latest request receipt",
+    "END22 repeated renewals preserve active source and frame marker without manufacturing frame0",
+    "END23 reconnect retains old deadline but invalidates old playback source and stamp",
+    "END24 unknown same-action renewal confirms exact body without resetting playback or producing a receipt",
+    "RENEW01 frozen C++ 24 steps match updated device/playback oracle AND actual host bytes",
+    "RENEW02 changed host-core pins are refused",
+    "RENEW03 corrupted C++ transcript bytes or source lifecycle are refused",
+    "RENEW04 same action keeps start stamp/source/cycle/mail/frame and separates latest request",
+    "RENEW pending draw older than renewal acceptance is conservative",
+    "RENEW pending draw equal than renewal acceptance is conservative",
+    "RENEW pending draw newer than renewal acceptance is conservative",
+    "RENEW08 initial new token/source allows same ms draw but not earlier decode",
+    "RENEW09 invalid stamp/non-frame0/draw flag/future time does not consume valid frame0",
+    "RENEW10 each loop requires fresh prepare yet same request does not repeat Presented",
+    "RENEW11 rejected same-ms draw waits for next loop and then reports latest sequence once",
+    "RENEW12 malformed SHA and TTL never update latest command or its acceptance time",
+    "RENEW13 same seq replay does not renew deadline; conflict does not mutate current request",
+    "RENEW14 BASE leases and replayed PING cannot extend session",
+    "RENEW old playback invalid after cancel",
+    "RENEW old playback invalid after expiry",
+    "RENEW old playback invalid after disconnect",
+    "RENEW old playback invalid after new-session",
+    "RENEW old playback invalid after action",
+    "RENEW20 explicit cancel then same BASE creates new playback while old source stays invalid"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 7967,
+  "scope": "Frozen 24-step actual C++ Core/Bridge transcript against updated Node device/worker oracle and pinned actual host; synthetic SHA/decode/draw and time. Separate original HTTP/shared UDS/real loopback TCP hold, continuity marker, stale draw, unknown and remaining-TTL recovery. No upstream script/build, real pet sampling, ESP or real display.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "contract": "native400-preserving-renewal/1",
+  "full_suite": {
+    "tests": 1909,
+    "passed": 1909,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 110833.937917
+  },
+  "checks": {
+    "syntax_exit": 0,
+    "standard_build_exit": 0,
+    "isolated_candidate_build_exit": 0
+  },
+  "source_hashes": {
+    "packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7",
+    "tests/fixtures/native400-endpoint-hold.mjs": "3c65d7dbcf13b1ebeffea6f7490a1bf617aec86f47d0849d4297777700eedd8a",
+    "tests/fixtures/native400-preserving-renewal.mjs": "bed5287f669032e97f26358bee0dbd14ea1ad14359633634077611127bb6d019",
+    "tests/native400-endpoint-hold.test.mjs": "ed9a7f531277a1d2ba0a74357d4d38a005ff8ca8624cc068f840c1b2b96815c2",
+    "tests/native400-preserving-renewal.test.mjs": "a649b2081694465f7b89056a66e89b06c04f2a0a411dadacc9a738d75e385a57",
+    "scripts/verify-native400-preserving-renewal.mjs": "a0b23f4ac4b7c29209264ea2f909a3c0c182c63a917a7730ebf1854b1f40c96b",
+    "scripts/verify-native400-endpoint-hold.mjs": "210aea1961adfe3e1a861da5844728f858c7d538f8e0dbf90ffff04edc239080"
+  },
+  "host_class_unchanged": {
+    "sha256": "7c31a2ee968aa50049c6cd696acd0af61b1b007db3c4adb7e44d37f127d10478",
+    "checked_before_after": true
+  },
+  "host_core_pins": {
+    "contract": "native400-preserving-renewal/1",
+    "wire_changes": false,
+    "node": "24.14.1",
+    "files": {
+      "packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+      "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+      "packages/core/native400-scheduling.mjs": "b890a418c7d9378ded7cd433c2de5a3fefa59481348a52a426ae217a5c11731e",
+      "packages/core/protocol.mjs": "12582ab3ae0d2a4ed96e29da24601842b8f8167d7aba1cf06cf915c2b09d91c1",
+      "packages/core/pet4.mjs": "5717a7ecd90004540cb0025124f50a311db2276d228ee08b8834eb6103fa60c5",
+      "packages/core/crc32.mjs": "626dff165498b1eba1080a9692992f58784946534d35b3db58b7737737c6577d"
+    }
+  },
+  "host_core_pins_file_sha256": "77d4ab79a8dcb10a38436165a16d6d0c55a1f33f2772f3e8fcbc63f8729fae9f",
+  "unchanged_from_tcp25": {
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-tcp-owner.mjs": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8",
+    "packages/runtime/native400-pet-hold-source.mjs": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+    "packages/runtime/native400-pet-bridge.mjs": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+    "packages/runtime/native400-node-control-channel.mjs": "db3b3a4caa34673464ffe8830d5d4bf7c1cf64d11e1ad38c2d82b17bc6fe2fd6",
+    "packages/core/native400-node-control-access.mjs": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3"
+  },
+  "candidate_artifacts": {
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+    "dist-dsh022/packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "dist-dsh022/packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7"
+  },
+  "upstream_readonly": {
+    "frozen_manifest_sha256": "aef9843f872bc806757052fef8a7e48c38ae6fbf43b408333d94340b7407500b",
+    "matched_files": 51,
+    "vector_sha256": "f62c25ca6feed7f39b8b089e6cfb074659d05ae8865468f4980e67ef456b9574",
+    "host_class_sha256": "7c31a2ee968aa50049c6cd696acd0af61b1b007db3c4adb7e44d37f127d10478",
+    "upstream_references": {
+      "docs/protocol/round-pet400-preserving-renewal-handoff.md": "b40d26ae7c78826a09fdb5853a670283656d92ea0677b87a4c856e49418ee43b",
+      "docs/protocol/round-pet400-preserving-renewal.md": "fee92f1a1cb80153d76811b54d5230108d76ce687130f5e489e4bfd234faeed5",
+      "apps/round-pet/reports/2026-11-06-preserving-renewal.md": "6060a861d4d8b2b6dead0ffee0bc10986356e7627d2ddeadf4e81a1b643de4f0",
+      "apps/round-pet/reports/2026-11-06-preserving-renewal.json": "09a3286e4eee6ec15e719e708e9894414fdc2960646f5f7c08817ffd31ac728e",
+      ".ai/reports/2026-11-06-native400-preserving-renewal-final-review.md": "9e73ce20f11d9cf1f78f8f8c37d7d83aa159aad46f2b55af06e45e3a4aa8864a",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/tcp_control_draft.h": "3f88d1c36b683dcaaa9e96a05c9029dd7c20d24463ae28110dd701df327e46ac",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_bridge.h": "a5f4f3831871b95952f42f37a5de51ac9513ab96db2f06cba9e846ba46c2204c",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_transport.h": "48697e51de0d9d25f8efd968f7fda02a1aae7d7930528ac29c8df91f45a86e09",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner.h": "b1d8f2f1ec6929bc0a812c2bc4821fc1e9a1bd8b6148f26c381a772d8997bc30",
+      "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/app_main.cpp": "a52a796ecc031cddf4972fe97c9e3f61e38f3922638e66021b94d28924bc6964",
+      "docs/protocol/vectors/round-pet400-preserving-renewal-v1.json": "f62c25ca6feed7f39b8b089e6cfb074659d05ae8865468f4980e67ef456b9574"
+    }
+  },
+  "firmware_candidates_from_frozen_upstream": {
+    "default": {
+      "sha256": "40068044576028bf6e6a17bbd119ddf327334da570bc0e8e0819a8bc8f3a3eae",
+      "bytes": 607856
+    },
+    "station": {
+      "sha256": "2759f2e48d14d2716a667157f723bdd24791d315a612ded3346209a5efb90681",
+      "bytes": 1214096,
+      "control_static_internal_bytes": 3944,
+      "control_static_delta_bytes": 40,
+      "explicit_PSRAM_bytes": 4439288
+    },
+    "partition_sha256": "4e5e0d80d43209967812c9f82b17ed71d2f68113b774fb163d73d01690cc3ccf",
+    "built_or_flashed_by_this_task": false,
+    "ESP_dynamic_resources_verified": false
+  },
+  "joint_contract": {
+    "manager_adopted": true,
+    "captured_CPP_steps_matched": 24,
+    "updated_Node_device_and_playback_oracles": true,
+    "actual_Node_host_class_unchanged": true,
+    "source_cycle_prepare_and_request_dedup_separated": true,
+    "same_ms_renewal_draw_conservatively_rejected": true,
+    "valid_draw_consumed_once_per_cycle": true,
+    "synthetic_frame_position_preserved": true,
+    "new_wire_or_hello_fields": 0,
+    "production_admission_frozen": false,
+    "ESP_verified": false
+  },
+  "verification_layers": {
+    "captured_CPP_transcript": true,
+    "CPP_reexecuted_by_this_task": false,
+    "CPP_or_firmware_built_by_this_task": false,
+    "Node_device_playback_host_execution": true,
+    "actual_HTTP_UDS_loopback_TCP": true,
+    "media_SHA_decode_draw_callbacks": "synthetic",
+    "real_pet_sampled": false,
+    "pet_runtime_identity_attested": false,
+    "natural_task_transition_verified": false,
+    "ESP_verified": false
+  },
+  "resource_limits": {
+    "new_model_sockets": 0,
+    "new_model_timers": 0,
+    "new_model_queues": 0,
+    "retained_playback_stamps": 1,
+    "retained_source_prepare": 1,
+    "per_request_receipt_high_water": 1,
+    "fixture_owner_sockets_sessions_timers_after_close": 0,
+    "fixture_HTTP_and_UDS_closed": true,
+    "ESP_dynamic_RAM_stack_or_worst_latency_measured": false
+  },
+  "cleanup": {
+    "temporary_environment_removed": true,
+    "production_listener_started": false,
+    "new_DSH_profile_started": false,
+    "existing_services_or_profiles_changed": false,
+    "plugin_installed_or_enabled": false,
+    "real_pet_sampled": false,
+    "pet_write_calls": false,
+    "ESP_USB_access": false,
+    "upstream_written": false,
+    "upstream_scripts_or_builds_run": false,
+    "credentials_read": false,
+    "commit_push": false
+  },
+  "document_audit": {
+    "relative_links": 728,
+    "broken": 0,
+    "trailing_whitespace": 0
+  }
+}

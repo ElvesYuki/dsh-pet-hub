@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-reviewed-lan-request.test.mjs'],expected:18,timeoutMs:30000,layer:'native400-independent-reviewed-request-assembly',prefix:'tcp12-',scope:'Original MIT metadata/cache and independent synthetic decisions, real audit fd exit and unstarted UDS election, no LAN bind/config success/credential/USB/STA/ESP or real material approval. Verify exact source/license/reference/scope association and revocation without changing firmware, services or existing configs.'});

@@ -1,0 +1,108 @@
+{
+  "schema": "native400-window-local-review-vector/1",
+  "source": "dsh-pet-hub original MIT synthetic bytes; no real-media approval",
+  "capabilities": {
+    "schema_version": 3,
+    "profile": "round-pet-native400-window-review/1",
+    "execution_model": "frame_window",
+    "display": {
+      "width": 466,
+      "height": 466,
+      "pixel_format": "RGB565",
+      "shape": "circle"
+    },
+    "media": {
+      "width": 400,
+      "height": 400,
+      "offset": [
+        33,
+        33
+      ],
+      "fps": 24,
+      "max_frames": 241,
+      "key_interval": 12,
+      "codec_flag": 1,
+      "tile_rows": 20,
+      "extra_keyframes": true
+    },
+    "max_asset_bytes": 5865472,
+    "working_set": {
+      "compressed_window_bytes": 1048576,
+      "rgb_frames": 3,
+      "rgb_frame_bytes": 320000,
+      "history_bytes": 160000,
+      "tile_bytes": 8000,
+      "packed_scratch_bytes": 8064,
+      "metadata_max_bytes": 2464,
+      "frame_receipt_max_bytes": 7712
+    },
+    "persistent": null
+  },
+  "identity": {
+    "profile": "round-pet-native400-offline/1",
+    "namespace_scope": "offline-candidate",
+    "namespace": "dd0f19bfdc4bed608ddf18baf095fd6c8b53217bbb59d8f0238e51460e2c0ff8",
+    "firmware_package_sha256": "9f961e546906b8a767082d4702ce91d889eb6bc2d461ac377d88b778e93d5699",
+    "hub_manifest_sha256": "da85432cfff3e085b31813d37398022e95d25d249adf474bddb8063611e4f51e",
+    "source_manifest_sha256": "544593cb7bf6b4badf0b1b2355ed62a580003128769a5e50b996e81d18f1ee1a",
+    "source_index_sha256": "ef156925a95cddcfce40ba677e082f4d47fcaafb2593c53398b036f953d09fe2",
+    "index_sha256": "1aa1fff7f210b1025e55861ab7c30db363f5b4b0dc4ce7f7e51f44c41a084c34"
+  },
+  "assets": [
+    {
+      "id": 0,
+      "bytes": 2145195,
+      "sha256": "3842d4b1127da7e20a04de813155c185dae8dabb2d8193c35848c2fb7f3052c4",
+      "timing": {
+        "id": 0,
+        "width": 400,
+        "height": 400,
+        "fps": 24,
+        "frames": 241,
+        "index_sha256": "4b095676a6613a28068c45a7824a79862a0a79746fca915f6cbbf86897717a0a",
+        "rgb565_sha256": "55705452d6a29627e7d7f79a6482c461d05df589ffa96279f802b45f87bd3e7b",
+        "extra_keyframes": 2
+      }
+    },
+    {
+      "id": 42,
+      "bytes": 1050618,
+      "sha256": "e09a4a2a7be6f9879f1bcbd03bc147ecd59981b34ae89a33403601c343a8976c",
+      "timing": {
+        "id": 42,
+        "width": 400,
+        "height": 400,
+        "fps": 24,
+        "frames": 118,
+        "index_sha256": "80d1248b4cfa8edbb82a2ecbc8de68fef13be128d2c21242b347f0b098f77f52",
+        "rgb565_sha256": "d3a94f41319cf0142d83a1a07f70bcdb5d7260dc0882c6dc4ce1478347d56294",
+        "extra_keyframes": 2
+      }
+    }
+  ],
+  "resources_241": {
+    "ring_bytes": 1048576,
+    "rgb_bytes": 960000,
+    "history_bytes": 160000,
+    "tile_bytes": 8000,
+    "packed_bytes": 8064,
+    "metadata_bytes": 2464,
+    "receipt_bytes": 7712,
+    "buffered_bytes": 0,
+    "busy": false,
+    "closed": false
+  },
+  "resources_after_close": {
+    "ring_bytes": 0,
+    "rgb_bytes": 0,
+    "history_bytes": 0,
+    "tile_bytes": 0,
+    "packed_bytes": 0,
+    "metadata_bytes": 0,
+    "receipt_bytes": 0,
+    "buffered_bytes": 0,
+    "busy": false,
+    "closed": true
+  },
+  "scope": "Local core model and original deterministic PET4 only. Not a hello/wire, firmware resource declaration or device receipt."
+}

@@ -1,0 +1,95 @@
+{
+  "schema": "native400-source-selection-evidence/1",
+  "date": "2026-11-03",
+  "scope": "original MIT sparse fixture only; no real source/cache/media/firmware/device or production services",
+  "selection": {
+    "metadata_content_reads": 0,
+    "ready_open_files": 0,
+    "serialized_reference": {},
+    "closed_resources": {
+      "closed": true,
+      "open_files": 0,
+      "content_reads": 0,
+      "retained_cache_bytes": 0,
+      "signal_listener": false
+    }
+  },
+  "same_bytes_replacement": {
+    "rejected": true,
+    "error": "bootstrap_selection_changed",
+    "content_reads": 0,
+    "source_bytes_unchanged": true
+  },
+  "source_map": {
+    "recipe": "native400-bootstrap-source-map-v1-canonical-json",
+    "sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+    "original_example_unchanged": true,
+    "device_evidence": false,
+    "media_validation": "not-performed"
+  },
+  "manager": {
+    "review_then_revalidate": true,
+    "revision": "1",
+    "closed_resources": {
+      "closed": true,
+      "busy": false,
+      "uncertain": false,
+      "open_files": 0,
+      "retained_cache_bytes": 0,
+      "stream_buffer_max": 65536
+    }
+  },
+  "sources": {
+    "baseline": 332,
+    "unchanged": 329,
+    "modified": [
+      {
+        "path": "packages/core/native400-source-review-view.mjs",
+        "sha256_before": "1fec61bafebe9bd800ed6f6b4987ef3b3264505246fbd36168795dfcc8840004",
+        "sha256_after": "98624a4af8538511f529b270ece27bb12909053ec1a6e0351566db60b7f3cfbe"
+      },
+      {
+        "path": "packages/runtime/native400-bootstrap-review.mjs",
+        "sha256_before": "fc93086d18c23a863c3c1b5810aeee7d38945ecd99e6f9b91ff883f0772c77b9",
+        "sha256_after": "b201b86f03dca9d0ba9fb0685fc91f2fc6b078f1b92f3004e437f18a4838e5f5"
+      },
+      {
+        "path": "packages/runtime/native400-review-manager.mjs",
+        "sha256_before": "175d91a3dade96bfa2cf54bede21a64d146c2dec16ad3ed709d3fc694b396e71",
+        "sha256_after": "9f4867cf5dd44ebfa0f234b39e5deab2d88e74d8ff7c3bcecef21a2626d1e244"
+      }
+    ],
+    "added": [
+      {
+        "path": "packages/runtime/native400-source-selection.mjs",
+        "sha256": "46347dfba39dd47f10f2db707c9a294ee155f7290e40eee0173792117d9cf812"
+      },
+      {
+        "path": "scripts/verify-native400-12.mjs",
+        "sha256": "3a80cbe9926482948c4f7c8100dc8cd16269fa1eaaab10027a73603725cee4ad"
+      },
+      {
+        "path": "tests/native400-12.test.mjs",
+        "sha256": "d57ff1045af149a0475d4bf287e23c652df34ab3af929daf15122642cb16f9a4"
+      }
+    ]
+  },
+  "compatibility": {
+    "wire_sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "golden_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "verification": {
+    "focused": 35,
+    "full": 1308,
+    "syntax_check": "passed; syntax only",
+    "full_observed_wall_ms": 99553,
+    "isolated": {
+      "passed": true,
+      "timeout": false,
+      "interrupted": false,
+      "observed_wall_ms": 7311,
+      "temporary_environment_removed": true
+    },
+    "ctl_scope": "internal selection subcases only; no full controls/session/idempotency/targeted-cancel/authorization gate"
+  }
+}

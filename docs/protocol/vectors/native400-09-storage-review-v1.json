@@ -1,0 +1,68 @@
+{
+  "schema": "native400-source-review-storage-evidence/1",
+  "date": "2026-11-03",
+  "scope": "original MIT sparse fixture only; no firmware, media or device read",
+  "journal": {
+    "protocol": "native400-source-review-journal/1",
+    "revision": "1",
+    "bytes": 2383,
+    "content_sha256": "4810ab3df2d1e40b73af960133d78ab0afdad7a3cd3393b7462f2bd05a7d2e30",
+    "record_source_name": "original.fixture"
+  },
+  "workflow": [
+    "empty",
+    "current",
+    "closed",
+    "historical",
+    "current"
+  ],
+  "original_400_08_map_sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+  "original_400_08_recipe_unchanged": true,
+  "device_evidence": false,
+  "media_validation": "not-performed",
+  "verification": {
+    "focused": 43,
+    "full": 1237,
+    "check": "syntax only, passed",
+    "isolated": {
+      "passed": true,
+      "cases": 43,
+      "temporary_environment_removed": true,
+      "observed_wall_ms": 5252
+    },
+    "full_observed_wall_ms": 98385
+  },
+  "compatibility": {
+    "wire_sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "golden_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "sources": {
+    "baseline": 322,
+    "unchanged": 319,
+    "modified": [
+      {
+        "path": "packages/core/native400-bootstrap.mjs",
+        "sha256_before": "b548836abeed75aa7928f8955375f00c0cc503025ad729da43b57f9ac542f7b4",
+        "sha256_after": "6947f7e7072a680826d3041c344921ed91920b16ad6b549841aa522cc4f3a0ca"
+      },
+      {
+        "path": "packages/ui/index.mjs",
+        "sha256_before": "eee1a27486dd1cb7f312529c0b6c02fb896c825a66423f341b9ef2f359749354",
+        "sha256_after": "733f72a06e3de0d603540b253eb2509537c9c64ad719f24e681b3e2393a76559"
+      },
+      {
+        "path": "scripts/build.mjs",
+        "sha256_before": "41e364628507929a24b6947b65c99c7725449bb604c4d092bf3501a384ef3071",
+        "sha256_after": "3317e1e04512b15e77398df49d6b4152f9afec788d8d2d46e7d8ad070089b20e"
+      }
+    ],
+    "added": [
+      "packages/core/native400-source-review-view.mjs",
+      "packages/runtime/native400-review-journal.mjs",
+      "packages/runtime/native400-review-manager.mjs",
+      "packages/ui/native400-source-review.mjs",
+      "scripts/verify-native400-09.mjs",
+      "tests/native400-09.test.mjs"
+    ]
+  }
+}

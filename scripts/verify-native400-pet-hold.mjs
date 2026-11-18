@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-pet-hold.test.mjs'],expected:24,timeoutMs:30000,layer:'explicit-pet-hold-state-with-independent-lifetimes',prefix:'tcp23-',scope:'Original HTTP response-liveness receipts, genuine audited shared IPC and real loopback TCP/model; freshness, monotonic source generation, distinct lane/authority budgets, ownership/CAS, local priority, exact unknown confirmation, expiry and cleanup. No ESP or real task-transition claim.'});

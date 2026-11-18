@@ -1,0 +1,99 @@
+{
+  "schema": "native400-source-review-host-evidence/1",
+  "date": "2026-11-03",
+  "scope": "original MIT sparse fixture; private UDS and temporary loopback host proxy, no real source/firmware/device",
+  "prepared_descriptor": {
+    "schema_version": 1,
+    "profile": "native400-source-review-host/1",
+    "scope": "offline-source-review",
+    "inputs_sha256": "1dfb277ff843149f85c1fe32384447c1328a6ea026842498eaf6225c6c4e7b36",
+    "create_journal": true
+  },
+  "workflow": [
+    "empty",
+    "current",
+    "historical",
+    "current"
+  ],
+  "first_service_owner_opens": 1,
+  "proxy": {
+    "source_review_phase": "current",
+    "device_transport": false,
+    "devices": [],
+    "private_path_exposed": false
+  },
+  "history": {
+    "revision": "1",
+    "map_sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+    "root_sequence": "2",
+    "device_evidence": false,
+    "media_validation": "not-performed"
+  },
+  "source_unchanged": true,
+  "closed_resources": {
+    "closed": true,
+    "busy": false,
+    "uncertain": false,
+    "open_files": 0,
+    "retained_cache_bytes": 0,
+    "stream_buffer_max": 65536
+  },
+  "compatibility": {
+    "wire_sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "golden_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "sources": {
+    "baseline": 328,
+    "unchanged": 325,
+    "modified": [
+      {
+        "path": "apps/dsh-plugin/index.mjs",
+        "sha256_before": "3625e5255d62b4fed0af8f3290e8c2214188c8ac012f5d442b8998a8e19b31fa",
+        "sha256_after": "febb2fc937531136e837af9f9bfecf79c2659fe9b1df95a11b70cf41d8ed36af"
+      },
+      {
+        "path": "packages/runtime/service.mjs",
+        "sha256_before": "5c6aed6ab51ef8a1164895f1f48237779c73eca0e5ebd97cc21cc323d4a28f92",
+        "sha256_after": "3fc1295acf182c56c2612f79bee1263553cafd1f359041e53e17e9a1cce17c8f"
+      },
+      {
+        "path": "packages/ui/index.mjs",
+        "sha256_before": "733f72a06e3de0d603540b253eb2509537c9c64ad719f24e681b3e2393a76559",
+        "sha256_after": "0c7221f0c7536afd3d29236c31a959928ed5ed8596769a7c18849bbff041e318"
+      }
+    ],
+    "added": [
+      {
+        "path": "packages/runtime/native400-source-review-host.mjs",
+        "sha256": "de9117e46ea56ed40f454a0ed57647cc3bacc5c118b7289ac9f8e5690aeb3399"
+      },
+      {
+        "path": "scripts/verify-native400-10.mjs",
+        "sha256": "56dca07dc46a5feff0d773611f4716f96ce52ac72691770a2370d2571bdadc3c"
+      },
+      {
+        "path": "tests/fixtures/native400-source-review-child.mjs",
+        "sha256": "18e9669e3286eda2ccd519ddf85d5918830a1a8ed4aa12f1cfe8ba774c3f01a5"
+      },
+      {
+        "path": "tests/native400-10.test.mjs",
+        "sha256": "a150c11bc1cf39944c814c8b398d9e7cee9d47a71ea2b967aedabc97eb4e425c"
+      }
+    ]
+  },
+  "verification": {
+    "focused_cases": 36,
+    "full_cases": 1273,
+    "full_observed_wall_ms": 95526,
+    "syntax_check": "passed; syntax only",
+    "isolated": {
+      "passed": true,
+      "timeout": false,
+      "interrupted": false,
+      "observed_wall_ms": 7834,
+      "temporary_environment_removed": true
+    },
+    "isolated_cases": 36,
+    "ui_scope": "built JS host and real fetch through temporary loopback proxy/private UDS; no browser/DSH installation"
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "schema": "native400-g0-review-evidence/1",
+  "review_date": "2026-11-03",
+  "status": "review_complete_joint_g0_and_device_admission_open",
+  "scope": "read-only firmware docs/source; local document-only review; no device, source import, firmware execution or services",
+  "firmware_reference_repository": "ai-embedded-studio",
+  "external_files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 4444,
+      "sha256": "159d30985dd20b8251dafba4ac55b85e99eab8d3d581417a5dd855e71c038a23",
+      "sha256_after": "159d30985dd20b8251dafba4ac55b85e99eab8d3d581417a5dd855e71c038a23",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/index.md",
+      "bytes": 9270,
+      "sha256": "309fba1d526df9a33a42fb0141dfefd5a0288b62ca029b928694c421c389ca9f",
+      "sha256_after": "309fba1d526df9a33a42fb0141dfefd5a0288b62ca029b928694c421c389ca9f",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/project-overview.md",
+      "bytes": 3905,
+      "sha256": "f7fd125c99d9fad330407367357566c3cbe42b832c76c768302088fee61156dd",
+      "sha256_after": "f7fd125c99d9fad330407367357566c3cbe42b832c76c768302088fee61156dd",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/current-system.md",
+      "bytes": 13914,
+      "sha256": "74274586c68a140abfda06a5bd413e63a56bd3ccea58c69b78011361525d1168",
+      "sha256_after": "74274586c68a140abfda06a5bd413e63a56bd3ccea58c69b78011361525d1168",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/current-todos.md",
+      "bytes": 11340,
+      "sha256": "1ab57c04e510944caef063509f0807ba3a70d4f8c5439c96281c030427a7fd0f",
+      "sha256_after": "1ab57c04e510944caef063509f0807ba3a70d4f8c5439c96281c030427a7fd0f",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/current-status.md",
+      "bytes": 17363,
+      "sha256": "f883468a09b5e3cb166751963b75e333fc8b98c95d18ac67c7c561b185711d6d",
+      "sha256_after": "f883468a09b5e3cb166751963b75e333fc8b98c95d18ac67c7c561b185711d6d",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/plans/round-pet-hub-baseline-alignment.md",
+      "bytes": 7388,
+      "sha256": "40ee5eab82b1c64e689dffa8afb91184bd5b6348a01ea1c04a083664c469f95b",
+      "sha256_after": "40ee5eab82b1c64e689dffa8afb91184bd5b6348a01ea1c04a083664c469f95b",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/plans/round-pet-hub-single-device-spec.md",
+      "bytes": 11436,
+      "sha256": "27672f1765fcefaf0a12f4733ae7b3160a7271dd166986da41c9d87f90df0d8e",
+      "sha256_after": "27672f1765fcefaf0a12f4733ae7b3160a7271dd166986da41c9d87f90df0d8e",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/plans/round-pet-hub-single-device-diff.md",
+      "bytes": 5167,
+      "sha256": "862ad99bb4a7ec41b322367fdd69ecd2a4a30e009000e5420c82f1c105e9020e",
+      "sha256_after": "862ad99bb4a7ec41b322367fdd69ecd2a4a30e009000e5420c82f1c105e9020e",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "docs/context/plans/round-pet-400-autoplay-spec.md",
+      "bytes": 7392,
+      "sha256": "ce8de602138dbb908dc70446a8b7435bc0bea76361e33d2a615f0d394b2ca21f",
+      "sha256_after": "ce8de602138dbb908dc70446a8b7435bc0bea76361e33d2a615f0d394b2ca21f",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/README.md",
+      "bytes": 3546,
+      "sha256": "6eef266482cb0aede47f5cd484e9e3971b0bf1789681f1cf8a05d60881bb41bd",
+      "sha256_after": "6eef266482cb0aede47f5cd484e9e3971b0bf1789681f1cf8a05d60881bb41bd",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/reports/2026-11-02-400-autoplay.md",
+      "bytes": 10039,
+      "sha256": "46f4419a51ba3736d6ea5b2a6c7bb212e93fd21241c5283b22200f9a6bd8d62f",
+      "sha256_after": "46f4419a51ba3736d6ea5b2a6c7bb212e93fd21241c5283b22200f9a6bd8d62f",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/reports/2026-11-02-400-autoplay.json",
+      "bytes": 23666,
+      "sha256": "b16d257a870d7ba8845fbbdf0e39c7ad972400e587f421e21c65a95e21738a7f",
+      "sha256_after": "b16d257a870d7ba8845fbbdf0e39c7ad972400e587f421e21c65a95e21738a7f",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/reports/2026-11-02-400-performance-device.md",
+      "bytes": 6441,
+      "sha256": "b4b7dc6c8049cea63e573c687b8e5d975e29602d964ebbdc97e40c3603307eca",
+      "sha256_after": "b4b7dc6c8049cea63e573c687b8e5d975e29602d964ebbdc97e40c3603307eca",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/reports/2026-11-02-400-pipeline-ack.md",
+      "bytes": 6423,
+      "sha256": "58365b21f6fab0af6d259499cf5def09616c9d966c817f0f1c9190bede6983a0",
+      "sha256_after": "58365b21f6fab0af6d259499cf5def09616c9d966c817f0f1c9190bede6983a0",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "tools/round-pet/native400_boot_image.py",
+      "bytes": 3306,
+      "sha256": "4a28e6da4165ab21a0f432a7a1e2191a28a2ff80b6ae0bd5de6dd72b3a4d7964",
+      "sha256_after": "4a28e6da4165ab21a0f432a7a1e2191a28a2ff80b6ae0bd5de6dd72b3a4d7964",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "tools/round-pet/native400_manifest.py",
+      "bytes": 6977,
+      "sha256": "0607ac071c1d1c266378c188a9d873af0ba4a1d45420757ac793eff74901c46f",
+      "sha256_after": "0607ac071c1d1c266378c188a9d873af0ba4a1d45420757ac793eff74901c46f",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/CMakeLists.txt",
+      "bytes": 3394,
+      "sha256": "1b0691bcd76e92a5f78523e5209df0c73fd341e0513e1736a4c0e9c885bd1846",
+      "sha256_after": "1b0691bcd76e92a5f78523e5209df0c73fd341e0513e1736a4c0e9c885bd1846",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/assets/pet_native360_store.h",
+      "bytes": 11789,
+      "sha256": "220b9804a5c0db6324fd9c575a40969b8a2bc97ae0a8b88e91e34a282cdf50b3",
+      "sha256_after": "220b9804a5c0db6324fd9c575a40969b8a2bc97ae0a8b88e91e34a282cdf50b3",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/assets/pet_native360_profile.h",
+      "bytes": 743,
+      "sha256": "457f580224d1bcb1b6932a3a8d33f4af78858433f105c134236c348c0efdf174",
+      "sha256_after": "457f580224d1bcb1b6932a3a8d33f4af78858433f105c134236c348c0efdf174",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400/codec.h",
+      "bytes": 4544,
+      "sha256": "ffbc4157a277e58070b35369bfaf6ce3465dfd7ba74330811c3f6f2864e701f6",
+      "sha256_after": "ffbc4157a277e58070b35369bfaf6ce3465dfd7ba74330811c3f6f2864e701f6",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400/session.h",
+      "bytes": 5171,
+      "sha256": "5d7f8b307df35061758b3444f6566a307250c359bd167aeca19b1d511467ecfa",
+      "sha256_after": "5d7f8b307df35061758b3444f6566a307250c359bd167aeca19b1d511467ecfa",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/protocol.h",
+      "bytes": 3660,
+      "sha256": "49bf4d065f9303bc3c25ddd78fb699656bcefdf299ee66789d318d8dcc7b940a",
+      "sha256_after": "49bf4d065f9303bc3c25ddd78fb699656bcefdf299ee66789d318d8dcc7b940a",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/render_lease.h",
+      "bytes": 2612,
+      "sha256": "39f15d8206650f286971ef04cc81e55ce8c18fe7eed7e917deee89b203d51334",
+      "sha256_after": "39f15d8206650f286971ef04cc81e55ce8c18fe7eed7e917deee89b203d51334",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/frame_source.h",
+      "bytes": 7554,
+      "sha256": "eb1cf6c350f1c82e258c905af2e9f90bd425280b2c0d34445b5333b62a57d173",
+      "sha256_after": "eb1cf6c350f1c82e258c905af2e9f90bd425280b2c0d34445b5333b62a57d173",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/local_prefetch.h",
+      "bytes": 5254,
+      "sha256": "fa9a298efacb92c7501c9a9d4776dad36d1fc8c53872a0c308033b32d48b5d9b",
+      "sha256_after": "fa9a298efacb92c7501c9a9d4776dad36d1fc8c53872a0c308033b32d48b5d9b",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/local_status.h",
+      "bytes": 1562,
+      "sha256": "7fb398553a86a70dbfcccb1d671f4246592abdbdf95df2dd32277de7e2ddece0",
+      "sha256_after": "7fb398553a86a70dbfcccb1d671f4246592abdbdf95df2dd32277de7e2ddece0",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/ingress.h",
+      "bytes": 3666,
+      "sha256": "403fc152854e762f7d9c98634404226d2074d8510ccc6bca4c9544d9438c27dd",
+      "sha256_after": "403fc152854e762f7d9c98634404226d2074d8510ccc6bca4c9544d9438c27dd",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/boot_catalog.h",
+      "bytes": 3302,
+      "sha256": "9d1956feae17d8102b5740364dd0ff51627809fec0a442a6e4a06aca307ae58d",
+      "sha256_after": "9d1956feae17d8102b5740364dd0ff51627809fec0a442a6e4a06aca307ae58d",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/README.md",
+      "bytes": 4962,
+      "sha256": "27153128a445bd89970c01995280919f0e1ee973cbb6311cf256034b70387fdf",
+      "sha256_after": "27153128a445bd89970c01995280919f0e1ee973cbb6311cf256034b70387fdf",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/buffer_policy.h",
+      "bytes": 2648,
+      "sha256": "7a233775a0a9c37fa57db1fce7670d14ff73cef385cc2fe577437c606a82e769",
+      "sha256_after": "7a233775a0a9c37fa57db1fce7670d14ff73cef385cc2fe577437c606a82e769",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/frame_trace.h",
+      "bytes": 729,
+      "sha256": "5aa0097bdd53c3f7966a175216355f898af12191380d22e5d6ad6b7e77eddfbc",
+      "sha256_after": "5aa0097bdd53c3f7966a175216355f898af12191380d22e5d6ad6b7e77eddfbc",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/framing.h",
+      "bytes": 1979,
+      "sha256": "02e3269f168db7c0906667ac38ecc9d7b6061b46de2f4901603c3c86be9c804a",
+      "sha256_after": "02e3269f168db7c0906667ac38ecc9d7b6061b46de2f4901603c3c86be9c804a",
+      "changed_during_digest_window": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/app_main.cpp",
+      "bytes": 37719,
+      "sha256": "a0c34846d36ea562c42f05eeb36030d8fc26f7be6f8974f3e432446e04e1bee5",
+      "sha256_after": "65a0163a755eec3224831264cb26f608189498c250b1cd22264c59c35f0191d1",
+      "changed_during_digest_window": true
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/byte_pipe.h",
+      "bytes": 3545,
+      "sha256": "ec3971bbe79f5c99100e02aa457c98169078e887467abe98c64b5907d2687926",
+      "sha256_after": "ec3971bbe79f5c99100e02aa457c98169078e887467abe98c64b5907d2687926",
+      "changed_during_digest_window": false
+    }
+  ],
+  "external_changes_during_digest_window": [
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/app_main.cpp"
+  ],
+  "reported_local400": {
+    "application": {
+      "bytes": 589248,
+      "sha256": "6882be44883bcc975b68ac7d107f455daf448b8028f122f977430437f6d1854e",
+      "elf_sha256": "2f3524357b11fb430afec4c311ab5d3ecfeb3648f983f7a1e40407914fb42834"
+    },
+    "namespace_sha256": "a34d0c7ba6e7ede9fb9973977dd31fb8a7eb7dc92158cff0308da2640c226e2a",
+    "cache": {
+      "bytes": 29360128,
+      "sha256": "57ae06ed061b5aa82a55f498dd736c89f169ec5c6d582416cbc45c0909832965"
+    },
+    "readback": {
+      "bytes": 33554432,
+      "sha256": "b194dddead341cd9150bb8ec7bcb5dc31625f6a18399875f7ba4f7267f400ef6",
+      "complete": true,
+      "system_unchanged": true,
+      "pair_exact": true
+    },
+    "build_memory_plan": {
+      "profile": "native400-readonly-autoplay-crc-status-v2",
+      "autoplay": true,
+      "local_status_crc": true,
+      "packed_rgb": true,
+      "protocol_version": 2,
+      "short_draw": true,
+      "image_bytes": 589248,
+      "sha256": "6882be44883bcc975b68ac7d107f455daf448b8028f122f977430437f6d1854e",
+      "encoded_bytes": 0,
+      "rgb_history_bytes": 1120000,
+      "compressed_window_bytes": 1048576,
+      "source_metadata_bytes": 5112,
+      "io_bytes": 4096,
+      "trace_psram_bytes": 12288,
+      "ingress_psram_bytes": 66560,
+      "usb_pipe_psram_bytes": 65536,
+      "ingress_cursor_section": ".dram0.bss",
+      "input_stack_bytes": 8192,
+      "explicit_psram_bytes": 2322168,
+      "remainder_before_system_and_transients": 6066440,
+      "internal_scratch_bytes": 20160,
+      "worker_stack_bytes": 16384,
+      "network_enabled": false,
+      "flash_writes_enabled": false,
+      "dynamic_memory_verified": false,
+      "device_fps_verified": false
+    },
+    "memory_minima": {
+      "psram": 6062680,
+      "largest": 6029312,
+      "internal": 195607,
+      "sdk_min_psram": 6062680,
+      "sdk_min_internal": 191507,
+      "main_stack": 6184,
+      "worker_stack": 10428,
+      "io_stack": 7032
+    },
+    "last_counters": {
+      "continuous_frames": 2076,
+      "continuous_gap_max_us": 889076,
+      "continuous_fps": 23.296693939778798
+    },
+    "completed_frames": 1928,
+    "sample_count": 87,
+    "cached_actions": [
+      0,
+      4,
+      1,
+      11
+    ],
+    "first_attempt_paired_rollback_verified": true,
+    "firmware_source_ledger_sha256": "139831272fae148b0eb748f2ccdb1215d890382673770b0284cf3654dccf7700",
+    "scope": "upstream_reported_device_evidence_not_remeasured"
+  },
+  "hub_offline_candidate_identity": {
+    "profile": "round-pet-native400-offline/1",
+    "namespace_scope": "offline-candidate",
+    "namespace": "dd0f19bfdc4bed608ddf18baf095fd6c8b53217bbb59d8f0238e51460e2c0ff8",
+    "firmware_package_sha256": "52b2f6cb91cb2cc7618aa6958278d991c08610be55696d0099da3f8ff2bd80ce",
+    "hub_manifest_sha256": "094e69be6fc297d9c79d53dfcd56acaefed1cfc6345a072b3ed5c78736943b9c",
+    "source_manifest_sha256": "a1c7c2a6a6a5ffeb113e403262252739271afc18db0a6d53ab40f1ebbab94ae5",
+    "source_index_sha256": "5bd657d47a288b055c4806e4245c07c470ad9057edf37338c75d8450fe19df29"
+  },
+  "budget_arithmetic": {
+    "host_safe_horizon_ms": 13074,
+    "read_admission_ms": 1610,
+    "renew_required_strictly_above_ms": 4510,
+    "trigger_ms": 6000,
+    "trigger_slack_ms": 1490,
+    "conditional_no_poll_remaining_ms": 4503,
+    "max_file_segments": 170,
+    "max_file_initial_two_pass_bytes": 11139290,
+    "max_file_one_pass_min_seconds_at_32KiB_per_second": 169.97207641601562
+  },
+  "budget_caveat": "scalar conditional arithmetic only; no new end-to-end timing trace or worst-device bounds",
+  "unmeasured_current_source_prefetch": {
+    "metadata_max_bytes": 2464,
+    "prefix_per_slot_bytes": 524288,
+    "alignment_bytes": 64,
+    "stride_bytes": 526784,
+    "slots": 4,
+    "prefix_storage_bytes": 2107136,
+    "additional_unknown_bytes": [
+      "sizeof(LocalPrefetch)",
+      "validator/hash state and scratch",
+      "internal publication atomics"
+    ],
+    "production_resource_admission": false
+  },
+  "local_source_audit": {
+    "paths_before": 314,
+    "changed": [],
+    "new_source_files": []
+  },
+  "validation": {
+    "syntax_check_passed": true,
+    "build_and_tests_passed": 1126,
+    "new_tests": 0,
+    "firmware_build_or_tests_executed": false,
+    "physical_device_access": false
+  },
+  "pending_decisions": [
+    "D01 namespace and source approval mapping",
+    "D03 integrity strategy and per-loop proof",
+    "D04 repeated touch and fallback",
+    "D05 autonomous vs finite remote lifetime",
+    "D07 actual I/O exit and worst delay",
+    "D09 capability negotiation, trusted time, secrets and new resources"
+  ],
+  "next_slice": "400-07 end-to-end cycle budget counterexamples; Spec/Diff first, offline only"
+}

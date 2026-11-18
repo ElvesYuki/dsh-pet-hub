@@ -1,0 +1,36 @@
+{
+  "status": "review_candidate_not_measured",
+  "target_profile": "128_native240_psram",
+  "source_static": {
+    "psram_slots": 4,
+    "slot_bytes": 3145728,
+    "frame_width": 240,
+    "frame_height": 240,
+    "rgb565_buffers": 2,
+    "lvgl_pool_bytes": 2097152,
+    "decoder_internal_bytes": 9664,
+    "download_internal_bytes": 16384,
+    "dma_internal_bytes": 57600,
+    "tls_rx_record_bytes": 16384,
+    "tls_tx_record_bytes": 4096,
+    "old_nvs_partition_bytes": 24576,
+    "old_app_partition_bytes": 4194304,
+    "old_reported_image_bytes": 1256576
+  },
+  "historical_report": {
+    "psram_free_bytes": 1859936,
+    "internal_idle_free_approx_bytes": 71680,
+    "internal_download_free_approx_bytes": 37888,
+    "qualifier": "2026-10-28 report samples, not current measurements or largest blocks"
+  },
+  "candidate_envelope_not_measurement": {
+    "concurrent_tls_connections": 1,
+    "tls_peak_internal_allowance_bytes": 98304,
+    "additional_control_bytes": 4096,
+    "additional_worker_stack_bytes": 8192,
+    "required_internal_reserve_bytes": 32768,
+    "control_message_max_bytes": 4096,
+    "asset_range_max_bytes": 32768,
+    "asset_read_buffer_bytes": 4096
+  }
+}

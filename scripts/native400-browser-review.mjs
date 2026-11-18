@@ -1,0 +1,10 @@
+import {parseArgs} from 'node:util';import {readFileSync,writeFileSync,unlinkSync,mkdirSync} from 'node:fs';import {resolve,join} from 'node:path';import {createInterface} from 'node:readline';
+import {native400BrowserHarness} from '../tests/fixtures/native400-browser-harness.mjs';
+const {values}=parseArgs({options:{'react-seed':{type:'string'},output:{type:'string'}}});
+const output=values.output&&resolve(values.output);if(!values['react-seed']||!output?.startsWith(resolve('.cache')+'/'))throw Error('explicit ignored output directory and local React seed required');
+mkdirSync(output,{recursive:true,mode:0o700});const stateFile=join(output,'private-browser-state.json'),harness=await native400BrowserHarness({reactSeed:readFileSync(resolve(values['react-seed']))});let closing=false;
+const input=createInterface({input:process.stdin});
+async function stop(){if(closing)return;closing=true;input.close();await harness.close();try{unlinkSync(stateFile);}catch(e){if(e.code!=='ENOENT')throw e;}console.log(JSON.stringify({closed:true,temporary_environment_removed:harness.resourcesRemoved()}));}
+void (async()=>{try{for await(const line of input){try{const op=line.trim();if(closing)return;if(op==='grant'){const state=await harness.grant();writeFileSync(stateFile,JSON.stringify(state),{mode:0o600});}else if(op==='choose')await harness.choose();else if(op==='revoke')harness.revoke();else if(op==='hold')harness.holdNext();else if(op==='release')harness.release();else if(op==='drop')harness.dropNext();else if(op==='unknown')harness.unknownNext();else if(op==='unload')harness.unload();else if(op==='reload')harness.reload();else if(op==='reopen')await harness.reopen();else if(op==='close'){await stop();return;}else if(op!=='state')throw Error('unknown command');console.log(JSON.stringify({command:op,state:harness.state()}));}catch{console.log(JSON.stringify({error:'fixture_command_rejected'}));}}}finally{await stop();}})().catch(()=>{process.exitCode=1;});
+for(const signal of ['SIGINT','SIGTERM'])process.once(signal,()=>void stop());
+console.log(JSON.stringify({origin:harness.origin,scope:'original-offline-browser-fixture'}));

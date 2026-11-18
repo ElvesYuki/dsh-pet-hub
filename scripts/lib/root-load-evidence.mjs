@@ -1,0 +1,19 @@
+import {keys,bounded,requireThat as need,clone,same} from '../../packages/core/protocol.mjs';
+import {ROOT_METRICS,ROOT_COUNTERS} from '../../packages/runtime/load-metrics.mjs';
+import {rootPersistenceBudget,ROOT_BOUNDS} from '../../packages/simulator/root-persistence-budget.mjs';
+// This validator belongs to the offline supervisor, not to the production entry point.
+const OLD=['certificate_leaf','certificate_static','certificate_validity','metadata_read','metadata_load','peer_binding','session_check','tls_handshake','segment_round_trip','control_round_trip','instrumentation','instrumentation_batch','lane_wait'];
+const exact=(v,k)=>{keys(v,k);need(Object.keys(v).length===k.length,'invalid_root_evidence');},number=v=>need(Number.isFinite(v)&&v>=0&&v<=Number.MAX_SAFE_INTEGER,'invalid_root_evidence');
+export function validateRootLoadEvidence(value){
+ exact(value,['scope','profiles','capacity','budget']);need(value.scope==='host-root-samples-NO_GO_UNTIL_MEASURED','invalid_root_evidence');need(Array.isArray(value.profiles)&&value.profiles.length===4,'invalid_root_evidence');
+ for(let i=0;i<4;i++){const p=value.profiles[i];exact(p,['bindings','persistent','rounds','asset_bytes','file_bytes','initial_static_checks','handshake_ms','elapsed_ms','trace','noop','metrics']);need(p.bindings===(i<2?1:64)&&p.persistent===(i%2===1)&&p.rounds===3,'invalid_root_evidence');bounded(p.asset_bytes,1,2**28);bounded(p.file_bytes,1,131072);bounded(p.initial_static_checks,1,100);number(p.handshake_ms);number(p.elapsed_ms);need(Array.isArray(p.trace)&&p.trace.length<=128);for(const n of p.trace)bounded(n,1,5);
+  exact(p.noop,['commits','locks','file_syncs','directory_syncs','write_bytes','revision_changed']);for(const n of ['commits','locks','file_syncs','directory_syncs','write_bytes'])bounded(p.noop[n],0,2**30);need(typeof p.noop.revision_changed==='boolean');
+  exact(p.metrics,['stats','counters','bin_upper_ms']);need(same(p.metrics.bin_upper_ms,[0.05,0.1,0.25,0.5,1,2,5,10,25,50,100,250,1000,10000]));keys(p.metrics.stats,[...OLD,...ROOT_METRICS]);keys(p.metrics.counters,['metadata_bytes','asset_write_bytes','asset_write_calls',...ROOT_COUNTERS]);for(const n of Object.values(p.metrics.counters))bounded(n,0,Number.MAX_SAFE_INTEGER);
+  need(['metadata_read','metadata_load','session_check','control_round_trip','segment_round_trip','certificate_validity'].every(k=>p.metrics.stats[k]?.count>0));need(p.metrics.counters.metadata_bytes>0&&p.metrics.counters.asset_write_calls>0&&p.metrics.counters.asset_write_bytes===p.asset_bytes);
+  if(p.persistent)need(['root_commit','root_prepare','root_publish','root_transaction','root_encode','root_file_sync','root_directory_sync','root_lock','root_cas','root_remember','root_exchange'].every(k=>p.metrics.stats[k]?.count>0));
+  for(const s of Object.values(p.metrics.stats)){exact(s,['count','failed','total_ms','max_ms','buckets']);bounded(s.count,0,Number.MAX_SAFE_INTEGER);bounded(s.failed,0,s.count);number(s.total_ms);number(s.max_ms);need(s.max_ms<=s.total_ms);need(Array.isArray(s.buckets)&&s.buckets.length===15);for(const n of s.buckets)bounded(n,0,s.count);need(s.buckets.reduce((a,b)=>a+b,0)===s.count);}
+ }
+ for(const p of value.profiles)need(p.asset_bytes===value.profiles[0].asset_bytes&&same(p.trace,value.profiles[0].trace),'unequal_root_workload');
+ exact(value.capacity,['registered','rooted','file_bytes','failure_operation','unchanged_on_failure']);bounded(value.capacity.registered,1,64);bounded(value.capacity.rooted,0,value.capacity.registered);bounded(value.capacity.file_bytes,1,131072);bounded(value.capacity.failure_operation,0,2);need(typeof value.capacity.unchanged_on_failure==='boolean');
+ need(same(value.budget,ROOT_BOUNDS.map(root_service_ms=>rootPersistenceBudget({root_service_ms}))),'invalid_root_evidence');return clone(value);
+}

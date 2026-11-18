@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "status": "draft-wire-vectors",
+  "source": "round-pet400-pbp1-persistent-wire-draft.md (2026-11-13)",
+  "fixture": "Synthetic public test data only. Signatures and PSK come from native400-pbp1-persistent-draft-v1.json.",
+  "header_bytes": 16,
+  "max_frame_bytes": 196,
+  "accept": [
+    {
+      "id": "read-capabilities-and-binding",
+      "direction": "request",
+      "type": 6,
+      "body_bytes": 0,
+      "fields": {},
+      "frame_hex": "504250310106000000000000305baee6"
+    },
+    {
+      "id": "unbound-new",
+      "direction": "response",
+      "type": 129,
+      "body_bytes": 84,
+      "fields": {
+        "status": 0,
+        "phase": 0,
+        "capabilities": 1,
+        "boot": "1230066625199609624",
+        "device": "00112233445566778899aabbccddeeff",
+        "epoch": "0",
+        "controller": "00000000000000000000000000000000",
+        "binding": "00000000000000000000000000000000",
+        "public_key_sha256_prefix_hex": "00000000000000000000000000000000"
+      },
+      "frame_hex": "504250310181000054000000b1d42cfa00000100181716151413121100112233445566778899aabbccddeeff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "unbound-after-unbind",
+      "direction": "response",
+      "type": 129,
+      "body_bytes": 84,
+      "fields": {
+        "status": 0,
+        "phase": 0,
+        "capabilities": 1,
+        "boot": "1230066625199609624",
+        "device": "00112233445566778899aabbccddeeff",
+        "epoch": "72623859790382855",
+        "controller": "00000000000000000000000000000000",
+        "binding": "00000000000000000000000000000000",
+        "public_key_sha256_prefix_hex": "00000000000000000000000000000000"
+      },
+      "frame_hex": "50425031018100005400000065cae0ba00000100181716151413121100112233445566778899aabbccddeeff0707060504030201000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "request-enroll-challenge",
+      "direction": "request",
+      "type": 7,
+      "body_bytes": 1,
+      "fields": {
+        "operation": 1
+      },
+      "frame_hex": "504250310107000001000000c268f07201"
+    },
+    {
+      "id": "enroll-challenge",
+      "direction": "response",
+      "type": 130,
+      "body_bytes": 40,
+      "fields": {
+        "status": 0,
+        "operation": 1,
+        "reference": 287454020,
+        "challenge_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+      },
+      "frame_hex": "5042503101820000280000006b1df0b50001000044332211000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+    },
+    {
+      "id": "enroll-proof",
+      "direction": "request",
+      "type": 8,
+      "body_bytes": 173,
+      "fields": {
+        "reference": 287454020,
+        "controller": "102132435465768798a9bacbdcedfe0f",
+        "binding": "f0e1d2c3b4a5968778695a4b3c2d1e0f",
+        "epoch": "72623859790382856",
+        "public_key_sec1_hex": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+        "signature_p1363_hex": "3e7db2358083ba21b68607c55e38ec792f218f7d07d46c90c7409bb6808d11b58dc46fd4c578a60a7074d6c3a126a00a3ca9c691a2010a626ee0873a3482aa86"
+      },
+      "frame_hex": "5042503101080000ad000000a239ac7244332211102132435465768798a9bacbdcedfe0ff0e1d2c3b4a5968778695a4b3c2d1e0f0807060504030201046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f53e7db2358083ba21b68607c55e38ec792f218f7d07d46c90c7409bb6808d11b58dc46fd4c578a60a7074d6c3a126a00a3ca9c691a2010a626ee0873a3482aa86"
+    },
+    {
+      "id": "enroll-pending-local",
+      "direction": "response",
+      "type": 129,
+      "body_bytes": 84,
+      "fields": {
+        "status": 0,
+        "phase": 1,
+        "capabilities": 1,
+        "boot": "1230066625199609624",
+        "device": "00112233445566778899aabbccddeeff",
+        "epoch": "72623859790382855",
+        "controller": "00000000000000000000000000000000",
+        "binding": "00000000000000000000000000000000",
+        "public_key_sha256_prefix_hex": "00000000000000000000000000000000"
+      },
+      "frame_hex": "5042503101810000540000009b1e9fbc00010100181716151413121100112233445566778899aabbccddeeff0707060504030201000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "bound-committed",
+      "direction": "response",
+      "type": 129,
+      "body_bytes": 84,
+      "fields": {
+        "status": 0,
+        "phase": 2,
+        "capabilities": 1,
+        "boot": "1230066625199609624",
+        "device": "00112233445566778899aabbccddeeff",
+        "epoch": "72623859790382856",
+        "controller": "102132435465768798a9bacbdcedfe0f",
+        "binding": "f0e1d2c3b4a5968778695a4b3c2d1e0f",
+        "public_key_sha256_prefix_hex": "698bea63dc44a344663ff1429aea1084"
+      },
+      "frame_hex": "504250310181000054000000a74ae61d00020100181716151413121100112233445566778899aabbccddeeff0807060504030201102132435465768798a9bacbdcedfe0ff0e1d2c3b4a5968778695a4b3c2d1e0f698bea63dc44a344663ff1429aea1084"
+    },
+    {
+      "id": "storage-fault",
+      "direction": "response",
+      "type": 129,
+      "body_bytes": 84,
+      "fields": {
+        "status": 4,
+        "phase": 3,
+        "capabilities": 1,
+        "boot": "1230066625199609624",
+        "device": "00112233445566778899aabbccddeeff",
+        "epoch": "0",
+        "controller": "00000000000000000000000000000000",
+        "binding": "00000000000000000000000000000000",
+        "public_key_sha256_prefix_hex": "00000000000000000000000000000000"
+      },
+      "frame_hex": "504250310181000054000000ce2cd34304030100181716151413121100112233445566778899aabbccddeeff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "request-resume-challenge",
+      "direction": "request",
+      "type": 7,
+      "body_bytes": 1,
+      "fields": {
+        "operation": 2
+      },
+      "frame_hex": "5042503101070000010000007839f9eb02"
+    },
+    {
+      "id": "resume-challenge",
+      "direction": "response",
+      "type": 130,
+      "body_bytes": 40,
+      "fields": {
+        "status": 0,
+        "operation": 2,
+        "reference": 287454021,
+        "challenge_hex": "202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f"
+      },
+      "frame_hex": "5042503101820000280000006cad9b940002000045332211202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f"
+    },
+    {
+      "id": "challenge-busy",
+      "direction": "response",
+      "type": 130,
+      "body_bytes": 40,
+      "fields": {
+        "status": 2,
+        "operation": 2,
+        "reference": 0,
+        "challenge_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "frame_hex": "504250310182000028000000b22584d602020000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "resume-proof",
+      "direction": "request",
+      "type": 9,
+      "body_bytes": 100,
+      "fields": {
+        "reference": 287454021,
+        "test_psk_hex": "404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f",
+        "signature_p1363_hex": "023ed94f0c6bbc5ddbdbdc353c3519b1e5a30fb1a781b401b5d060cdf5f23fdf8de698113805a6bd1e7ad3f0ed7031a6b2bb1424e9fe8a149ec9f759d69faa48"
+      },
+      "frame_hex": "5042503101090000640000008723227645332211404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f023ed94f0c6bbc5ddbdbdc353c3519b1e5a30fb1a781b401b5d060cdf5f23fdf8de698113805a6bd1e7ad3f0ed7031a6b2bb1424e9fe8a149ec9f759d69faa48"
+    },
+    {
+      "id": "resume-active",
+      "direction": "response",
+      "type": 131,
+      "body_bytes": 56,
+      "fields": {
+        "status": 0,
+        "proposal": 16909060,
+        "fingerprint_hex": "c52dfc0cfd90c447abde0a26be5d2bb1",
+        "tag_hex": "cc790eb4b179a756a8367e0b54f7dffb4af8406ea0f596f18b05424d1ae3f46a"
+      },
+      "frame_hex": "50425031018300003800000028b3c6d00000000004030201c52dfc0cfd90c447abde0a26be5d2bb1cc790eb4b179a756a8367e0b54f7dffb4af8406ea0f596f18b05424d1ae3f46a"
+    },
+    {
+      "id": "resume-expired",
+      "direction": "response",
+      "type": 131,
+      "body_bytes": 56,
+      "fields": {
+        "status": 3,
+        "proposal": 0,
+        "fingerprint_hex": "00000000000000000000000000000000",
+        "tag_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "frame_hex": "504250310183000038000000662464fc0300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "reject": [
+    {
+      "id": "bad-crc",
+      "expected": "frame-crc",
+      "direction": "request",
+      "frame_hex": "5042503101080000ad000000a339ac7244332211102132435465768798a9bacbdcedfe0ff0e1d2c3b4a5968778695a4b3c2d1e0f0807060504030201046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f53e7db2358083ba21b68607c55e38ec792f218f7d07d46c90c7409bb6808d11b58dc46fd4c578a60a7074d6c3a126a00a3ca9c691a2010a626ee0873a3482aa86"
+    },
+    {
+      "id": "enroll-body-one-byte-short",
+      "expected": "frame-length",
+      "direction": "request",
+      "frame_hex": "5042503101080000ac0000003be72ffe44332211102132435465768798a9bacbdcedfe0ff0e1d2c3b4a5968778695a4b3c2d1e0f0807060504030201046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f53e7db2358083ba21b68607c55e38ec792f218f7d07d46c90c7409bb6808d11b58dc46fd4c578a60a7074d6c3a126a00a3ca9c691a2010a626ee0873a3482aa"
+    },
+    {
+      "id": "truncated-header",
+      "expected": "frame-length",
+      "direction": "request",
+      "frame_hex": "504250310106000000000000305bae"
+    },
+    {
+      "id": "truncated-body",
+      "expected": "frame-length",
+      "direction": "request",
+      "frame_hex": "5042503101090000640000008723227645332211404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f023ed94f0c6bbc5ddbdbdc353c3519b1e5a30fb1a781b401b5d060cdf5f23fdf8de698113805a6bd1e7ad3f0ed7031a6b2bb1424e9fe8a149ec9f759d69faa"
+    },
+    {
+      "id": "trailing-byte",
+      "expected": "frame-length",
+      "direction": "response",
+      "frame_hex": "50425031018300003800000028b3c6d00000000004030201c52dfc0cfd90c447abde0a26be5d2bb1cc790eb4b179a756a8367e0b54f7dffb4af8406ea0f596f18b05424d1ae3f46a00"
+    },
+    {
+      "id": "unknown-type",
+      "expected": "frame-type",
+      "direction": "request",
+      "frame_hex": "50425031010a00000000000044310e21"
+    },
+    {
+      "id": "response-on-request-lane",
+      "expected": "direction",
+      "direction": "request",
+      "frame_hex": "504250310181000054000000a74ae61d00020100181716151413121100112233445566778899aabbccddeeff0807060504030201102132435465768798a9bacbdcedfe0ff0e1d2c3b4a5968778695a4b3c2d1e0f698bea63dc44a344663ff1429aea1084"
+    },
+    {
+      "id": "request-on-response-lane",
+      "expected": "direction",
+      "direction": "response",
+      "frame_hex": "504250310107000001000000c268f07201"
+    },
+    {
+      "id": "unknown-operation",
+      "expected": "field",
+      "direction": "request",
+      "frame_hex": "5042503101070000010000005458f70500"
+    },
+    {
+      "id": "zero-enroll-reference",
+      "expected": "field",
+      "direction": "request",
+      "frame_hex": "5042503101080000ad0000000dbcbf3700000000102132435465768798a9bacbdcedfe0ff0e1d2c3b4a5968778695a4b3c2d1e0f0807060504030201046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f53e7db2358083ba21b68607c55e38ec792f218f7d07d46c90c7409bb6808d11b58dc46fd4c578a60a7074d6c3a126a00a3ca9c691a2010a626ee0873a3482aa86"
+    },
+    {
+      "id": "zero-resume-reference",
+      "expected": "field",
+      "direction": "request",
+      "frame_hex": "50425031010900006400000002150f4200000000404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f023ed94f0c6bbc5ddbdbdc353c3519b1e5a30fb1a781b401b5d060cdf5f23fdf8de698113805a6bd1e7ad3f0ed7031a6b2bb1424e9fe8a149ec9f759d69faa48"
+    },
+    {
+      "id": "unknown-status",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "50425031018100005400000003f1501305000100181716151413121100112233445566778899aabbccddeeff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "unknown-phase",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "5042503101810000540000004987d3e300040100181716151413121100112233445566778899aabbccddeeff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "unbound-controller-nonzero",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "5042503101810000540000006d389dc700000100181716151413121100112233445566778899aabbccddeeff0000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "fault-epoch-nonzero",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "504250310181000054000000193f465e04030100181716151413121100112233445566778899aabbccddeeff0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "challenge-reserved",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "5042503101820000280000008e5013190002010045332211202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f"
+    },
+    {
+      "id": "failed-challenge-reference-nonzero",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "50425031018200002800000027f1f44302020000010000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "successful-challenge-all-zero",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "50425031018200002800000022fe377b00020000453322110000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "active-reserved",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "5042503101830000380000003800c5f20001000004030201c52dfc0cfd90c447abde0a26be5d2bb1cc790eb4b179a756a8367e0b54f7dffb4af8406ea0f596f18b05424d1ae3f46a"
+    },
+    {
+      "id": "active-zero-proposal",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "504250310183000038000000194dfd750000000000000000c52dfc0cfd90c447abde0a26be5d2bb1cc790eb4b179a756a8367e0b54f7dffb4af8406ea0f596f18b05424d1ae3f46a"
+    },
+    {
+      "id": "failed-active-tag-nonzero",
+      "expected": "field",
+      "direction": "response",
+      "frame_hex": "504250310183000038000000cc21be0d0300000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "stream": {
+    "id": "fragmented-and-coalesced-responses",
+    "chunk_hex": [
+      "50425031018200",
+      "00280000006cad9b9400020000453322",
+      "11202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f5042503101",
+      "8300003800000028b3c6d00000000004030201c52dfc0cfd90c447abde0a26be5d2bb1cc790eb4b179a756a8367e0b54f7dffb4af8406ea0f596f18b05424d1ae3f46a"
+    ],
+    "expected_frame_ids": [
+      "resume-challenge",
+      "resume-active"
+    ]
+  },
+  "context_reject": {
+    "id": "active-with-another-resume-transcript",
+    "frame_id": "resume-active",
+    "wrong_transcript_id": "wrong-challenge",
+    "expected": "active-authentication-failed"
+  }
+}

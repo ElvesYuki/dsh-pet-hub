@@ -1,0 +1,498 @@
+{
+  "passed": true,
+  "layer": "actual-fixed-copy-host-authorized-IPC-and-loopback",
+  "cases": [
+    "HOST-N01 JSON window/client and missing original capabilities fail without a process or grant",
+    "HOST-N02 changed fixed bytes reject before original authority is borrowed",
+    "HOST-N03 duplicate start cannot create a second process or grant",
+    "HOST-N04 a second host cannot borrow the same live run authority",
+    "HOST-N05 genuine window from another module instance is not rebranded by JSON shape",
+    "HOST-N06 pre-abort and close before start never create a child/source",
+    "HOST-N07 abort immediately after start fences half-start and releases genuine snapshot lease",
+    "HOST-N08 a stuck owned child is bounded unknown and is not mistaken for clean run exit",
+    "HOST-N09 fake JSON snapshot cannot carry an execution lease or approve a run",
+    "HOST-N10 genuine inventory with a different entry is refused as actual host code",
+    "HOST-P01 real lost parent makes orphan close TCP28 and remove only its private home",
+    "HOST-P02 real lost IPC ACK is unknown; exact confirmation after manual takeover preserves manual",
+    "HOST01 fixed child actually constructs/starts TCP28 and controls real original IPC/TCP",
+    "HOST02 actual wall-clock renewals preserve playback, long touch EOF uses latest working, deadline exits",
+    "HOST03 close preserves independently submitted manual target and parent shared owner",
+    "HOST04 abort during real HTTP read waits child cleanup; source late value cannot submit"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 19119,
+  "scope": "Real fixed-copy Node child constructs/starts TCP28; same-instance parent audit/request/shared owner lends original scoped UDS client via bounded RPC. Original HTTP and actual TCP/model, 14s wall-clock renewals/touch/EOF/deadline, unknown lost ACK/manual, orphan parent and stuck child bounded exit. SHA/decode/draw synthetic; no DSH/pet/ESP or production service.",
+  "observations": {
+    "actual_started": {
+      "phase": "closed",
+      "pid_matched": true,
+      "constructed": true,
+      "started": true,
+      "run_reason": "deadline",
+      "run_resources": {
+        "deadline_timers": 0,
+        "poll_timers": 0,
+        "source_open": false,
+        "start_pending": false,
+        "operation_pending": false,
+        "host_window_owned": false
+      },
+      "grant_release": {
+        "released": true,
+        "detached": true
+      },
+      "provenance": {
+        "snapshot_sha256": "33e00ed8f6841aef8aee0109f56a441c203d5fecd3c32ffd377633eefe20b256",
+        "runtime": {
+          "kind": "node",
+          "sha256": "35d4bc736bbe4161f0c074aa140ddb74586e46969bc2ad63d32c838bec4463ff",
+          "bytes": 119168512
+        },
+        "entry": {
+          "role": "manager",
+          "root": "host",
+          "path": "packages/runtime/native400-pet-hold-run.mjs"
+        },
+        "bootstrap_sha256": "7de19e49c81d51d9e788bae424b04c1ba5169e6f03797c0226801e7fd0d999e1"
+      },
+      "import_receipt": {
+        "schema_version": 1,
+        "profile": "native400-node-import-receipt/1",
+        "ok": true,
+        "node_version": "v24.14.1",
+        "snapshot_sha256": "33e00ed8f6841aef8aee0109f56a441c203d5fecd3c32ffd377633eefe20b256",
+        "bootstrap_sha256": "985bbd24ad8478deefe4d56a6305934bc0caa3dc76a2fc532f493205cc0abda6",
+        "bootstrap_builtins": [
+          "node:crypto",
+          "node:fs",
+          "node:module",
+          "node:path",
+          "node:url"
+        ],
+        "entry": {
+          "path": "packages/runtime/native400-pet-hold-run.mjs",
+          "role": "manager",
+          "root": "host"
+        },
+        "loaded": [
+          {
+            "root": "host",
+            "bytes": 4807,
+            "path": "packages/core/native400-node-control-access.mjs",
+            "sha256": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+            "format": "module"
+          },
+          {
+            "root": "host",
+            "bytes": 7469,
+            "path": "packages/runtime/native400-pet-bridge.mjs",
+            "sha256": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+            "format": "module"
+          },
+          {
+            "root": "host",
+            "bytes": 6393,
+            "path": "packages/runtime/native400-pet-hold-run.mjs",
+            "sha256": "24a14535ce9b56e8caa6c0f2c2628e22a3661db4910fc1109579096a384ad5a0",
+            "format": "module"
+          },
+          {
+            "root": "host",
+            "bytes": 1570,
+            "path": "packages/runtime/native400-pet-hold-source.mjs",
+            "sha256": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+            "format": "module"
+          },
+          {
+            "root": "host",
+            "bytes": 1476,
+            "path": "packages/source-pet/index.mjs",
+            "sha256": "f14edc2c827ff8e6308fbb336912de79721952156cfaaedd2e581d93b25161ba",
+            "format": "module"
+          },
+          {
+            "root": "host",
+            "bytes": 433,
+            "path": "packages/source-pet/page.mjs",
+            "sha256": "e1d750be6c70ea639930303ce36f9583b9796554061abd132b24b9fc7f0c4b3a",
+            "format": "module"
+          },
+          {
+            "root": "host",
+            "bytes": 562,
+            "path": "packages/source-pet/schema.mjs",
+            "sha256": "19e8e1cba99c3a0f667e8fded591dbc48455f24ef0f7474c37d56c32fcb8f4a1",
+            "format": "module"
+          }
+        ],
+        "builtins": [
+          "node:crypto",
+          "node:http"
+        ],
+        "exports": [
+          "createNative400PetHoldRun"
+        ],
+        "coverage": "observed-node-imports",
+        "device_evidence": false
+      }
+    },
+    "snapshot_removed": true,
+    "fixture_window_closed": true,
+    "fixture_transport": {
+      "sockets": 0,
+      "sessions": 0,
+      "timers": 0,
+      "listening": false,
+      "active": 0
+    },
+    "host_resources": {
+      "child_pid": null,
+      "child_running": false,
+      "streams_open": false,
+      "timers": 0,
+      "rpc_pending": false,
+      "snapshot_lease": false,
+      "grant_held": false,
+      "home_owned": false,
+      "host_window_owned": false
+    },
+    "BASEs": 5,
+    "PINGs": 1,
+    "simulated_presented": 3,
+    "synthetic_SHA_decode_draw": true,
+    "wall_clock_window_ms": 14000
+  },
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "full_suite": {
+    "tests": 1956,
+    "passed": 1956,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 111211.701709
+  },
+  "checks": {
+    "syntax_exit": 0,
+    "standard_build_exit": 0,
+    "isolated_candidate_build_exit": 0
+  },
+  "source_hashes": {
+    "packages/runtime/native400-node-control-window.mjs": "4407420257ce7156afef9ee998f86592d549592a444d8b1f82951a00e54258c1",
+    "packages/runtime/native400-node-load-audit.mjs": "6c8faf1423cee2d962ff3ed09db1c162eb425dd03b4a59bc1aa3e0a20c0588e1",
+    "packages/runtime/native400-pet-hold-host.mjs": "c88de5944455377b3109d3c743fd1bc67c9a034787fdefeadc89f492eb6ff34c",
+    "packages/runtime/native400-pet-hold-host-child.mjs": "7de19e49c81d51d9e788bae424b04c1ba5169e6f03797c0226801e7fd0d999e1",
+    "packages/runtime/index.mjs": "45f69861e677329110d1d094f5315e4be92484581fb94b3ea3201223653d1ca0",
+    "tests/fixtures/native400-pet-hold-host.mjs": "35fdab73d1b9e8dc33ea4de9bbc2f4122a57428d41eaf6e6009a53c966f41e5c",
+    "tests/fixtures/native400-hold-host-parent.mjs": "ae06ba402222e6341fe4d0f64271a8dcf25a6b1e8f7446b5c3b171ceef55cc91",
+    "tests/native400-pet-hold-host.test.mjs": "cb9c006bc5267e405bf01453dd8ba1fb431ba742f2fe51fe84b956118732064a",
+    "tests/native400-pet-hold-host-negative.test.mjs": "6eeb31647a9bd5dffa0a68aa89367e6f0c27a9ab4aa6ebb50289015530bd3545",
+    "tests/native400-pet-hold-host-parent.test.mjs": "3466c2d8fcd9e4794e905a7c6bad1dab65821bc16b3425199ef4a4ccab3ce383",
+    "scripts/verify-native400-pet-hold-host.mjs": "a0c9bd129367c8c9087a2adf59ec4cc0bd1398018552c3dd836eda03da28d400"
+  },
+  "changed_previous_files": {
+    "packages/runtime/native400-node-control-window.mjs": "8222e37b90b83af8f8c3f49160d66fd60178759c3bef0e2329430c00a71f4ea1",
+    "packages/runtime/native400-node-load-audit.mjs": "9f3ce78265f4b094dd115537dd7a2e318a6adeba9cdebbc1ba55c375502cc352",
+    "packages/runtime/index.mjs": "24638a7eb34430a1f6fa66603b1e4d7759a938dfc132337ac6a7ce3f9b0b1145"
+  },
+  "original_control_core_and_wire_unchanged": {
+    "packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/core/native400-scheduling.mjs": "b890a418c7d9378ded7cd433c2de5a3fefa59481348a52a426ae217a5c11731e",
+    "packages/core/protocol.mjs": "12582ab3ae0d2a4ed96e29da24601842b8f8167d7aba1cf06cf915c2b09d91c1",
+    "packages/core/pet4.mjs": "5717a7ecd90004540cb0025124f50a311db2276d228ee08b8834eb6103fa60c5",
+    "packages/core/crc32.mjs": "626dff165498b1eba1080a9692992f58784946534d35b3db58b7737737c6577d",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-tcp-owner.mjs": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8",
+    "packages/runtime/native400-pet-hold-source.mjs": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+    "packages/runtime/native400-pet-bridge.mjs": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+    "packages/runtime/native400-node-control-channel.mjs": "db3b3a4caa34673464ffe8830d5d4bf7c1cf64d11e1ad38c2d82b17bc6fe2fd6",
+    "packages/core/native400-node-control-access.mjs": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+    "packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7",
+    "tests/fixtures/native400-endpoint-hold.mjs": "3c65d7dbcf13b1ebeffea6f7490a1bf617aec86f47d0849d4297777700eedd8a",
+    "tests/fixtures/native400-preserving-renewal.mjs": "bed5287f669032e97f26358bee0dbd14ea1ad14359633634077611127bb6d019",
+    "tests/native400-endpoint-hold.test.mjs": "ed9a7f531277a1d2ba0a74357d4d38a005ff8ca8624cc068f840c1b2b96815c2",
+    "tests/native400-preserving-renewal.test.mjs": "a649b2081694465f7b89056a66e89b06c04f2a0a411dadacc9a738d75e385a57",
+    "scripts/verify-native400-preserving-renewal.mjs": "a0b23f4ac4b7c29209264ea2f909a3c0c182c63a917a7730ebf1854b1f40c96b",
+    "scripts/verify-native400-endpoint-hold.mjs": "210aea1961adfe3e1a861da5844728f858c7d538f8e0dbf90ffff04edc239080",
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+    "dist-dsh022/packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "dist-dsh022/packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7"
+  },
+  "TCP28_run_unchanged_sha256": "24a14535ce9b56e8caa6c0f2c2628e22a3661db4910fc1109579096a384ad5a0",
+  "original_loader_unchanged_sha256": "985bbd24ad8478deefe4d56a6305934bc0caa3dc76a2fc532f493205cc0abda6",
+  "candidate_artifacts": {
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/packages/runtime/native400-node-control-window.mjs": "4407420257ce7156afef9ee998f86592d549592a444d8b1f82951a00e54258c1",
+    "dist-dsh022/packages/runtime/native400-node-load-audit.mjs": "6c8faf1423cee2d962ff3ed09db1c162eb425dd03b4a59bc1aa3e0a20c0588e1",
+    "dist-dsh022/packages/runtime/native400-pet-hold-host.mjs": "c88de5944455377b3109d3c743fd1bc67c9a034787fdefeadc89f492eb6ff34c",
+    "dist-dsh022/packages/runtime/native400-pet-hold-host-child.mjs": "7de19e49c81d51d9e788bae424b04c1ba5169e6f03797c0226801e7fd0d999e1",
+    "dist-dsh022/packages/runtime/index.mjs": "45f69861e677329110d1d094f5315e4be92484581fb94b3ea3201223653d1ca0"
+  },
+  "built_candidate_actual_run": {
+    "phase": "closed",
+    "error": null,
+    "reason": null,
+    "code": 0,
+    "instance_id_sha256": "b4ab053b834db59c80c984a1ba6d5d7c130f365ce938d11b75ff56fbc20be6a4",
+    "child_instance_id_sha256": "81fdb9b05341a1c5a305e41d9f3278ba4665b76dad9ff638f9cdc0f09b765eee",
+    "import_receipt": {
+      "schema_version": 1,
+      "profile": "native400-node-import-receipt/1",
+      "ok": true,
+      "node_version": "v24.14.1",
+      "snapshot_sha256": "c2c4a6bb06505023b043b5ae9a42e8585ec8f49161e1ed2e9a9e42def05cfd2d",
+      "bootstrap_sha256": "985bbd24ad8478deefe4d56a6305934bc0caa3dc76a2fc532f493205cc0abda6",
+      "bootstrap_builtins": [
+        "node:crypto",
+        "node:fs",
+        "node:module",
+        "node:path",
+        "node:url"
+      ],
+      "entry": {
+        "path": "packages/runtime/native400-pet-hold-run.mjs",
+        "role": "manager",
+        "root": "candidate"
+      },
+      "loaded": [
+        {
+          "root": "candidate",
+          "bytes": 4807,
+          "path": "packages/core/native400-node-control-access.mjs",
+          "sha256": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 7469,
+          "path": "packages/runtime/native400-pet-bridge.mjs",
+          "sha256": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 6393,
+          "path": "packages/runtime/native400-pet-hold-run.mjs",
+          "sha256": "24a14535ce9b56e8caa6c0f2c2628e22a3661db4910fc1109579096a384ad5a0",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 1570,
+          "path": "packages/runtime/native400-pet-hold-source.mjs",
+          "sha256": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 1476,
+          "path": "packages/source-pet/index.mjs",
+          "sha256": "f14edc2c827ff8e6308fbb336912de79721952156cfaaedd2e581d93b25161ba",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 433,
+          "path": "packages/source-pet/page.mjs",
+          "sha256": "e1d750be6c70ea639930303ce36f9583b9796554061abd132b24b9fc7f0c4b3a",
+          "format": "module"
+        },
+        {
+          "root": "candidate",
+          "bytes": 562,
+          "path": "packages/source-pet/schema.mjs",
+          "sha256": "19e8e1cba99c3a0f667e8fded591dbc48455f24ef0f7474c37d56c32fcb8f4a1",
+          "format": "module"
+        }
+      ],
+      "builtins": [
+        "node:crypto",
+        "node:http"
+      ],
+      "exports": [
+        "createNative400PetHoldRun"
+      ],
+      "coverage": "observed-node-imports",
+      "device_evidence": false
+    },
+    "actual": {
+      "instance_sha256": "81fdb9b05341a1c5a305e41d9f3278ba4665b76dad9ff638f9cdc0f09b765eee",
+      "kind": "final",
+      "reason": "run_closed",
+      "constructed": true,
+      "started": true,
+      "snapshot": {
+        "profile": "native400-pet-hold-run/1",
+        "phase": "closed",
+        "reason": "deadline",
+        "remaining_ms": 85,
+        "bridge": {
+          "phase": "closed",
+          "mode": "hold-state",
+          "arbitration": "endpoint-arbitrated",
+          "counter": 1,
+          "pending": false,
+          "owns_target": false,
+          "timer_active": false,
+          "device_evidence": false
+        },
+        "device_evidence": false
+      },
+      "resources": {
+        "deadline_timers": 0,
+        "poll_timers": 0,
+        "source_open": false,
+        "start_pending": false,
+        "operation_pending": false,
+        "host_window_owned": false
+      }
+    },
+    "last_observation": {
+      "instance_sha256": "81fdb9b05341a1c5a305e41d9f3278ba4665b76dad9ff638f9cdc0f09b765eee",
+      "kind": "final",
+      "reason": "run_closed",
+      "constructed": true,
+      "started": true,
+      "snapshot": {
+        "profile": "native400-pet-hold-run/1",
+        "phase": "closed",
+        "reason": "deadline",
+        "remaining_ms": 85,
+        "bridge": {
+          "phase": "closed",
+          "mode": "hold-state",
+          "arbitration": "endpoint-arbitrated",
+          "counter": 1,
+          "pending": false,
+          "owns_target": false,
+          "timer_active": false,
+          "device_evidence": false
+        },
+        "device_evidence": false
+      },
+      "resources": {
+        "deadline_timers": 0,
+        "poll_timers": 0,
+        "source_open": false,
+        "start_pending": false,
+        "operation_pending": false,
+        "host_window_owned": false
+      }
+    },
+    "provenance": {
+      "snapshot_sha256": "c2c4a6bb06505023b043b5ae9a42e8585ec8f49161e1ed2e9a9e42def05cfd2d",
+      "runtime": {
+        "kind": "node",
+        "sha256": "35d4bc736bbe4161f0c074aa140ddb74586e46969bc2ad63d32c838bec4463ff",
+        "bytes": 119168512
+      },
+      "entry": {
+        "role": "manager",
+        "root": "candidate",
+        "path": "packages/runtime/native400-pet-hold-run.mjs"
+      },
+      "bootstrap_sha256": "7de19e49c81d51d9e788bae424b04c1ba5169e6f03797c0226801e7fd0d999e1"
+    },
+    "pid_matched": true,
+    "grant_release": {
+      "released": true,
+      "detached": true
+    },
+    "device_evidence": false,
+    "borrowed_window_alive_after_host": true,
+    "actual_original_HTTP_requests": 2,
+    "actual_TCP_BASEs": 1,
+    "cleanup": {
+      "host": {
+        "child_pid": null,
+        "child_running": false,
+        "streams_open": false,
+        "timers": 0,
+        "rpc_pending": false,
+        "snapshot_lease": false,
+        "grant_held": false,
+        "home_owned": false,
+        "host_window_owned": false
+      },
+      "snapshot_removed": true,
+      "fixture_window_closed": true
+    },
+    "scope": "Built dist-dsh022 snapshot actual constructor/start/original HTTP+UDS+TCP; synthetic display, no DSH/pet/ESP"
+  },
+  "capability_boundary": {
+    "parent_keeps_original_audit_request_shared_owner": true,
+    "same_module_window_brand_required": true,
+    "JSON_window_or_client_cannot_authorize": true,
+    "child_receives_bearer": false,
+    "original_UDS_path_used": true,
+    "material_or_window_approval_issued": false,
+    "own_scoped_attachment_only": true,
+    "borrowed_window_and_manual_kept": true
+  },
+  "lifecycle": {
+    "actual_child_constructor_start": true,
+    "PID_match_and_Node_snapshot_bound": true,
+    "original_hooks_reused": true,
+    "main_wall_clock_ms": 14000,
+    "built_candidate_wall_clock_ms": 1000,
+    "own_parent_loss_and_orphan_exit_verified": true,
+    "real_ACK_loss_exact_body_manual_verified": true,
+    "stuck_child_bounded_unknown_verified": true,
+    "snapshot_lease_held_through_exit": true
+  },
+  "limits": {
+    "max_run_ms": 45000,
+    "default_run_start_budget_ms": 52500,
+    "default_startup_ms": 5000,
+    "default_close_ms": 3000,
+    "kill_after_TERM_ms": 200,
+    "max_original_RPC_inflight": 1,
+    "max_abort_cleanup_waiting": 1,
+    "max_IPC_message_bytes": 8192,
+    "full_runtime_closure_proven": false,
+    "device_admission": false
+  },
+  "scope_unverified": {
+    "real_DSH_and_pet_runtime_identity": true,
+    "natural_pet_transition": true,
+    "fresh_live_material_and_window_approval": true,
+    "real_app_peer_link": true,
+    "ESP_dynamic_resources_and_display": true,
+    "cycle_mail_wire_observation": true,
+    "device_cleanup_and_exact_restore": true
+  },
+  "upstream_readonly": {
+    "current_status_sha256": "56c3d393abf83d7daefa4df0cfa3824ecdfab13c0d49de1a5b467495711012cd",
+    "hold_ready_preflight_sha256": "da54a8dc0d1ed45f049a67546c541620c60a64ad80a79997f805c31679c308cb",
+    "station_sha256": "2759f2e48d14d2716a667157f723bdd24791d315a612ded3346209a5efb90681",
+    "last_confirmed_running_prefix": "f5538cb9",
+    "new_device_read_or_build": false
+  },
+  "cleanup": {
+    "isolated_environment_removed": true,
+    "main_child_home_lease_and_fixtures_removed": true,
+    "built_candidate_fixture_removed": true,
+    "parent_loss_home_exit_verified_by_separate_test": true,
+    "no_successful_grant_or_lease_release_claim_for_dead_parent": true,
+    "production_listener_started": false,
+    "existing_service_or_profile_changed": false,
+    "plugin_installed_or_enabled": false,
+    "real_pet_sampled": false,
+    "upstream_written": false,
+    "upstream_scripts_or_builds_run": false,
+    "ESP_USB_access": false,
+    "credentials_read": false,
+    "commit_push": false
+  },
+  "document_audit": {
+    "relative_links": 726,
+    "broken": 0,
+    "trailing_whitespace": 0
+  }
+}

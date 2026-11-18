@@ -1,0 +1,25 @@
+{
+  "name": "dsh-pet-hub",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "24.14.1",
+    "npm": "11.11.0"
+  },
+  "packageManager": "npm@11.11.0",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node scripts/build.mjs && node --test tests/*.test.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs",
+    "test:sim": "node scripts/test-sim.mjs",
+    "preview:simulation": "node scripts/prepare-simulation-preview.mjs && node scripts/simulation-preview.mjs --react-seed .cache/s2/react-seed.js",
+    "preview:materials": "node scripts/prepare-simulation-preview.mjs && node scripts/simulation-preview.mjs --react-seed .cache/s2/react-seed.js --demo-materials",
+    "preview:streaming": "node scripts/prepare-simulation-preview.mjs && node scripts/simulation-preview.mjs --react-seed .cache/s2/react-seed.js --demo-materials --streaming",
+    "preview:warehouse": "node scripts/prepare-simulation-preview.mjs && node scripts/simulation-preview.mjs --react-seed .cache/s2/react-seed.js --demo-materials --streaming --demo-versions",
+    "preview:roles": "node scripts/prepare-simulation-preview.mjs && node scripts/simulation-preview.mjs --react-seed .cache/s2/react-seed.js --demo-materials --streaming --demo-roles --demo-versions",
+    "preview:frames": "node scripts/prepare-simulation-preview.mjs && node scripts/simulation-preview.mjs --react-seed .cache/s2/react-seed.js --demo-materials --streaming --demo-roles --demo-versions --demo-pixels"
+  }
+}

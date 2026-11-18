@@ -1,0 +1,201 @@
+{
+  "passed": true,
+  "layer": "native400-shared-session-and-remaining-TTL-recovery",
+  "cases": [
+    "SHARED01 policy is explicit, opaque and included in service identity",
+    "SHARED02 multiple independently authorized views share logical state, not bearer token",
+    "SHARED03 attaching another page neither cancels target nor emits another BASE",
+    "SHARED04 all pages can detach while logical target and revision survive reattachment",
+    "SHARED05 page lease expiry does not cancel logical intent or extend its TTL",
+    "SHARED06 explicit revoke ends every attachment and old target, next authorize is new group",
+    "SHARED07 global sequence and revision prevent two pages overwriting from stale state",
+    "SHARED08 new page credential can confirm an earlier exact request without side effects",
+    "SHARED09 bounded receipt ledger supports recent confirmation and rejects evicted requests",
+    "SHARED10 attachment capacity is bounded and expired/detached slots are reusable",
+    "SHARED11 incoming fresh HELLO automatically restores once with remaining TTL",
+    "SHARED12 automatic recovery still works with zero page attachments",
+    "SHARED13 latest offline target replaces earlier intent before recovery",
+    "SHARED14 expired intent is never revived by reconnect",
+    "SHARED15 explicit cancel prevents reconnection replay",
+    "SHARED16 ending backend group remains possible after all page grants expire",
+    "SHARED17 pause disables automatic recovery until a new explicit intent",
+    "SHARED18 external same-action intent cannot be adopted by stale recovery handle",
+    "SHARED19 automatic recovery can be disabled without changing shared state",
+    "SHARED20 link down/up uses a fresh incoming connection and retains original deadline",
+    "SHARED21 source invalidation stops background recovery even without pages",
+    "SHARED22 re-mounted component synchronizes backend desired state without sending BASE",
+    "SHARED23 uncertain UI request can be confirmed after reattaching with a fresh token",
+    "SHARED24 true group change clears old pending and accepts fresh authorized state",
+    "SHARED25 replacement service creates a new logical group without restoring prior intent",
+    "SHARED26 read-only polling never performs recovery; only the background maintainer may restore",
+    "SHARED27 shared state cannot outlive its independent source window",
+    "SHARED28 malformed shared metadata fails the presentation boundary",
+    "SHARED29 restored page reads clear an obsolete unavailable warning without writing"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 8352,
+  "scope": "Original full input audit and independent window, real private IPC/HTTP/loopback, shared backend group and separately bounded page tokens, CAS/receipt/reattach/expiry, fresh incoming HELLO with original deadline recovery, cancel/revoke/pause/source boundaries and shared React hooks. Read-only GET does not restore. No real LAN/ESP, persistent session recovery, existing configuration or upstream Python/USB.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-05",
+  "check": {
+    "command": "npm run check",
+    "exit_code": 0,
+    "scope": "mjs syntax only"
+  },
+  "full_suite": {
+    "command": "npm test",
+    "includes_candidate_build": true,
+    "tests": 1784,
+    "pass": 1784,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 105142.666625,
+    "exit_code": 0
+  },
+  "final_build": {
+    "command": "npm run build",
+    "exit_code": 0,
+    "candidate_installed": false
+  },
+  "regressions": {
+    "legacy_control_and_owner": {
+      "passed": 43
+    },
+    "legacy_node_window_after_readiness_fix": {
+      "passed": 21
+    },
+    "initial_full": {
+      "tests": 1783,
+      "passed": 1782,
+      "failed": 1,
+      "failure": "NODE18 ready emitted before signal handlers; fixture corrected without assertion relaxation"
+    },
+    "intermediate_full": {
+      "passed": 1783,
+      "failed": 0
+    },
+    "page_read_recovery": "SHARED29 reproduced obsolete warning before UI fix, then passed"
+  },
+  "source_audit": {
+    "before_count": 422,
+    "after_count": 425,
+    "unchanged_count": 414,
+    "changed": {
+      "packages/ui/native400-node-controls.mjs": {
+        "before_sha256": "1780f10bb63dc7e3eecbc138ece2549509c3fe5a7e9a7f489e1c4d1183580f8c",
+        "final_sha256": "0ed38df7e85b3f6f734326b9a5dbd341bb6d79399deb06d7ab15c77ac30150e4"
+      },
+      "packages/core/native400-node-control-access.mjs": {
+        "before_sha256": "3d7ea73e572d238caa32e6b952e24cd2ace4f2fbaec86f3274efb474847a72fe",
+        "final_sha256": "6bb7f25cd276de9aee5407e02bff0fc4e433420388739cfa2ff6809ae66d154c"
+      },
+      "packages/runtime/native400-node-control-channel.mjs": {
+        "before_sha256": "805b711c972ebe41a1f17bc7a0fa8e01eb32de3d43ff39f7d6cc79d60987d9b2",
+        "final_sha256": "b49b26f97824ef55d65e97edec7e47e90fc3b0ce6512ce0bd62ca194cd598cbc"
+      },
+      "packages/runtime/native400-node-control-window.mjs": {
+        "before_sha256": "8e65133fc070ca2c0c1b60f28475f814993eb73cc9f01e98b561f71e07c73d1f",
+        "final_sha256": "8222e37b90b83af8f8c3f49160d66fd60178759c3bef0e2329430c00a71f4ea1"
+      },
+      "packages/runtime/native400-tcp-lan-host.mjs": {
+        "before_sha256": "632bd8da4688a53844f43aade94a74eda1aa130b059fe102bcdd1f39317ae41f",
+        "final_sha256": "464cda34eb5fdd770996be513ea4f74bc2cb442d6b22c626070a107af4dcf433"
+      },
+      "packages/runtime/native400-tcp-owner.mjs": {
+        "before_sha256": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+        "final_sha256": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8"
+      },
+      "tests/native400-node-control-channel.test.mjs": {
+        "before_sha256": "9f1c8101df63043a456e40532b10cd19c7188181296712ca1b93395631ff29e2",
+        "final_sha256": "657b358d7fa4fcb570733c7b882699e0966f6739427b6384935a8f74a2bc8446"
+      },
+      "tests/fixtures/native400-node-window-child.mjs": {
+        "before_sha256": "459657d4c8047089e51e50fb71bee66bdc80658024359cef9a0197a0580d20c4",
+        "final_sha256": "e53b12a509042fd6127cd1c7a1d0d4fa4ed4fda06f548b466c90251e15f2030c"
+      }
+    },
+    "new": {
+      "scripts/verify-native400-shared-control.mjs": "50159f78f60da9a17e0de368b5ab9f58fa55431dc198a03e73fda6f9cd1a3c2a",
+      "tests/native400-shared-control.test.mjs": "1a98b53a17944eec191f778f37920e7b8e526360a6a450a56e9c6bc22825e267",
+      "tests/fixtures/native400-controls-test-support.mjs": "58e66579b11ce091e1f67096f5d0df322ea118865fd2d12c6eab323695427a98"
+    },
+    "wire_codec_and_mapping_unchanged": {
+      "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+      "packages/core/native400-tcp-control.mjs": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+      "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+      "native/native400-tcp-check.cpp": "2ea7a63c0b0246c6dc8008c368a9263b1abb6388b2257c3bc0fe22442cc91356"
+    }
+  },
+  "artifact_audit": {
+    "copied_modules_match": {
+      "packages/ui/native400-node-controls.mjs": true,
+      "packages/core/native400-node-control-access.mjs": true,
+      "packages/runtime/native400-node-control-channel.mjs": true,
+      "packages/runtime/native400-node-control-window.mjs": true,
+      "packages/runtime/native400-tcp-lan-host.mjs": true,
+      "packages/runtime/native400-tcp-owner.mjs": true
+    },
+    "client_contains_shared_view_and_read_recovery": true,
+    "license_copy_matches": true
+  },
+  "document_audit": {
+    "relative_links_checked": 726,
+    "broken": 0,
+    "trailing_whitespace": 0,
+    "files_sha256": {
+      "README.md": "aaf8e5a856239842c1d858eceb4fed1cef8f6ba5de0247ee60eb3d3a5f9a164a",
+      "THIRD_PARTY.md": "a2d7eaf88ac063ce33c9d54508615cb3329c7f80167b756dcccc88b7974fcfc0",
+      "docs/context/index.md": "4f711ba719f35612270e6e89a148bb93bba1ff7cd32080166dfc6672c8aca2a8",
+      "docs/context/current-system.md": "af1b2d694a79ccf9f630fe3f9d5ab633da293141d6279c1181f639c92c744de3",
+      "docs/context/current-todos.md": "153cfd2aaadb4fc987f3f76b656e8b97561947c0224fa89cc18f8bcf23507894",
+      "docs/context/native400-baseline.md": "9715c07f7612ac69bf392c8d1ffb5d2f27edb56fdcdfd21d7e53798b277e7c3b",
+      "docs/context/decisions.md": "8b2f56e134c0da96a4bdc22dfd2aecefdfed755f4c89c6ef143afe4e12f045d8",
+      "docs/context/plans/round-pet-g0-handoff.md": "bdc8551568537227d220b4dd65ab9e101cc643304e142642d3df88b9da5182a1",
+      "docs/context/plans/tcp19-spec.md": "0fcbc2eb31af572a4a82b6be672bb04cbb22371bd4dcc863bfd4ec9ac2146be7",
+      "docs/context/plans/tcp19-diff.md": "65d99f0c3ab8bb24824ff8f6f0d69a9c719955b708a8482d7573084a626130fb",
+      "docs/context/history/tcp19-evolution.md": "871ab899d54b2da8b01ca6fc2002a9701954a2af35ea3f3f304bd69a9d8d3de6",
+      "docs/protocol/native400-node-control-channel.md": "d931863db600549cd1429664608190a52bbe577fac35b087764b743dea16292b",
+      "docs/protocol/native400-node-control-window.md": "dd0f621f3d2c9205b23fdfd1001c17dfd3766270c855c8a0ed8983efddb39655",
+      "docs/protocol/native400-shared-control.md": "a845e8afd66e3500f3c9b54fce7fc13e6309a227b2a980b98dd8177cec2076e5",
+      "docs/reports/2026-11-05-tcp19.md": "a7eb2d40186c1f4faef0088fa901c17bb385a3e6b2024f4ba9a5a7313ccf96b9"
+    }
+  },
+  "upstream_read_only": {
+    "docs/context/current-status.md": {
+      "before_sha256": "c3f5e5aaca67cb6117d5394a725ed5c0c99addc1da4f5d125fff21510f948cc2",
+      "final_sha256": "49fd88a654aeda80e3ca412ee57afe0c1dfaefa1cecd6fc4f20a668370a11de9",
+      "changed_by_external_task": true
+    },
+    "docs/context/current-todos.md": {
+      "before_sha256": "b3acb093e3071bed42fe70a2b002dd434a000d91c94951cec67581b4f5eeaa95",
+      "final_sha256": "3e2393fba07d52c8a8648879cf8ea0a05f0a51d77efcba8a33a0867c2dc0b994",
+      "changed_by_external_task": true
+    },
+    "apps/round-pet/reports/2026-11-05-400-startup-device.md": {
+      "final_sha256": "68e7d663ba4bf8cc5104c72c24128c32edc114e9adaa641188911126145d5306",
+      "read_only_reference": true
+    }
+  },
+  "evidence_levels": {
+    "offline_model": true,
+    "real_loopback_tcp_http_uds": true,
+    "react_hooks": true,
+    "browser_dom": false,
+    "installed_dsh_provider": false,
+    "esp_device": false
+  },
+  "limits": {
+    "shared_default": false,
+    "autoRecover_default": "shared",
+    "page_attachments": 16,
+    "request_receipts": 32,
+    "source_window_max_ms": 120000,
+    "cross_process_command_persistence": false,
+    "production_listener_started": false,
+    "existing_configuration_changed": false,
+    "upstream_scripts_executed": false,
+    "git_commit_or_push": false
+  }
+}

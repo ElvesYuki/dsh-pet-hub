@@ -1,0 +1,5 @@
+import {spawnSync} from 'node:child_process';import {mkdirSync,writeFileSync} from 'node:fs';import {dirname} from 'node:path';import {parseArgs} from 'node:util';
+const {values}=parseArgs({options:{output:{type:'string'}}});if(!values.output)throw new Error('explicit output required');
+// Reuses the acceptance tests; this is a reproducible report, not extra independent coverage.
+const result=spawnSync(process.execPath,['--test','--test-reporter=tap','tests/dual-clock.test.mjs'],{encoding:'utf8',timeout:30000,maxBuffer:1048576});
+const cases=[...(result.stdout??'').matchAll(/^ok \d+ - (.+)$/gm)].map(m=>m[1]);const report={layer:'independent-virtual-clocks',passed:result.status===0&&cases.length===13,cases,coverage:'Offsets, rate mismatch, delay/drop/duplication/reordering, expiry, disconnect, epoch/session/boot and latest-target recovery; no real transport or wall-clock endurance.'};mkdirSync(dirname(values.output),{recursive:true});writeFileSync(values.output,JSON.stringify(report,null,2)+'\n',{mode:0o600});console.log(JSON.stringify({passed:report.passed,cases:cases.length}));if(!report.passed)process.exitCode=1;

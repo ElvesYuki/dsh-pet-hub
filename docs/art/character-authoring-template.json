@@ -1,0 +1,644 @@
+{
+  "document_type": "authoring_checklist_only_not_runtime_package",
+  "draft_version": 12,
+  "status": "desktop_character_states_candidate_review_pending",
+  "reference": {
+    "manifest_sha256": "a6a2ddae50a8fe4ddf15ff07a3a228dccf865bb91a037693ce0a72232204c39e",
+    "license_ref": "dsh-pet-nc-86181ce",
+    "credits": [
+      "上善无形",
+      "ZipZipPipe",
+      "PC2005-cloud/dsh-pet"
+    ],
+    "artwork_creator": null,
+    "modifications": null
+  },
+  "working_base": {
+    "selected_source": ".cache/layered-character/neutral-review-v1/neutral-v1.png",
+    "source_sha256": "89941940b5b6f1a731c148006dc941ffe8eb7cf0f5aa4e16049c6254be6f3c47",
+    "standard_png": ".cache/layered-character/authoring-base-v1/neutral-360.png",
+    "standard_sha256": "20b98d397a0ee7a52a688c49a2b8808b80e07c119969b08846d39a0d3f64f653",
+    "registration_record": ".cache/layered-character/authoring-base-v1/manifest.json",
+    "status": "frozen_base_static_master_candidate_available"
+  },
+  "coordinates": {
+    "units": "reference_canvas_pixels",
+    "canvas": [
+      360,
+      360
+    ],
+    "origin": "top_left_boundary",
+    "pixel_center": "i+0.5,j+0.5",
+    "canvas_center": [
+      180,
+      180
+    ],
+    "display": [
+      466,
+      466
+    ],
+    "display_offset": [
+      53,
+      53
+    ],
+    "safe_circle": {
+      "center": [
+        180,
+        180
+      ],
+      "radius": 166.5
+    },
+    "rotation": "clockwise_degrees",
+    "root_rest_translation": [
+      0,
+      0
+    ],
+    "root_rest_scale": [
+      1,
+      1
+    ]
+  },
+  "parts": [
+    {
+      "id": "body",
+      "parent": "root",
+      "source": ".cache/layered-character/character-master-v5/body.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        169,
+        235
+      ],
+      "z": 6,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "head",
+      "parent": "body",
+      "source": ".cache/layered-character/character-master-v5/head.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        169,
+        202
+      ],
+      "z": 9,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "hair_cap",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/hair_cap.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        174,
+        119
+      ],
+      "z": 12,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "fringe_left",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/fringe_left.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        136,
+        102
+      ],
+      "z": 17,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "fringe_center",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/fringe_center.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        166,
+        101
+      ],
+      "z": 18,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "fringe_right",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/fringe_right.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        202,
+        106
+      ],
+      "z": 16,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "side_left",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/side_left.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        107,
+        142
+      ],
+      "z": 11,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "side_right",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/side_right.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        231,
+        143
+      ],
+      "z": 10,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "back_left",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/back_left.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        100,
+        145
+      ],
+      "z": 4,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "back_center",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/back_center.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        174,
+        150
+      ],
+      "z": 0,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "back_right",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/back_right.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        240,
+        145
+      ],
+      "z": 3,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "ahoge",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/ahoge.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        165,
+        77
+      ],
+      "z": 19,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "head_accessories",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/head_accessories.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        174,
+        119
+      ],
+      "z": 20,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "arm_left",
+      "parent": "body",
+      "source": ".cache/layered-character/character-master-v5/arm_left.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        143,
+        216
+      ],
+      "z": 7,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "arm_right",
+      "parent": "body",
+      "source": ".cache/layered-character/character-master-v5/arm_right.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        195,
+        216
+      ],
+      "z": 8,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "eyes",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/eyes.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        166,
+        174
+      ],
+      "z": 14,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "brows",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/brows.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        166,
+        145
+      ],
+      "z": 13,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "mouth",
+      "parent": "head",
+      "source": ".cache/layered-character/character-master-v5/mouth.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        164,
+        193
+      ],
+      "z": 15,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "tail",
+      "parent": "body",
+      "source": ".cache/layered-character/character-master-v5/tail.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        228,
+        269
+      ],
+      "z": 5,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "back_left_tip",
+      "parent": "back_left",
+      "source": ".cache/layered-character/character-master-v5/back_left_tip.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        94,
+        258
+      ],
+      "z": 2,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    },
+    {
+      "id": "back_right_tip",
+      "parent": "back_right",
+      "source": ".cache/layered-character/character-master-v5/back_right_tip.png",
+      "size_px": [
+        360,
+        360
+      ],
+      "rest_origin_canvas_px": [
+        0,
+        0
+      ],
+      "pivot_canvas_px": [
+        258,
+        248
+      ],
+      "z": 1,
+      "pivot_status": "provisional_small_angle_desktop_checked_not_user_or_device_accepted"
+    }
+  ],
+  "slots": {
+    "eyes": [
+      "open",
+      "half",
+      "closed",
+      "happy"
+    ],
+    "brows": [
+      "neutral",
+      "happy",
+      "angry",
+      "confused"
+    ],
+    "mouth": [
+      "closed",
+      "small",
+      "wide",
+      "round",
+      "smile"
+    ]
+  },
+  "expression_sets": [],
+  "motion_samples": [
+    "neutral",
+    "idle_breathe",
+    "blink",
+    "touch_head"
+  ],
+  "touch_regions_canvas_px": {
+    "head": null,
+    "body": null
+  },
+  "review": {
+    "identity": false,
+    "size_and_position": false,
+    "static_composite": false,
+    "layer_overlap": false,
+    "all_motion_bounds": false,
+    "device_performance": false
+  },
+  "hair_motion_design": {
+    "status": "desktop_full_11_channel_spring_candidate_not_device_ready",
+    "priority": "full_visual_effect_first_performance_optimization_later",
+    "hair_part_count": 12,
+    "dynamic_parts": [
+      "fringe_left",
+      "fringe_center",
+      "fringe_right",
+      "side_left",
+      "side_right",
+      "back_left",
+      "back_center",
+      "back_right",
+      "ahoge",
+      "back_left_tip",
+      "back_right_tip"
+    ],
+    "fixed_with_head": [
+      "hair_cap",
+      "head_accessories"
+    ],
+    "effects": [
+      "fringe_phase_offsets",
+      "side_roots_fixed_tips_sway",
+      "back_center_subtle_sides_delayed",
+      "tip_follow_through",
+      "ahoge_rebound",
+      "breathing_sway",
+      "head_turn_lag",
+      "damped_settling",
+      "local_touch_response"
+    ],
+    "motion_parameters": null,
+    "performance_gates_current_artwork": false,
+    "performance_verified": false,
+    "implementation_reference": "scripts/character-natural-motion.mjs"
+  },
+  "static_master": {
+    "path": ".cache/layered-character/character-master-v5",
+    "layout": "docs/art/character-layout-v1.json",
+    "status": "hidden_edge_overlap_revised_small_angle_probe_checked",
+    "report": "docs/reports/2026-10-29-character-motion-probe.md"
+  },
+  "motion_probe": {
+    "path": ".cache/layered-character/character-motion-probe-v2/index.html",
+    "status": "diagnostic_curves_not_final_natural_motion",
+    "moving_hair_channels": 11,
+    "target_sample_fps": 24,
+    "device_fps_measured": false
+  },
+  "natural_motion": {
+    "path": ".cache/layered-character/character-natural-motion-v3/index.html",
+    "demo": ".cache/layered-character/character-natural-motion-v3/natural-demo.webp",
+    "report": "docs/reports/2026-10-29-character-natural-motion.md",
+    "status": "desktop_candidate_pending_visual_acceptance",
+    "solver_hz": 120,
+    "preview_sample_fps": 24,
+    "moving_hair_channels": 11,
+    "neutral_face_only": true,
+    "device_verified": false
+  },
+  "expression_candidate": {
+    "assets": ".cache/layered-character/character-expressions-v6",
+    "preview": ".cache/layered-character/character-expression-preview-v4/index.html",
+    "report": "docs/reports/2026-10-29-character-expressions.md",
+    "eyes": [
+      "open_original",
+      "half_original_iris_with_lid",
+      "closed",
+      "smile"
+    ],
+    "brows": [
+      "neutral",
+      "relaxed",
+      "raised"
+    ],
+    "mouth": [
+      "closed_original",
+      "smile"
+    ],
+    "original_eye_png_unchanged": true,
+    "whole_face_pixel_identical": false,
+    "audio_lipsync": false,
+    "device_verified": false
+  },
+  "silent_speech": {
+    "assets": ".cache/layered-character/character-speech-assets-v1",
+    "preview": ".cache/layered-character/character-speech-preview-v1/index.html",
+    "report": "docs/reports/2026-10-29-character-speech-preview.md",
+    "mouth_states": [
+      "closed",
+      "smile",
+      "small",
+      "open",
+      "round"
+    ],
+    "anchor_canvas_px": [
+      164,
+      193
+    ],
+    "generation_controls": true,
+    "previous_expression_assets_preserved": true,
+    "audio_synchronized": false,
+    "device_verified": false
+  },
+  "base_states_candidate": {
+    "base_states": [
+      "idle",
+      "thinking",
+      "working"
+    ],
+    "one_shot": "success",
+    "target_blend_seconds": 0.45,
+    "success_seconds": 1.4,
+    "touch_returns_to": "latest_base_state",
+    "root_transform": "identity",
+    "new_artwork": false,
+    "preview": ".cache/layered-character/character-state-preview-v1/index.html",
+    "report": "docs/reports/2026-10-30-character-states.md",
+    "device_supported": false,
+    "audio_sync": "deferred_until_device_phase"
+  },
+  "raised_arm_candidate": {
+    "status": "static_visual_review_pending",
+    "side": "screen_right",
+    "replaces": "arm_right",
+    "preview": ".cache/layered-character/character-raised-arm-v1/final/index.html",
+    "report": "docs/reports/2026-10-30-character-raised-arm.md",
+    "original_master_unchanged": true,
+    "animation_verified": false,
+    "device_verified": false
+  },
+  "wave_candidate": {
+    "status": "desktop_visual_review_pending",
+    "preview": ".cache/layered-character/character-wave-preview-v4/index.html",
+    "report": "docs/reports/2026-10-30-character-wave-contour.md",
+    "duration_seconds": 2.4,
+    "cancel_seconds": 0.3,
+    "cycles": 3,
+    "transition": "shoulder_wrist_similarity_signed_distance_contour_and_interior_color",
+    "device_verified": false
+  }
+}

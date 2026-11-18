@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-04",
+  "status": "internal-decoded-fields-proposal-not-joint-wire",
+  "tests": {
+    "host_and_isolated": 22,
+    "full_with_build": 1461,
+    "syntax_check": "passed"
+  },
+  "isolation": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 69,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "OBS01 candidate default disabled and inventory closed identity schema",
+    "OBS02 verification independent from real-frame0 report and no whole-media claim",
+    "OBS03 frame0 without corresponding verification fails closed",
+    "OBS04 content SHA identity mismatch and inflated integrity fail closed",
+    "OBS05 touch clears current remote preserves base and needs new verification on return",
+    "OBS06 old touch exit and old source cannot terminate latest returned remote",
+    "OBS07 latest base while touching rejects old target and returns only newest",
+    "OBS08 cancel preserves physical touch but cannot restore cancelled base",
+    "OBS09 base expiry clears remote and retains only historical display",
+    "OBS10 base expiry does not erase physical touch state",
+    "OBS11 duplicate semantic report does not renew TTL, reordered fields idempotent",
+    "OBS12 same sequence different content blocks and cannot revive by replay",
+    "OBS13 wrong connection/boot/session/mapping never poisons current scope",
+    "OBS14 older report cannot replace higher full state; uint64 beyond2^53 exact",
+    "OBS15 matching failure with retained front makes observation historical only",
+    "OBS16 close invalidates scope and current observation without persistence claim",
+    "OBS17 backward monotonic clock fails closed; previous state cannot return",
+    "OBS18 shared renderer filters private fields and has no operation buttons",
+    "OBS19 remote error invalidates base so new source cannot revive same failed target",
+    "OBS20 known local random action reported independently of remote base",
+    "OBS21 same token with a different source cannot replace prepared source",
+    "OBS22 new preparing source cannot inherit old verification"
+  ],
+  "source_sha256": {
+    "packages/core/native400-tcp-observation.mjs": "1be8680ed9e6ad60269f028a3deae35189dd276ff9951ef11e29bfa7bd1079c4",
+    "packages/ui/native400-tcp-observation.mjs": "c2e3a023df2932bff42a4b05e8c4b2ec99f360f227dd2398c5f6850b873cba5f",
+    "tests/native400-tcp-observation.test.mjs": "74759b32defc76aa301c95527eeeb1a10cc2a3c01b51bb7393865e9cc308e77d",
+    "scripts/verify-native400-tcp-observation.mjs": "620c03c45e8df5688f30afb85bfacda8b1d7b24b716bd71dfc08b16722b4453e"
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "0c4c8c61c25cd9fc860575e6ed96375a4a300cdb7bbcd27247d765e56f85f646",
+    "docs/context/current-todos.md": "29a8328dd54d33bfe1adb42802d6e9dbc1829fae0cf420a054956c45f942b81d",
+    "docs/protocol/round-pet400-tcp-control-draft.md": "ef5cd4402eb3ab7a216747f844cb63708985999b96931d32883a63ad7cf2499b"
+  },
+  "tcp02_sources_unchanged": true,
+  "wire_types_allocated": false,
+  "owner_integrated": false,
+  "new_binary_cpp_interop": false,
+  "new_loopback_interop": false,
+  "esp_verified": false,
+  "production_enabled": false,
+  "integrity_policy": "device-reported-file-SHA-metadata-frame0-CRC-not-whole-media",
+  "not_covered": [
+    "joint type/length/capability agreement",
+    "real endpoint report producer and worker/View",
+    "binary vectors and TCP adapter for these fields",
+    "DSH UI mount and browser verification",
+    "ESP/LAN resource or physical display test"
+  ]
+}

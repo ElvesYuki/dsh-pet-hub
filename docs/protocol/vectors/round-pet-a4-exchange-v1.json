@@ -1,0 +1,13 @@
+{
+  "scope": "original loopback candidate only; not device wire",
+  "request": {
+    "profile": "round-pet-pull-candidate/1", "schema_version": 1, "type": "exchange.request",
+    "context": {"device_id":"D","binding_id":"B","binding_epoch":"1","boot_id":"boot","session_id":"session","controller_id":"C","service_instance_id":"H"},
+    "request_id": "request_1", "request_seq": "9007199254740993", "observation": null
+  },
+  "response": {
+    "profile": "round-pet-pull-candidate/1", "schema_version": 1, "type": "exchange.response",
+    "context": {"device_id":"D","binding_id":"B","binding_epoch":"1","boot_id":"boot","session_id":"session","controller_id":"C","service_instance_id":"H"},
+    "request_id": "request_1", "request_seq": "9007199254740993", "control": null, "read_permit": null, "poll_after_ms": 500
+  }
+}

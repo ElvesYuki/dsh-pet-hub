@@ -1,0 +1,222 @@
+{
+  "schema": "native400-bootstrap-source-review-evidence/1",
+  "review_date": "2026-11-03",
+  "scope": "original sparse fixture only; no real cache/media/device/firmware execution or production services",
+  "reference_license": "Apache-2.0; layout facts only, no implementation copied",
+  "references": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "159d30985dd20b8251dafba4ac55b85e99eab8d3d581417a5dd855e71c038a23",
+      "sha256_after": "159d30985dd20b8251dafba4ac55b85e99eab8d3d581417a5dd855e71c038a23",
+      "changed": false
+    },
+    {
+      "path": "apps/round-pet/devices/esp32s3-touch-amoled-175c/candidates/native400-window/boot_catalog.h",
+      "sha256": "9d1956feae17d8102b5740364dd0ff51627809fec0a442a6e4a06aca307ae58d",
+      "sha256_after": "9d1956feae17d8102b5740364dd0ff51627809fec0a442a6e4a06aca307ae58d",
+      "changed": false
+    },
+    {
+      "path": "tools/round-pet/native400_boot_image.py",
+      "sha256": "4a28e6da4165ab21a0f432a7a1e2191a28a2ff80b6ae0bd5de6dd72b3a4d7964",
+      "sha256_after": "4a28e6da4165ab21a0f432a7a1e2191a28a2ff80b6ae0bd5de6dd72b3a4d7964",
+      "changed": false
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "sha256_after": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "changed": false
+    }
+  ],
+  "original_example": {
+    "recipe": "native400-bootstrap-source-map-v1-canonical-json",
+    "sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+    "content": {
+      "schema_version": 1,
+      "scope": "offline-source-review",
+      "identity": {
+        "namespace_boot": "a34d0c7ba6e7ede9fb9973977dd31fb8a7eb7dc92158cff0308da2640c226e2a",
+        "namespace_offline": "dd0f19bfdc4bed608ddf18baf095fd6c8b53217bbb59d8f0238e51460e2c0ff8",
+        "firmware_package_sha256": "861249f4f8854997f7733669dcf9a730492779baa6d75265ec9222fba9b3201f",
+        "hub_manifest_sha256": "9320f6ed19ab5d2a83e9f7fa4455efae0e27a727d8b1d65b6d5bd4c52667c3a7",
+        "source_manifest_sha256": "4c14391ed16b80807a60aeb4dd6a615b48e0a761f696991bd17511e225883efe",
+        "source_index_sha256": "12eb8a21ef80e1ca8703f21f591d39f24b4d285738cc7706e091fb19b535a619"
+      },
+      "approval": {
+        "mapping_approval_id": "original-bootstrap-review",
+        "candidate_approval_id": "original400-v1",
+        "license_ref": "original-test-MIT",
+        "credits": [
+          "dsh-pet-hub original MIT fixture"
+        ],
+        "source_kind": "original-test",
+        "usage": "offline-source-review"
+      },
+      "selection": {
+        "sector": 1,
+        "sequence": "2",
+        "minimum_sequence": "0",
+        "degraded_roots": false,
+        "fallback_from_newer": false,
+        "roots": [
+          {
+            "sector": 0,
+            "valid": true,
+            "sequence": "1",
+            "error": null
+          },
+          {
+            "sector": 1,
+            "valid": true,
+            "sequence": "2",
+            "error": null
+          }
+        ]
+      },
+      "objects": [
+        {
+          "slot": 0,
+          "generation": "1",
+          "action_id": 0,
+          "bytes": 214785,
+          "file_sha256": "9f7306e141bce7c483ac19c3e74d5eb236a78b8f942bedcdd943c80d05a02a93",
+          "frames": 241,
+          "payload_offset": 12288
+        },
+        {
+          "slot": 1,
+          "generation": "2",
+          "action_id": 4,
+          "bytes": 214785,
+          "file_sha256": "9f7306e141bce7c483ac19c3e74d5eb236a78b8f942bedcdd943c80d05a02a93",
+          "frames": 241,
+          "payload_offset": 5881856
+        },
+        {
+          "slot": 2,
+          "generation": "3",
+          "action_id": 1,
+          "bytes": 214785,
+          "file_sha256": "9f7306e141bce7c483ac19c3e74d5eb236a78b8f942bedcdd943c80d05a02a93",
+          "frames": 241,
+          "payload_offset": 11751424
+        },
+        {
+          "slot": 3,
+          "generation": "4",
+          "action_id": 11,
+          "bytes": 214785,
+          "file_sha256": "9f7306e141bce7c483ac19c3e74d5eb236a78b8f942bedcdd943c80d05a02a93",
+          "frames": 241,
+          "payload_offset": 17620992
+        }
+      ],
+      "cache": {
+        "bytes": 29360128,
+        "sha256": "b3a75d22d8cde8a5b1f76eaae9854fec4eafcac9d2018f7c1065e7b0f5148cae"
+      },
+      "checks": {
+        "catalog_metadata": true,
+        "payload_sha256": true,
+        "media_validation": "not-performed"
+      },
+      "device_evidence": false
+    }
+  },
+  "checks": {
+    "whole_cache_sha256": true,
+    "each_physical_payload_sha256": true,
+    "whole_media_validation": false,
+    "device_evidence": false,
+    "source_not_written": true
+  },
+  "source_audit": {
+    "paths_before": 317,
+    "changed": [],
+    "new_files": [
+      {
+        "path": "packages/core/native400-bootstrap.mjs",
+        "sha256": "b548836abeed75aa7928f8955375f00c0cc503025ad729da43b57f9ac542f7b4"
+      },
+      {
+        "path": "packages/runtime/native400-bootstrap-review.mjs",
+        "sha256": "fc93086d18c23a863c3c1b5810aeee7d38945ecd99e6f9b91ff883f0772c77b9"
+      },
+      {
+        "path": "packages/simulator/native400-bootstrap-fixture.mjs",
+        "sha256": "1d5e32afd0b1eed419083e569b993d94ba4f120773ff2f9652774bb2b2fe1511"
+      },
+      {
+        "path": "tests/native400-08.test.mjs",
+        "sha256": "65a7a5c6a8f8a97f24bb5f330ce5ec4ba8cae3e69a4fe0f0b836378bef2c5e42"
+      },
+      {
+        "path": "scripts/verify-native400-08.mjs",
+        "sha256": "862dd42626dc3e699f955695975515577dadaed2cb5040bb8241d7dd1a01c5fc"
+      }
+    ]
+  },
+  "fixed_contract_sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+  "fixed_vectors_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876",
+  "validation": {
+    "new_cases": 44,
+    "full_build_tests": 1194,
+    "syntax_passed": true,
+    "isolated_passed": true,
+    "temporary_environment_removed": true,
+    "cases": [
+      "400-08-01 N_boot recipe stays distinct from offline N package manifest and F",
+      "400-08-02 damaged root CRC falls back to valid older root with explicit degradation",
+      "400-08-03 valid newer root with bad reference reports fallback and caller floor rejects it",
+      "400-08-04 equal valid root sequences are ambiguous even if content matches",
+      "400-08-05 uint64 max root and generation remain decimal strings above2^53",
+      "400-08-06 unknown boot namespace is not accepted by matching other domains",
+      "400-08-07 fixed400 geometry rejects stale360 headers",
+      "400-08-08 incomplete marker and reserved bytes are not committed metadata",
+      "400-08-09 duplicate or out-of-range slots cannot create extra active objects",
+      "400-08-10 generation mismatch refuses root association",
+      "400-08-11 duplicate action IDs and unapproved remote actions are not bootstrap stock",
+      "400-08-12 wrong F or declared length cannot map to approved P/M",
+      "400-08-13 object reserved bytes cannot carry transplanted package fields",
+      "400-08-14 mapping approval is independent and never read from a ledger",
+      "400-08-15 P/M identity swaps fail despite valid namespace and cache headers",
+      "400-08-16 mapping N_offline cannot be promoted to N_boot in candidate identity",
+      "400-08-17 production usage or missing credits do not inherit offline permission",
+      "400-08-18 real sparse file gets whole-cache and four payload hashes without side effects",
+      "400-08-19 claimed header F cannot conceal corrupt payload",
+      "400-08-20 truncate or entire32MiB image is rejected before any data read",
+      "400-08-21 symlink and hardlink cannot stand in for private selected cache",
+      "400-08-22 changed bytes during await fail consistency even with original mtime restored",
+      "400-08-23 replacing path while fd remains open cannot publish old-inode audit",
+      "400-08-24 unknown I/O failure cannot be recast as old valid root fallback",
+      "400-08-25 cancellation holds fd until ignoring hook actually returns",
+      "400-08-26 real deadline abort still waits for actual hook exit before fd cleanup",
+      "400-08-27 permissions revoked mid-review fail without changing or repairing source",
+      "400-08-28 caller pre-abort performs no reads or partial publication",
+      "400-08-29 root state idle and touch defaults cannot be inferred from four good objects",
+      "400-08-30 zero reference generations and reserved root words fail closed",
+      "400-08-31 wrong object magic and incomplete object marker cannot be a saved record",
+      "400-08-32 length mismatch is refused even when F and CRC are correct",
+      "400-08-33 source digest or candidate approval transplant cannot create a mapping decision",
+      "400-08-34 caller minimum floor is enforced before any payload hash publication",
+      "400-08-35 unreferenced spare bytes affect cache identity but never add a fifth reviewed object",
+      "400-08-36 group-readable selected file is refused without attempting to repair permissions",
+      "400-08-37 external abort during actual read hook publishes no partial mapping",
+      "400-08-38 malformed bounded header arrays and noncanonical floor strings are rejected",
+      "400-08-39 truncated cache is distinct from a corrupt but readable root",
+      "400-08-40 canonical map is deterministic and carries no filesystem or device evidence",
+      "400-08-41 same F in multiple slots never skips hashing each physical payload",
+      "400-08-42 candidate package identity and original usage approval are revalidated at boundary",
+      "400-08-43 four active references may rotate through physical slot4 without a fifth active asset",
+      "400-08-44 repeated close does not remove or rewrite source and hides live result publication"
+    ]
+  },
+  "uncovered": [
+    "real cache and material use approval/import",
+    "whole-media CRC/index/RGB/extra validation of reviewed cache",
+    "device inventory or authenticated freshness/floor",
+    "result persistence/reopen/UI and production integration",
+    "formal protocol/strategy, Flash writer and TLS/device resource gates"
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "test_only": true,
+  "scope": "hash-recipes-only; fake media, two actions; must fail production PET4/46-action admission",
+  "asset_generators": [
+    {
+      "action_id": 0,
+      "repeated_byte": 0,
+      "bytes": 544,
+      "expected_file_sha256": "44ddd2f478477ebd1c1cd5b99400af48cd46033c59173195f48870e608cec810"
+    },
+    {
+      "action_id": 4,
+      "repeated_byte": 1,
+      "bytes": 545,
+      "expected_file_sha256": "279f0aa1b16987fc8d170e8fedbba84df4784f123f08a3c43e9156e652208da2"
+    }
+  ],
+  "source_manifest_utf8": "round-pet-g0-source\n",
+  "source_package": {
+    "hash_recipe": "pet-package-v1-canonical-json",
+    "sha256": "69d686e2c85df78c8247fc6b2e1266bf336d20fab59f34b86a5c6956124e17e7",
+    "content": {
+      "schema_version": 1,
+      "catalog": {
+        "character_id": "fixture_whale",
+        "variant_id": "fixture_native360",
+        "codec": "PET4",
+        "display": {
+          "width": 360,
+          "height": 360,
+          "shape": "circle",
+          "pixel_format": "RGB565"
+        },
+        "actions": [
+          {
+            "id": 0,
+            "bytes": 544,
+            "sha256": "44ddd2f478477ebd1c1cd5b99400af48cd46033c59173195f48870e608cec810"
+          },
+          {
+            "id": 4,
+            "bytes": 545,
+            "sha256": "279f0aa1b16987fc8d170e8fedbba84df4784f123f08a3c43e9156e652208da2"
+          }
+        ],
+        "license_ref": "fixture-license-非商用"
+      },
+      "media_profile": {
+        "container": "PET4",
+        "codec_flag": 1,
+        "key_interval": 12,
+        "tile_rows": 20,
+        "fps": 24,
+        "frame_limit": 360
+      },
+      "timing": [
+        {
+          "id": 0,
+          "width": 360,
+          "height": 360,
+          "fps": 24,
+          "frames": 241,
+          "index_sha256": "4069c45fce71b189615e853f91ef0312f536336bf7e791ebd81ff395f7efd8f5"
+        },
+        {
+          "id": 4,
+          "width": 360,
+          "height": 360,
+          "fps": 24,
+          "frames": 241,
+          "index_sha256": "9dc0b43016a9407a87267e744defd64b26e6c5295685ac8c65221e8bb70c8705"
+        }
+      ],
+      "semantics": {
+        "idle": 0,
+        "touch": 4,
+        "thinking": 0,
+        "working": 0,
+        "result": 0,
+        "success": 0,
+        "waiting": 0,
+        "error": 0
+      },
+      "source_manifest_sha256": "f2d4aa67eb0eb6544c7969dcb1b5330502ac77ca72b574c1cf6dc57937407761"
+    }
+  },
+  "hub_manifest_input": {
+    "character_id": "fixture_whale",
+    "variant_id": "fixture_native360",
+    "codec": "PET4",
+    "display": {
+      "width": 360,
+      "height": 360,
+      "shape": "circle",
+      "pixel_format": "RGB565"
+    },
+    "actions": [
+      {
+        "id": 0,
+        "bytes": 544,
+        "sha256": "44ddd2f478477ebd1c1cd5b99400af48cd46033c59173195f48870e608cec810"
+      },
+      {
+        "id": 4,
+        "bytes": 545,
+        "sha256": "279f0aa1b16987fc8d170e8fedbba84df4784f123f08a3c43e9156e652208da2"
+      }
+    ],
+    "license_ref": "fixture-license-非商用"
+  },
+  "index_object": {
+    "schemaVersion": 1,
+    "variants": [
+      {
+        "manifest": {
+          "character_id": "fixture_whale",
+          "variant_id": "fixture_native360",
+          "codec": "PET4",
+          "display": {
+            "width": 360,
+            "height": 360,
+            "shape": "circle",
+            "pixel_format": "RGB565"
+          },
+          "actions": [
+            {
+              "id": 0,
+              "bytes": 544,
+              "sha256": "44ddd2f478477ebd1c1cd5b99400af48cd46033c59173195f48870e608cec810"
+            },
+            {
+              "id": 4,
+              "bytes": 545,
+              "sha256": "279f0aa1b16987fc8d170e8fedbba84df4784f123f08a3c43e9156e652208da2"
+            }
+          ],
+          "license_ref": "fixture-license-非商用"
+        },
+        "files": [
+          {
+            "action_id": 0,
+            "path": "0.pet"
+          },
+          {
+            "action_id": 4,
+            "path": "4.pet"
+          }
+        ]
+      }
+    ]
+  },
+  "index_serialization": "Python json.dumps(ensure_ascii=False, indent=2) plus LF; only this raw index recipe is illustrative, not canonical identity",
+  "namespace_identity_utf8": "round-pet/whale/native360/pet4/tile20/key12/v1",
+  "expected": {
+    "firmware_package_sha256": "69d686e2c85df78c8247fc6b2e1266bf336d20fab59f34b86a5c6956124e17e7",
+    "hub_manifest_sha256": "40bfd4fd39321c43a2df565295234e8ff53410e137db9341f534a39735742432",
+    "namespace_sha256": "dfc829e13e7c25d732ae0c0afd011f1232419e603ba06c225104645ea668bdf6",
+    "index_file_sha256": "cb357c1fcbe4fc2906518ada7eb9088a40d4d53c045aa741483853bde54c568a"
+  },
+  "negative_vectors": {
+    "reversed_catalog_actions": {
+      "canonical_package_sha256": "ae7239ff4dbbbac497f0428785139283fc7ca74b402c882fce888be875febf86",
+      "canonical_hub_manifest_sha256": "0127896c1cc7d1cd1e691bf8a1fa889be2dc0bab29b0062b9facaca719bcb8c3",
+      "admission": "reject: changed package digest or nonascending action order"
+    },
+    "timing_241_to_240": {
+      "canonical_package_sha256": "2add2e00750f1f4f72d5a2bd913aad54631bd3eb5058b09f822779b3bda9d815",
+      "canonical_hub_manifest_sha256": "40bfd4fd39321c43a2df565295234e8ff53410e137db9341f534a39735742432",
+      "admission": "reject: production F241 constraint even if new P is declared"
+    },
+    "file_manifest_package_swap": "reject typed F/M/P mismatch; none is the V2 namespace",
+    "fake_media": "reject PET4 header and action-count constraints despite matching declared hashes"
+  }
+}

@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-tcp-lan.test.mjs'],expected:13,timeoutMs:30000,layer:'native400-independent-lan-profile-rehearsal',prefix:'tcp08-',scope:'Independent trusted synthetic window decision, fixed NIC/peer/identity and finite one-use lifetime; actual loopback rehearsal only. Real LAN branch pure preflight with injected inventory, no LAN bind/ESP/STA/real material approval/production changes. No offline profile upgrade or new wire.'});

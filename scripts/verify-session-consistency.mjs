@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/binding-store.test.mjs','tests/session-consistency.test.mjs'],expected:28,layer:'temporary-binding-session-authority',prefix:'hub-session-check-',scope:'Temporary metadata, real loopback TLS, virtual suspend/clocks and host-process crash cutpoints; no real pairing, OS sleep hooks, ESP, persistent keys or production listener.'});

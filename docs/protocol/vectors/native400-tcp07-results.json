@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "isolated-single-runtime-host-only",
+  "tests": {
+    "specialized_and_isolated": 13,
+    "full_with_build": 1524,
+    "check": "passed",
+    "full_exit_code": 0,
+    "full_wall_ms": 105358.351958
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 1416,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "HOST01 opaque preparation is private and no I/O",
+    "HOST02 tcp host requires explicit directory and isolated modes",
+    "HOST03 simultaneous startup elects one reader and attached owns no task",
+    "HOST04 different source peer or timing cannot attach or run a reader",
+    "HOST05 IPC is readonly and status omits private source endpoint and grants",
+    "HOST06 default service has no TCP slot",
+    "HOST07 source failure is visible without listener or automatic retry",
+    "HOST08 winner owns actual TCP and close drains it before releasing UDS",
+    "HOST09 attached close cannot stop the winner TCP listener",
+    "HOST10 close fences IPC and waits actual reader exit before UDS release",
+    "HOST11 restart fresh reviews and does not restore listener or targets",
+    "HOST12 malformed device claims fail closed and private additions never cross status",
+    "HOST13 independent processes elect one fresh-source owner and attach close is harmless"
+  ],
+  "source_sha256": {
+    "packages/core/native400-tcp-host-view.mjs": "00b62dfcb9a0844b1b92775425b4ee6a850d37df47fdc02137ec42b8013c526a",
+    "packages/runtime/native400-tcp-host.mjs": "bb00db9f03d393372d32135f72f20643edc738201c599eb7e3ebf4403920c7b4",
+    "packages/runtime/native400-tcp-binding.mjs": "5412c6020b523e25a7d77e8e88a9941b11e89936df98757efd3d03c2c9354733",
+    "packages/runtime/service.mjs": "6bf5ca3d1cc3681c4eda676bc59c1fee3973b0d9ae5df0ee064dd249633b5cad",
+    "tests/native400-tcp-host.test.mjs": "15474c9f1a901000b5aaad3918b7a040a7ef37ea9e39154eacaceb5f3f0c6922",
+    "tests/fixtures/native400-tcp-host-child.mjs": "5aaaceacdf7991e13289608aa4b10d5bb1fc0d9ab4089fc5ca9d99b395f18110",
+    "scripts/verify-native400-tcp-host.mjs": "62fa8017e738f718476f38114a9a6944b6906f63e484754886d4fa31070c10db"
+  },
+  "tcp06_comparison": {
+    "packages/core/native400-tcp-network.mjs": {
+      "unchanged": true,
+      "before": "056b2795395039b2c364e243b87ca9e6e01c27487e63900880597d67adbe1de6",
+      "after": "056b2795395039b2c364e243b87ca9e6e01c27487e63900880597d67adbe1de6"
+    },
+    "packages/runtime/native400-tcp-owner.mjs": {
+      "unchanged": true,
+      "before": "b6f80d3469b2a7f5d5a8d96f48ae17517e3f691c1ad62bc1c73b5fbbe52e0843",
+      "after": "b6f80d3469b2a7f5d5a8d96f48ae17517e3f691c1ad62bc1c73b5fbbe52e0843"
+    },
+    "packages/runtime/native400-tcp-binding.mjs": {
+      "unchanged": false,
+      "before": "4aaf18e541a1ea710a6773ca00247a938bb39cad792057f8539dcd751cae5506",
+      "after": "5412c6020b523e25a7d77e8e88a9941b11e89936df98757efd3d03c2c9354733"
+    },
+    "tests/native400-tcp-network.test.mjs": {
+      "unchanged": true,
+      "before": "1268a8e86483a43314e0c1343ddd4f05c90c8a380c419402fe8e2ac3a49d70aa",
+      "after": "1268a8e86483a43314e0c1343ddd4f05c90c8a380c419402fe8e2ac3a49d70aa"
+    },
+    "scripts/verify-native400-tcp-network.mjs": {
+      "unchanged": true,
+      "before": "6e36a5496d25678e93d20ea22c92cdbb6e056be2aacf6122f47ab1f6795c9316",
+      "after": "6e36a5496d25678e93d20ea22c92cdbb6e056be2aacf6122f47ab1f6795c9316"
+    }
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "9edbe49bd9e43d675d3bf571165952e2fa552016b07a24962387c7480f743483",
+    "docs/context/current-todos.md": "724e88e5b26dfb3954a0b797c59328ad8b4027b5de3409fe65650138c352ae7d",
+    "docs/protocol/round-pet400-sta-relay.md": "2c8fa5c9d2579cc89b5dc1c994026bfe38bc2c3267388ee11bc9a6f92daa944c",
+    "docs/protocol/round-pet400-socket-owner.md": "ecc23fdfe79a0936b77a388ccc7ef0edb39fad3ad936286db14fb07c07138ff9"
+  },
+  "actual_two_process_election": true,
+  "actual_owned_uds_loopback": true,
+  "lan_executed": false,
+  "sta_executed": false,
+  "esp_connected": false,
+  "production_config_changed": false,
+  "new_wire": false,
+  "dsh_ui_or_cli_connected": false,
+  "real_material_or_cache_read": false,
+  "upstream_tools_rerun": false,
+  "not_covered": [
+    "real identity and role usage approval",
+    "LAN profile implementation and activation",
+    "STA initialization/product callers and device close completion",
+    "dynamic ESP resources/worst latency and actual worker/View",
+    "rich STATE media stream persistence V3"
+  ],
+  "endpoint_recheck_changes": [],
+  "document_links_checked": 12,
+  "final_build_exit_code": 0,
+  "dist_matches_source": true,
+  "dist_license_current": true
+}

@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "optional-peer-link-policy-offline-only",
+  "tests": {
+    "specialized_and_isolated": 12,
+    "full_with_build": 1511,
+    "check": "passed",
+    "full_exit_code": 0,
+    "observed_full_wall_ms": 104224.680375
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 615,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "NET01 canonical IPv4 config rejects aliases DNS CIDR multicast and wildcard",
+    "NET02 link initially down mapped IPv4 normalized only on incoming path",
+    "NET03 old equal conflicting link events cannot change readiness",
+    "NET04 epoch range exhaustion never wraps",
+    "NET05 selected peer requires explicit link before real TCP HELLO",
+    "NET06 wrong socket address denied before session despite matching mapping",
+    "NET07 down closes active socket and resume cannot reopen a down link",
+    "NET08 up up epoch fences old session and never replays previous BASE",
+    "NET09 stale link event ignored before clock check and cannot close current socket",
+    "NET10 policy does not expand listener and default old owner has no link publisher",
+    "NET11 close is final and new link cannot revive resources",
+    "NET12 TCP05 fresh-source task forwards optional local link without exposing address"
+  ],
+  "source_sha256": {
+    "packages/core/native400-tcp-network.mjs": "056b2795395039b2c364e243b87ca9e6e01c27487e63900880597d67adbe1de6",
+    "packages/runtime/native400-tcp-owner.mjs": "b6f80d3469b2a7f5d5a8d96f48ae17517e3f691c1ad62bc1c73b5fbbe52e0843",
+    "packages/runtime/native400-tcp-binding.mjs": "4aaf18e541a1ea710a6773ca00247a938bb39cad792057f8539dcd751cae5506",
+    "tests/native400-tcp-network.test.mjs": "1268a8e86483a43314e0c1343ddd4f05c90c8a380c419402fe8e2ac3a49d70aa",
+    "scripts/verify-native400-tcp-network.mjs": "6e36a5496d25678e93d20ea22c92cdbb6e056be2aacf6122f47ab1f6795c9316"
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "9edbe49bd9e43d675d3bf571165952e2fa552016b07a24962387c7480f743483",
+    "docs/context/current-system.md": "cf90ff9871292944cb2dccedd40a999d2479938a7566710c3abb041da932880c",
+    "docs/context/current-todos.md": "724e88e5b26dfb3954a0b797c59328ad8b4027b5de3409fe65650138c352ae7d",
+    "docs/protocol/round-pet400-socket-owner.md": "ecc23fdfe79a0936b77a388ccc7ef0edb39fad3ad936286db14fb07c07138ff9",
+    "apps/round-pet/reports/2026-11-05-400-socket-owner.md": "c67d8790d345d32f617bd57f1c80d48e53fd3bbf28b8dfed0559e7f552c19db6",
+    "docs/protocol/round-pet400-sta-relay.md": "2c8fa5c9d2579cc89b5dc1c994026bfe38bc2c3267388ee11bc9a6f92daa944c",
+    "apps/round-pet/reports/2026-11-05-400-sta-relay.md": "c472348475ae75f984f67c9aa80fc3d17676343b828c3f3ec87086cf4afefe84"
+  },
+  "tcp05_source_comparison": {
+    "packages/runtime/native400-tcp-binding.mjs": {
+      "before": "828a16ed14203db799706ba1c0240936ebcae41dbb8bd0c869f7dc7571ac8d3a",
+      "after": "4aaf18e541a1ea710a6773ca00247a938bb39cad792057f8539dcd751cae5506",
+      "unchanged": false
+    },
+    "tests/native400-tcp-binding.test.mjs": {
+      "before": "3387720464e305c678f5482488ebd79b04ee250216fee93d8f7ab2f62a982b57",
+      "after": "3387720464e305c678f5482488ebd79b04ee250216fee93d8f7ab2f62a982b57",
+      "unchanged": true
+    },
+    "scripts/verify-native400-tcp-binding.mjs": {
+      "before": "fb061a3865328df88050e113c8637f7ad35b658447d33684014e90bee219b5e6",
+      "after": "fb061a3865328df88050e113c8637f7ad35b658447d33684014e90bee219b5e6",
+      "unchanged": true
+    },
+    "native/native400-tcp-mapping-check.cpp": {
+      "before": "7433dc6ef917a61a4b6bbd907d6f9d2d18077fc37935054cb5f2a1922ec5e1d0",
+      "after": "7433dc6ef917a61a4b6bbd907d6f9d2d18077fc37935054cb5f2a1922ec5e1d0",
+      "unchanged": true
+    },
+    "docs/protocol/vectors/native400-tcp05-mapping.json": {
+      "before": "adecda49a519edef5c27c8fe6ee715961ca08568fe01aeac2a430058d24829b2",
+      "after": "adecda49a519edef5c27c8fe6ee715961ca08568fe01aeac2a430058d24829b2",
+      "unchanged": true
+    }
+  },
+  "owned_loopback_tcp": true,
+  "listener_still_loopback_port_zero": true,
+  "new_wire": false,
+  "lan_executed": false,
+  "sta_executed": false,
+  "esp_connected": false,
+  "production_config_changed": false,
+  "authentication": false,
+  "upstream_tests_rerun": false,
+  "not_covered": [
+    "real identity and role usage approval",
+    "LAN profile and STA lifecycle publisher",
+    "ESP dynamic Wi-Fi/lwIP memory stack worst-case latency",
+    "actual worker/View/device playback and STATE",
+    "media streaming persistence V3"
+  ],
+  "endpoint_recheck_changes": [],
+  "document_links_checked": 12,
+  "repeat_validation": {
+    "overlapping_full_runs_failed": true,
+    "overlapped_latest_failed_count": 4,
+    "focused_deadline_recheck_passed": 4,
+    "final_single_full_passed": 1511,
+    "deadlines_or_assertions_relaxed": false,
+    "overlapped_failed_cases": [
+      "400-05-15 delayed polling with insufficient renewal horizon fails closed without a permit",
+      "400-05-16 local content corruption cannot produce local proof or local playing",
+      "400-05-17 admitted remote GET drains before local begins and stale segment is dropped",
+      "R6-06 a superseding request fences prepared frame tokens before any refresh",
+      "400-05-15 delayed polling with insufficient renewal horizon fails closed without a permit",
+      "400-05-16 local content corruption cannot produce local proof or local playing",
+      "400-05-17 admitted remote GET drains before local begins and stale segment is dropped",
+      "R6-06 a superseding request fences prepared frame tokens before any refresh"
+    ]
+  },
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "external_updates_reconciled": [
+    "docs/context/current-status.md",
+    "docs/context/current-system.md",
+    "docs/context/current-todos.md"
+  ],
+  "upstream_latest_not_rerun": {
+    "sta_relay_complete": true,
+    "tool_tests": 178,
+    "default_image": "800f2a0a46f59d0ef8df5e5eb79745ddb9b30de39c48006882fa082243f2167c",
+    "owner_image": "b4be1aaac16b386b6e08ae4f029de4f708df97c09c5d6a164013e24ab954449b",
+    "both_undeployed": true,
+    "board_prefix": "f5538cb9",
+    "relay_atomic_bytes": 24,
+    "dram_delta_from_prior_owner": 32,
+    "dram_delta_from_default": 15216,
+    "psram_bytes": 4439288,
+    "stop_is_fd_exit_barrier": false
+  }
+}

@@ -1,0 +1,11 @@
+import {createServer} from 'node:http';import {readFileSync,writeFileSync,existsSync} from 'node:fs';import {resolve,join} from 'node:path';import {fileURLToPath} from 'node:url';import {layeredDirectoryRoot} from '../packages/runtime/layered-character-validator.mjs';
+/** Temporary loopback QA boundary. Serves fixed pages only, no package/master filesystem endpoint. */
+export function serveLayeredL3(directory){
+ const root=layeredDirectoryRoot(directory),routes=new Map([['/','index.html'],['/candidate.html','candidate.html'],['/clean.html','clean.html'],['/baseline.html','baseline.html'],['/comparison.mjs','comparison.mjs']]),evidence=new Set(['pixels','recovery','resources','failures']);
+ const server=createServer((req,res)=>{
+  if(req.method==='GET'&&routes.has(req.url)){res.setHeader('Content-Type',req.url.endsWith('.mjs')?'text/javascript':'text/html; charset=utf-8');res.setHeader('Cache-Control','no-store');res.end(readFileSync(join(root,routes.get(req.url))));return;}
+  const key=req.url?.match(/^\/evidence\/([a-z]+)$/)?.[1];if(req.method==='POST'&&evidence.has(key)){let size=0,tooLarge=false;const chunks=[];req.on('data',b=>{if(tooLarge)return;size+=b.length;if(size>12000000){tooLarge=true;res.writeHead(413);res.end();req.destroy();return;}chunks.push(b);});req.on('end',()=>{if(tooLarge)return;try{const data=JSON.parse(Buffer.concat(chunks));const file=join(root,key+'.json');if(existsSync(file)){res.writeHead(409);res.end();return;}writeFileSync(file,JSON.stringify(data,null,2)+'\n',{flag:'wx'});res.end('saved');}catch{res.writeHead(400);res.end();}});return;}res.writeHead(404);res.end();
+ });
+ return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',()=>resolve({port:server.address().port,close:()=>new Promise((ok,fail)=>{server.close(e=>e?fail(e):ok());server.closeAllConnections();})}));});
+}
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){if(process.argv.length!==3)throw new Error('explicit_workspace_required');const qa=await serveLayeredL3(process.argv[2]);console.log(JSON.stringify({port:qa.port}));let closing=false;for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{if(!closing){closing=true;void qa.close();}});}

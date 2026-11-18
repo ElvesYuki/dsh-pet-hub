@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-pet-hold-run.test.mjs'],expected:24,timeoutMs:30000,layer:'finite-A-hold-run-lifecycle',prefix:'tcp28-',scope:'Borrowed genuine shared client, original HTTP/UDS/loopback endpoint and virtual clock, 45s bounded slice plus actual 1s wall timer; startup/three budgets, late timer and await fences, touch/renewal, manual priority, source failure, exact unknown, actual in-flight close and owned cleanup. No new authority/listener, real pet, DSH/profile or ESP.'});

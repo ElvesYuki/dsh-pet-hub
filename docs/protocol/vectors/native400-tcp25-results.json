@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "layer": "explicit-endpoint-arbitrated-pet-hold",
+  "cases": [
+    "END01 arbitration is explicit; event and observed-local defaults remain",
+    "END02 long touch crosses four bounded renewals, EOF presents latest working request",
+    "END03 cancellation during touch preserves local until EOF then local",
+    "END withdrawal HTTP failure cannot revive remote at touch EOF",
+    "END withdrawal closed source cannot revive remote at touch EOF",
+    "END withdrawal page budget cannot revive remote at touch EOF",
+    "END withdrawal observation budget cannot revive remote at touch EOF",
+    "END08 manual takeover during touch is neither overwritten nor cancelled",
+    "END paused permits authorized cleanup but refuses BASE",
+    "END down permits authorized cleanup but refuses BASE",
+    "END11 lost local ACK confirms exact renewal body without extending deadline",
+    "END12 true target expiry during touch is not revived by fresh unchanged source",
+    "END reconnect retains touch, autoRecover=true uses original remaining lease only",
+    "END reconnect retains touch, autoRecover=false uses original remaining lease only",
+    "END15 late prior request receipt and old touch completion cannot replace latest intent",
+    "END16 existing same-action renewal restarts model token: continuity is an unresolved endpoint gate",
+    "END17 expired old target cannot autoRecover through new connection",
+    "END18 CAS race after controls read cannot overwrite or cancel a manual target",
+    "END19 exact lost-ACK confirmation cannot cancel later manual takeover",
+    "END20 lane source window remains independent of long page and observation windows"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 6095,
+  "scope": "Original HTTP response-liveness, genuine audited UDS/shared owner and actual loopback TCP; one persistent simulated endpoint across connections. Long touch, Deferred/PING/latest EOF, three lifetime gates, cancellation/paused/down, manual CAS, unknown exact body, stale receipt and recovery TTL. Same-action restart reproduced, not solved. No real pet sampling, ESP or real display claim.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "full_suite": {
+    "tests": 1885,
+    "passed": 1885,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 111442.710833
+  },
+  "checks": {
+    "syntax_exit": 0,
+    "standard_build_exit": 0,
+    "isolated_candidate_build_exit": 0
+  },
+  "source_hashes": {
+    "packages/runtime/native400-pet-bridge.mjs": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+    "packages/runtime/native400-node-control-channel.mjs": "db3b3a4caa34673464ffe8830d5d4bf7c1cf64d11e1ad38c2d82b17bc6fe2fd6",
+    "tests/fixtures/native400-endpoint-hold.mjs": "37d7044e4064321767fdd1ba1cdf843886bc238341de96724a83b17c3075792f",
+    "tests/native400-endpoint-hold.test.mjs": "5e5a712dfe4dad96ade2cf5c39f14c311ed9f9dc61b1efac2df23a1dcd08b7af",
+    "scripts/verify-native400-endpoint-hold.mjs": "b624f06bbeb32c6f7c8c0faf6eae750963f0d75adfe36615d92108b94908cd24"
+  },
+  "wire_and_owner_unchanged": {
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/core/native400-tcp-control.mjs": "18f682cd6bcb2fd454f35ce7fc6a3b8f3ff56d1d74725c9563cdb3796099c568",
+    "packages/runtime/native400-tcp.mjs": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+    "packages/runtime/native400-tcp-owner.mjs": "1b8a9b46e603c587a3e9fbb229e8133cd422366aed52a195adc7cc53785b04a8"
+  },
+  "old_hold_and_source_unchanged": {
+    "packages/runtime/native400-pet-hold-source.mjs": "89507f2c2b0fccadf2da7b48959974bdf45886c304aa32ebacb3d6c5c6384e3c",
+    "packages/core/native400-node-control-access.mjs": "5b6d96ca9bd669e43340749c1dcd736fafb2dd3040ba76f171aeb822c9839ee3",
+    "tests/native400-pet-hold.test.mjs": "b89f210ef92ffa07dedcb8f0115bc352a467b24c73408b3af24373c0951581f7",
+    "scripts/observe-native400-pet.mjs": "bae191a3d5658f6c4461c59de49c2b454f5873f5929778235003fdb6d648f4fd",
+    "scripts/verify-native400-pet-hold.mjs": "2dc1eb4f605e7ab5f335431a3c5aa040055c1d5a3216eae7ee6e8b73ad682813"
+  },
+  "candidate_artifacts": {
+    "dist-dsh022/package.json": "a05de1952b7b6fe1d2b9b3ee6b440ee09d3b6096a9c8a804b4de6839935171e3",
+    "dist-dsh022/client.js": "2ab6ca06a6cd1cde3707f997cda9c392208726c33a818e83f47d916a07315908",
+    "dist-dsh022/apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "dist-dsh022/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+    "dist-dsh022/packages/runtime/native400-pet-bridge.mjs": "31e2cb9644da1c121e39fc1c126841a94bb84e21e5ce71b5c21a32ba4d49842e",
+    "dist-dsh022/packages/runtime/native400-node-control-channel.mjs": "db3b3a4caa34673464ffe8830d5d4bf7c1cf64d11e1ad38c2d82b17bc6fe2fd6"
+  },
+  "upstream_readonly_references": {
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/tcp_control_draft.h": "fb0f94b687af6a74d6a32e1c98767df5a744906d0d592632cde72848fafcfb12",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_bridge.h": "0ab8887baf4c836edfd915b48d3e9be4baf755d38025e66add2cae99da93967c",
+    ".cache/native400-touch-resume-a-20261106/renewal_probe.cpp": "60fcd39e79fbff56ebd3e8eb863e793cd584c36e0ce54b20e91e3160d6ef7826",
+    ".cache/native400-touch-resume-a-20261106/renewal_probe.log": "21ef573f0e4220f63d3c96fa60952a09fef30579ce357fa59c0bcfaa2cbbbd78"
+  },
+  "policy": {
+    "explicit": "endpoint-arbitrated",
+    "default": "observed-local",
+    "default_mode": "event",
+    "priority_callback_mixing_rejected": true,
+    "new_wire_types": 0,
+    "new_hello_fields": 0,
+    "B_query_prerequisite": false,
+    "A_requires_autoRecover_false": false,
+    "auto_recovery_preserves_original_deadline": true,
+    "device_hold_enabled": false
+  },
+  "renewal_gate": {
+    "same_action_token_replacement_reproduced_Node_loopback": true,
+    "CPP_probe_readonly_confirms_stamp_invalidation": true,
+    "CPP_sanitizers_run_by_this_task": false,
+    "continuous_playback_fixed": false,
+    "proposed_preserve_token_source_cycle_and_frame_position": true,
+    "protocol_jointly_frozen": false,
+    "ESP_verified": false
+  },
+  "verification_layers": {
+    "pure_model": true,
+    "real_HTTP_UDS_loopback_TCP": true,
+    "display_and_SHA_callbacks": "simulated",
+    "real_DSH_reloaded": false,
+    "real_pet_sampled": false,
+    "real_pet_transition_verified": false,
+    "runtime_loaded_pet_identity_attested": false,
+    "ESP_verified": false
+  },
+  "resource_limits": {
+    "bridge_new_timers": 0,
+    "bridge_max_pending_poll": 1,
+    "bridge_max_pending_body": 1,
+    "owner_max_control_inflight": 1,
+    "shared_attachments": 16,
+    "shared_receipts": 32,
+    "fixture_touch_virtual_ms": 14500,
+    "fixture_owner_sockets_sessions_timers_after_close": 0,
+    "fixture_HTTP_and_UDS_closed": true,
+    "ESP_RAM_or_worst_latency_measured": false
+  },
+  "cleanup": {
+    "isolated_environment_removed": true,
+    "production_listener_started": false,
+    "new_profile_started": false,
+    "plugin_installed_or_enabled": false,
+    "existing_service_changed": false,
+    "pet_write_calls": false,
+    "ESP_USB_access": false,
+    "upstream_written": false,
+    "credentials_read": false,
+    "commit_push": false
+  },
+  "document_audit": {
+    "relative_links": 715,
+    "broken": 0,
+    "trailing_whitespace": 0
+  }
+}

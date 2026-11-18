@@ -1,0 +1,42 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLeaseBudgetLab,EXAMPLE_LEASE_POLICY} from '../packages/simulator/lease-budget.mjs';import {createLeaseGuard,leaseSendBudget} from '../packages/core/lease-budget.mjs';import {verifyLeaseMatrix} from '../packages/simulator/lease-matrix.mjs';
+const reject=(fn,code)=>assert.throws(fn,{code});
+function setup(){const f=createLeaseBudgetLab(),ctx=f.lab.connect(),r=f.guard.begin(ctx,{request_id:'a',kind:'acquire',expected_epoch:'0'}),grant=f.lab.actor.acquire(ctx,'op','0'),v=f.receipt(ctx,r,grant);f.guard.accept(ctx,v.packet,v.proof);return {...f,ctx,r,grant,v};}
+test('lease arithmetic: conservative horizon and exact-rate matrix include beyond-assumption counterexamples',()=>{const r=verifyLeaseMatrix();assert.ok(r.accepted>0&&r.rejected>0);assert.equal(r.arrival_checks,r.accepted*4);assert.equal(leaseSendBudget(15000,EXAMPLE_LEASE_POLICY),13974);reject(()=>leaseSendBudget(1,EXAMPLE_LEASE_POLICY),'insufficient_lease_budget');reject(()=>leaseSendBudget(15001,EXAMPLE_LEASE_POLICY),'invalid_message');reject(()=>leaseSendBudget(15000,{...EXAMPLE_LEASE_POLICY,host_ppm:-1}),'invalid_message');});
+test('trusted receipts: default deny, serialized proof and mutated TTL cannot authorize',()=>{
+ const f=createLeaseBudgetLab(),ctx=f.lab.connect(),r=f.guard.begin(ctx,{request_id:'a',kind:'acquire',expected_epoch:'0'}),g=f.lab.actor.acquire(ctx,'op','0'),v=f.receipt(ctx,r,g),before=f.lab.registry.summary();
+ for(const proof of [{authenticated:true},JSON.parse(JSON.stringify(v.proof)),null])reject(()=>f.guard.accept(ctx,v.packet,proof),'untrusted_receipt');reject(()=>f.guard.accept(ctx,{...v.packet,lease_ms:14999},v.proof),'untrusted_receipt');assert.deepEqual(f.lab.registry.summary(),before);
+ const deny=createLeaseGuard({registry:f.lab.registry,clock:f.lab.host,policy:EXAMPLE_LEASE_POLICY});const req=deny.begin(ctx,{request_id:'deny',kind:'acquire',expected_epoch:'0'}),vv=f.receipt(ctx,req,g);reject(()=>deny.accept(ctx,vv.packet,vv.proof),'untrusted_receipt');f.guard.accept(ctx,v.packet,v.proof);assert.equal(f.lab.registry.summary().devices[0].controlled,true);deny.close();f.close();
+});
+test('bounded delay: response RTT inclusive boundary accepted, excessive RTT and local horizon rejected',()=>{
+ for(const age of [2000,2001]){const f=createLeaseBudgetLab(),ctx=f.lab.connect(),r=f.guard.begin(ctx,{request_id:'a',kind:'acquire',expected_epoch:'0'}),g=f.lab.actor.acquire(ctx,'op','0'),v=f.receipt(ctx,r,g);f.lab.host.advance(age);if(age===2000)f.guard.accept(ctx,v.packet,v.proof);else{const before=f.lab.registry.summary();reject(()=>f.guard.accept(ctx,v.packet,v.proof),'delay_exceeded');assert.deepEqual(f.lab.registry.summary(),before);}f.close();}
+ const f=setup();f.lab.host.advance(13973);f.guard.expect(f.ctx,f.lab.command(11,'1'));f.lab.host.advance(1);const before=f.lab.registry.summary();reject(()=>f.guard.expect(f.ctx,f.lab.command(58,'2')),'lease_expired');reject(()=>f.guard.accept(f.ctx,f.v.packet,f.v.proof),'lease_expired');assert.deepEqual(f.lab.registry.summary(),before);f.close();
+});
+test('receipt schema, context and exact epoch transitions reject without replacing actual/confirmation',()=>{
+ const f=setup();f.lab.play(f.ctx,{grant:f.grant,observation:f.guard.accept(f.ctx,f.v.packet,f.v.proof)},f.lab.command(0,'1'));const before=f.lab.registry.summary(),r=f.guard.begin(f.ctx,{request_id:'b',kind:'renew',expected_epoch:'1',lease_id:f.grant.lease_id});const good=f.receipt(f.ctx,r,f.grant).packet;
+ for(const mutate of [p=>p.grant.control_epoch='2',p=>p.grant.lease_id='wrong',p=>p.context.boot_id='wrong',p=>p.request_seq='999',p=>p.kind='acquire',p=>p.lease_ms=15001,p=>p.extra=true]){const p=structuredClone(good);mutate(p);assert.throws(()=>f.guard.accept(f.ctx,p,f.sign(p,f.ctx)));assert.deepEqual(f.lab.registry.summary(),before);assert.equal(f.guard.resources().confirmed,1);}
+ f.close();
+});
+test('same-tick renew sequencing: newer receipt wins, reordered earlier receipt cannot roll back',()=>{
+ const f=setup();const begin=id=>f.guard.begin(f.ctx,{request_id:id,kind:'renew',expected_epoch:'1',lease_id:f.grant.lease_id});const a=begin('b'),b=begin('c');f.lab.device.advance(10);const g=f.lab.actor.renew(f.ctx,f.grant),v=f.receipt(f.ctx,b,g);f.guard.accept(f.ctx,v.packet,v.proof);const old=f.receipt(f.ctx,a,g);reject(()=>f.guard.accept(f.ctx,old.packet,old.proof),'stale_response');reject(()=>f.guard.accept(f.ctx,f.v.packet,f.v.proof),'stale_response');const before=f.lab.registry.summary();reject(()=>f.lab.registry.control(f.ctx,g,{sent_at:0,lease_ms:13974}),'stale_control');assert.deepEqual(f.lab.registry.summary(),before);f.close();
+});
+test('duplicate accepted receipt stays tied to original send time and cannot extend lease',()=>{
+ const f=setup(),obs=f.guard.accept(f.ctx,f.v.packet,f.v.proof);f.lab.host.advance(1000);assert.deepEqual(f.guard.accept(f.ctx,f.v.packet,f.v.proof),obs);assert.equal(obs.sent_at,0);const p=structuredClone(f.v.packet);p.lease_ms=14000;reject(()=>f.guard.accept(f.ctx,p,f.sign(p,f.ctx)),'idempotency_conflict');f.close();
+});
+test('pending expiry, capacity and close reclaim state without granting control',()=>{
+ const f=createLeaseBudgetLab(),ctx=f.lab.connect();for(let n=0;n<32;n++)f.guard.begin(ctx,{request_id:`r${n}`,kind:'acquire',expected_epoch:'0'});reject(()=>f.guard.begin(ctx,{request_id:'overflow',kind:'acquire',expected_epoch:'0'}),'capacity_exceeded');f.lab.host.advance(2001);f.guard.expire();assert.equal(f.guard.resources().pending,0);const r=f.guard.begin(ctx,{request_id:'new',kind:'acquire',expected_epoch:'0'}),g=f.lab.actor.acquire(ctx,'op','0'),v=f.receipt(ctx,r,g);f.guard.close();f.guard.close();assert.equal(f.guard.resources().pending,0);reject(()=>f.guard.accept(ctx,v.packet,v.proof),'closed');f.lab.close();
+});
+test('disconnect/reconnect fences old proof and requires new acquire and latest target',()=>{
+ const f=setup();const initial=f.lab.command(0,'1');f.guard.expect(f.ctx,initial);f.lab.actor.set(f.ctx,f.grant,initial);f.lab.registry.disconnect(f.ctx);f.lab.actor.disconnect(f.ctx);f.guard.invalidate('D');const ctx=f.lab.connect();reject(()=>f.guard.accept(ctx,f.v.packet,f.v.proof),'stale_session');const r=f.guard.begin(ctx,{request_id:'new',kind:'acquire',expected_epoch:'1'}),g=f.lab.actor.acquire(ctx,'new_op','1'),v=f.receipt(ctx,r,g);f.guard.accept(ctx,v.packet,v.proof);const command=f.lab.command(58,'1');f.guard.expect(ctx,command);f.lab.actor.set(ctx,g,command);assert.equal(f.lab.actor.snapshot().desired.action_id,58);f.close();
+});
+test('completed replay window stays bounded and evicted request cannot resurrect',()=>{
+ const f=setup();let grant=f.grant;for(let n=0;n<70;n++){f.lab.host.advance(1);f.lab.device.advance(1);const r=f.guard.begin(f.ctx,{request_id:`n${n}`,kind:'renew',expected_epoch:'1',lease_id:grant.lease_id});grant=f.lab.actor.renew(f.ctx,grant);const v=f.receipt(f.ctx,r,grant);f.guard.accept(f.ctx,v.packet,v.proof);}assert.equal(f.guard.resources().completed,32);reject(()=>f.guard.accept(f.ctx,f.v.packet,f.v.proof),'unknown_request');assert.equal(f.guard.resources().confirmed,1);f.close();
+});
+test('device epoch remains final authority even if host is paused outside model bounds',()=>{
+ const f=setup();f.lab.device.advance(15000);const c=f.lab.command(11,'1');f.guard.expect(f.ctx,c);reject(()=>f.lab.actor.set(f.ctx,f.grant,c),'lease_expired');f.close();
+});
+test('worst-delay delivery: slow host/fast device accepts within budget; excess delay fails without replacing actual',()=>{
+ for(const delay of [1000,1100]){const f=setup(),initial=f.lab.command(0,'1');f.lab.play(f.ctx,{grant:f.grant,observation:f.guard.accept(f.ctx,f.v.packet,f.v.proof)},initial);
+  const realSend=13980;f.lab.host.advance(Math.floor(realSend*0.9995));f.lab.device.advance(Math.floor(realSend*1.0005));const command=f.lab.command(11,'2');f.guard.expect(f.ctx,command);f.lab.send('set',f.ctx,{grant:f.grant,command},{delay});
+  f.lab.host.advance(Math.floor((realSend+delay)*0.9995)-f.lab.host.now());f.lab.device.advance(Math.floor((realSend+delay)*1.0005)+800000-f.lab.device.now());f.lab.link.advance(delay);const result=f.lab.queue.flush()[0];if(delay===1000){assert.equal(result.ok,true);assert.equal(f.lab.actor.snapshot().desired.action_id,11);}else{assert.equal(result.code,'lease_expired');assert.equal(f.lab.actor.snapshot().desired.action_id,0);}assert.equal(f.lab.actor.snapshot().actual.action_id,0);f.close();
+ }
+});

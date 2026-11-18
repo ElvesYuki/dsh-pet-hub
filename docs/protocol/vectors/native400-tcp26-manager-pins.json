@@ -1,0 +1,13 @@
+{
+  "contract": "native400-preserving-renewal/1",
+  "wire_changes": false,
+  "node": "24.14.1",
+  "files": {
+    "packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+    "packages/core/native400-tcp.mjs": "4c6c5dc7143aa441bb203644320ae7aaed06cc0fe5d5422caa7752e4bd747384",
+    "packages/core/native400-scheduling.mjs": "b890a418c7d9378ded7cd433c2de5a3fefa59481348a52a426ae217a5c11731e",
+    "packages/core/protocol.mjs": "12582ab3ae0d2a4ed96e29da24601842b8f8167d7aba1cf06cf915c2b09d91c1",
+    "packages/core/pet4.mjs": "5717a7ecd90004540cb0025124f50a311db2276d228ee08b8834eb6103fa60c5",
+    "packages/core/crc32.mjs": "626dff165498b1eba1080a9692992f58784946534d35b3db58b7737737c6577d"
+  }
+}

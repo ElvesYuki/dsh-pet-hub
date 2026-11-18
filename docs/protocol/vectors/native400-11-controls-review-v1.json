@@ -1,0 +1,56 @@
+{
+  "schema": "native400-source-review-controls-assessment/1",
+  "date": "2026-11-03",
+  "status": "design-reviewed-not-implemented",
+  "scope": "two existing-API probes using original MIT temporary files; no real media/cache/firmware/device/service configuration",
+  "observations": [
+    {
+      "id": "OBS-01",
+      "scope": "existing path-only reader; original MIT fixture",
+      "selection_fingerprint_changed": true,
+      "existing_reader_accepted_opened_file": true,
+      "selected_cache_sha256": "b3a75d22d8cde8a5b1f76eaae9854fec4eafcac9d2018f7c1065e7b0f5148cae",
+      "opened_cache_sha256": "c4c639c497792b182d84cdcdcc633ff19348519dc615c5fbc4cea6683a9a63c4",
+      "bytes": 29360128,
+      "meaning": "Current reader validates the file opened at task start, not an earlier selection. Planned expectedSource must be checked inside that open before first read.",
+      "device_evidence": false
+    },
+    {
+      "id": "OBS-02",
+      "scope": "existing untargeted owner.cancel; original MIT fixture",
+      "previous_review_completed": true,
+      "next_revalidation_cancelled": true,
+      "cancel_has_no_job_id_contract": true,
+      "journal_revision": "1",
+      "actual_io_exited": true,
+      "meaning": "A new controller must synchronously match current job/session before invoking existing cancel(); the owner API does not supply that association.",
+      "device_evidence": false
+    }
+  ],
+  "planned_scenarios_executed": false,
+  "production_source_changes": 0,
+  "sources": {
+    "baseline": 332,
+    "unchanged": 332,
+    "modified": [],
+    "added": []
+  },
+  "planned_controls_profile": "native400-source-review-controls/1",
+  "planned_scenarios": {
+    "ids": "CTL-01–40",
+    "count": 40,
+    "status": "design only, not executed"
+  },
+  "verification": {
+    "existing_api_observations": 2,
+    "new_controls_tests": 0,
+    "syntax_check": "passed; syntax only",
+    "full_cases": 1273,
+    "full_observed_wall_ms": 94567,
+    "planned_controls_scenarios_executed": false
+  },
+  "compatibility": {
+    "wire_sha256": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "golden_sha256": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  }
+}

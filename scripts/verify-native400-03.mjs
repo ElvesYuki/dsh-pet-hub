@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-03.test.mjs'],expected:36,timeoutMs:120000,layer:'native400-wire-review-host-vectors',prefix:'h403-',scope:'Original MIT 400 review canonical JSON, 94 positive/116 negative Node-C++17 byte vectors, material-reference pinning and Node-only parsed HTTP/Range/ETag checks. Private temporary compiler artifact removed. No socket, firmware build/device, TLS handshake, media decode/import, production listener or existing configuration changes.'});

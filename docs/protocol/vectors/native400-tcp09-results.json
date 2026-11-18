@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "independent-LAN-single-instance-host-loopback-rehearsal-only",
+  "tests": {
+    "specialized_and_isolated": 13,
+    "check": "passed",
+    "full_with_build": 1550,
+    "full_exit_code": 0,
+    "full_wall_ms": 100263.048167
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 233,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "LHOST01 preparation is opaque non-consuming and default does not create TCP",
+    "LHOST02 explicit private mode rejects mixed modes before creating runtime",
+    "LHOST03 same runtime elects one owner and loser profile stays unacquired",
+    "LHOST04 mismatched references endpoint or policy cannot attach or acquire",
+    "LHOST05 read-only status filters private claims and rejects writes",
+    "LHOST06 default service omits LAN slot and rejects later LAN attachment",
+    "LHOST07 actual loopback is manual and attached close cannot stop winner",
+    "LHOST08 attaching or preparing new host cannot renew winner window",
+    "LHOST09 bad current snapshot fails closed and additions never leak",
+    "LHOST10 cleanup failure retains UDS fenced operations and permits manual retry",
+    "LHOST11 restart cannot reacquire old profile; explicit new profile remains unstarted",
+    "LHOST12 rejected late contender does not invalidate active winner profile",
+    "LHOST13 independent processes elect one LAN holder without auto listener"
+  ],
+  "source_sha256": {
+    "packages/runtime/native400-tcp-lan-profile.mjs": "6346f237d79481a5c323c0b4f66a193c9c1908a66e415acc48404c59cb6c5f2f",
+    "packages/runtime/native400-tcp-lan-host.mjs": "c6f1ebdbc60ee0571eee04046d19d662b5ada6c0b172f5c1606499f55c2980f2",
+    "packages/core/native400-tcp-lan-host-view.mjs": "fe9a54a6b74e0fae9447573d52bb31f38d7be02c059a1ff2769e9cfd95d08752",
+    "packages/runtime/service.mjs": "e1f83c1bbb63f23ee7ac9b79b5500b9fc744509a5f781f7b1925930cfdf79e44",
+    "tests/native400-tcp-lan-host.test.mjs": "2ca1299459ce78a787ad383b0bfafbe90e50b50fb02cdaaa969fa130f023aac8",
+    "tests/fixtures/native400-lan-host-child.mjs": "e32d4c55b107cd48f328916964e59ec7bca182f0f062d212bd29e8e13c58b394",
+    "scripts/verify-native400-tcp-lan-host.mjs": "e5dd4786bb4a45245c775bda108385f142e48a2b3d22ea4c40aed765820c333b"
+  },
+  "tcp08_comparison": {
+    "packages/runtime/native400-tcp-lan-profile.mjs": {
+      "unchanged": false,
+      "before": "368ac0eceaa3fbd869bd4f56570a3c8490c74c74af30379bf6eee808d6db3aa6",
+      "after": "6346f237d79481a5c323c0b4f66a193c9c1908a66e415acc48404c59cb6c5f2f"
+    },
+    "packages/runtime/native400-tcp-lan-owner.mjs": {
+      "unchanged": true,
+      "before": "3549d191df49058ffa476d9f1d05684ffc7ef16ef9d277822d2c884862905bd4",
+      "after": "3549d191df49058ffa476d9f1d05684ffc7ef16ef9d277822d2c884862905bd4"
+    },
+    "packages/runtime/native400-tcp-owner.mjs": {
+      "unchanged": true,
+      "before": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+      "after": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54"
+    },
+    "packages/runtime/native400-tcp.mjs": {
+      "unchanged": true,
+      "before": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+      "after": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922"
+    },
+    "tests/native400-tcp-lan.test.mjs": {
+      "unchanged": true,
+      "before": "f4882c54160ac08448e7991b629216132c084652f0cc25fbaba07ba86898a477",
+      "after": "f4882c54160ac08448e7991b629216132c084652f0cc25fbaba07ba86898a477"
+    },
+    "scripts/verify-native400-tcp-lan.mjs": {
+      "unchanged": true,
+      "before": "770468f5b48c2c98cdd808f311fb2d9cc0e382b6ce56912246ac39da73baf404",
+      "after": "770468f5b48c2c98cdd808f311fb2d9cc0e382b6ce56912246ac39da73baf404"
+    }
+  },
+  "readonly_endpoint_snapshot_sha256": {
+    "docs/context/current-status.md": "751d973a9925c33d7237ac1ad3560bad63375170e6f8dc30d0756b01ae13275d",
+    "docs/context/current-todos.md": "e986661a47d0dd39f41a92502c46ff139f2c4c7499c25bf5a119abf3bc9fac02",
+    "docs/protocol/round-pet400-sta-bootstrap.md": "9f986fb7fe1a2340a17f33f8e8bf6d7cfc2763e50b26ae6c33c4e4dc0aca13f5"
+  },
+  "actual_two_process_UDS_election": true,
+  "actual_owned_loopback": true,
+  "cleanup_failure_holds_UDS_and_fences": true,
+  "manual_close_retry_tested": true,
+  "actual_LAN_bind": false,
+  "STA_executed": false,
+  "ESP_connected": false,
+  "production_service_or_config_changed": false,
+  "real_source_or_material_usage_approved": false,
+  "decision_references_are_caller_declarations": true,
+  "new_UI_CLI_or_device_config_importer": false,
+  "new_wire": false,
+  "upstream_tests_rerun": false,
+  "not_covered": [
+    "R0 true source and material purpose approval",
+    "manager trusted config producer/UI and actual device credential handoff; upstream USB importer exists but has not run on hardware",
+    "actual LAN STA dynamic resources timing and worker/View/device cleanup",
+    "STATE media stream persistence V3"
+  ],
+  "endpoint_recheck_changes": [
+    "docs/context/current-status.md",
+    "docs/context/current-todos.md"
+  ],
+  "document_links_checked": 13,
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "final_build_exit_code": 0,
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "450cff048bc713a84f287e9d1d039eb57bcea08c6e7da1bf91c1ed31e193f9d5",
+    "docs/context/current-todos.md": "16b70a0f39e368f0bd5d2aebea4c9e5f543454b74debecd60ec5b56489f83acd",
+    "docs/protocol/round-pet400-sta-bootstrap.md": "9f986fb7fe1a2340a17f33f8e8bf6d7cfc2763e50b26ae6c33c4e4dc0aca13f5",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "apps/round-pet/reports/2026-11-05-400-usb-provision.md": "84f020517698583f431fb6b6d37bb14eb59c7f451779f464476eaf16eac3bab3",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/usb_lan_config.h": "55c75abcadf6e7a2a3c9dbd150d3e1a8734bfb7f9aac124721abc840f030e634",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/app_main.cpp": "a52a796ecc031cddf4972fe97c9e3f61e38f3922638e66021b94d28924bc6964",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9"
+  },
+  "endpoint_recheck_resolution": "Read latest USB provider interface, implementation and report; current summaries replaced, prior snapshot archived; no external code executed.",
+  "upstream_usb_provider_implemented": true,
+  "upstream_USB_or_STA_execution": false
+}

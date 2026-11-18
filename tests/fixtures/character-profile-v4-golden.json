@@ -1,0 +1,81 @@
+{
+  "scope": "pre_parameter_wiring_synthetic_numeric_reference_not_art_or_device",
+  "sources": {
+    "natural-motion": "68a50e77254dee34a92c696168f4147b1eb44b1a3a0907f3ca21466ea1af7b8a",
+    "states": "f51c91bc27d49b097fd9c7c76dfb9983d944d6eda291dabb8b5d29dbc8e87ddc",
+    "expression": "347ad7c02ca64ec624c2d50b0f400d6e6d3f683631e13c0473b0f5175f7822c3",
+    "speech": "1336d5c2c628ece4a0a77bfffab57d631fbf3504e923c7d008a106d6a9675668",
+    "wave": "2a7afd2220b73234fe283b4677ff7a62ebfa34aae06da8283866d1a4213f71f0",
+    "arm-morph": "eb06a7e11008df4f6556c7e1b41b3f385faaba6553ec1140b2d093b2105cfcc0"
+  },
+  "scenes": {
+    "idle": {
+      "sha256": "c25bf35029eec9a6e191f071c7f8428e4733e925d23228555e0cb8cbab5894d6",
+      "records": 289
+    },
+    "thinking": {
+      "sha256": "03c151b3f88bdbfcd5d1f954ef2232f1d2a205c97a2fbb7ad493d08ac29f0257",
+      "records": 290
+    },
+    "working": {
+      "sha256": "93a43655727664676538306eb3f085326ff9f4988fc74bf9faa8532a1e7dd6b7",
+      "records": 290
+    },
+    "success": {
+      "sha256": "00d8ce5cd3328002f7683da6e2d00b390d8f8a7b15c71c38ed00c67985d02420",
+      "records": 290
+    },
+    "latest_base": {
+      "sha256": "614583395cdde3ae6d659b052e3b5c5f177832d0532f6e5a9b4e3305e076c9dc",
+      "records": 292
+    },
+    "rapid_states": {
+      "sha256": "1d7bffb735751c2f7e03e172bf0fe3fd80bbb70eda05ada628b9d5a949c23b19",
+      "records": 309
+    },
+    "success_latest": {
+      "sha256": "e04630e0f6353560bdcacf9289f6e9aa3590d3b9f7786952b2c66ca6d4f6016e",
+      "records": 292
+    },
+    "repeated_success": {
+      "sha256": "96faf734d32c57c64a62e8240ea333d2e84bd2dff7e728fec63f73beec345ff5",
+      "records": 294
+    },
+    "state_speech": {
+      "sha256": "a5fd6852ca63a71f5d689a011a0f9f3d38bd40acd6cf83a0a4937a98fbe1118f",
+      "records": 294
+    },
+    "state_stop": {
+      "sha256": "caacfa762a3deeecbce1ed759e3aae69b65d70fa3f91e8967d62f511aa660279",
+      "records": 292
+    },
+    "wave": {
+      "sha256": "d4fa304168e0dde4267e7756eb5b0166a754c8ffd9e303d4bf83ab3f4822a850",
+      "records": 289
+    },
+    "wave_cancel": {
+      "sha256": "6ee9132686756fd8b95efdcc7fe17d3c9aa1d5e16c9a6be4f29845db8e11d076",
+      "records": 289
+    },
+    "wave_latest": {
+      "sha256": "af954ce9fcab76ea9d6148c2d31cf5e6f041fee7eeb1564b5ae485976c91c0ce",
+      "records": 292
+    },
+    "wave_speech": {
+      "sha256": "781e5761d19501a8885f2e68638903a505af8c34d19b252101521796efa4f3af",
+      "records": 292
+    },
+    "legacy": {
+      "sha256": "23a51fdc1950bed6c1e2f27e20a471d210f1e67254cdc0cf3eaa752c4dc0106f",
+      "records": 289
+    },
+    "contour": {
+      "sha256": "db957b84060c07e03068a67a84b59d839f6a88a18f51a3cf79e3ecb153d781bc",
+      "records": 7
+    }
+  },
+  "boundaries": {
+    "sha256": "73ffebcd7ed5772ec0e04a251d2dfb0b1691579da59f0b789f528354128d160b",
+    "records": 89
+  }
+}

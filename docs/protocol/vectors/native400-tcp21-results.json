@@ -1,0 +1,141 @@
+{
+  "passed": true,
+  "layer": "pet-public-reader-to-authorized-shared-TCP",
+  "cases": [
+    "PET01 default off never reads or requests authority",
+    "PET02 ready null thinking working map only 0 1 11 through real shared IPC",
+    "PET03 duplicate counters neither resubmit nor renew original TTL",
+    "PET04 rollback cancels own intent and fences the source generation",
+    "PET05 same counter different semantic is conflict, not replacement",
+    "PET06 unsupported actions withdraw target rather than pretending eight cached states",
+    "PET07 pending unsupported unavailable are never idle commands",
+    "PET08 lost ACK freezes new source reads and confirms only exact original body",
+    "PET09 manual revision change yields and close never cancels the newer target",
+    "PET10 page grant expiry cannot self renew bridge authority",
+    "PET11 close waits an active reader and discards its late source value",
+    "PET12 start polling is serialized and close clears its own timer",
+    "PET13 public capability probing distinguishes missing method pending and genuine idle",
+    "PET14 malformed ready data withdraws old intent and blocks",
+    "PET15 explicit public HTTP reader drives genuine shared TCP without source/page or pet writes",
+    "PET16 page capability wins and unsupported without explicit fallback cannot invent idle"
+  ],
+  "timeout": false,
+  "interrupted": false,
+  "observed_wall_ms": 3077,
+  "scope": "Original public HTTP/page reader fixtures, genuine audited window/shared IPC/real loopback TCP. No installed pet state, DSH profile or ESP accessed. Counter/TTL/unknown/authority/close boundaries.",
+  "temporary_environment_removed": true,
+  "date": "2026-11-06",
+  "full": {
+    "tests": 1820,
+    "passed": 1820,
+    "failed": 0,
+    "duration_ms": 103957.671042
+  },
+  "check_exit": 0,
+  "build_exit": 0,
+  "isolated_candidate_build_exit": 0,
+  "installed": {
+    "sources": [
+      {
+        "path": "package.json",
+        "sha256": "cbf5dc8ff3e6318cc61d966010e427aefa2042a1371155596de7f5af53bd3c64",
+        "bytes": 882
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/cordis/package.json",
+        "sha256": "70be1056619663339433309474b1e6a2307088097af3cb082afe4b5ca2021b26",
+        "bytes": 1241
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/schemastery/package.json",
+        "sha256": "b56f354704ff6e65c8a0c2639f0d46dffa74aaeef9c12e83d47d60f19021112b",
+        "bytes": 932
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-host-webserver/package.json",
+        "sha256": "3ec6f9e16028d6c21f265e133a6e6a1c53026b7855406a6554055035467f3a0d",
+        "bytes": 1249
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-client-connection/package.json",
+        "sha256": "cb3c6005e57364222419b904e7ef1537d50d19905e1c7402927d75cff6d961a5",
+        "bytes": 1767
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-client-connection/lib/index.js",
+        "sha256": "0ebcca7583e082716f79b0b55bc1749d48269cc8db2989b043b321b57abd3684",
+        "bytes": 44434
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-web-frontend/package.json",
+        "sha256": "cc96c62c5bfacfd153d8de41009839180fd6cb16d65eee639a201a6f94cba7e7",
+        "bytes": 2824
+      },
+      {
+        "path": "dsh/node_modules/@deepseek-ai/dsh-host-webserver/lib/index.js",
+        "sha256": "81a85ab619d8977e090e23124fd4e0e135c944c99b8b199eadea615532f2b2e3",
+        "bytes": 26614
+      },
+      {
+        "path": "frontend/assets/index-BgUyXZcc.js",
+        "sha256": "c7e9821660f7e0f0524cc7cb1a375a5171eebbe68e167b80d290bd2ea391286d",
+        "react1831": true,
+        "settingsSlot": false
+      }
+    ]
+  },
+  "installed_sources_stable_on_reread": true,
+  "candidate": {
+    "peer": {
+      "@deepseek-ai/schemastery": "3.19.0",
+      "@deepseek-ai/cordis": "4.1.0",
+      "@deepseek-ai/dsh-host-webserver": "0.2.2-rc.1",
+      "@deepseek-ai/dsh-client-connection": "0.2.2-rc.1",
+      "react": "18.3.1"
+    },
+    "single_bundle": true,
+    "old_peer_unchanged": true,
+    "dynamic_host_verified": false,
+    "config_slots_runtime_verified": false
+  },
+  "pet": {
+    "public_get_only_fixture": true,
+    "real_installed_getState_confirmed": false,
+    "real_source_changes_verified": false,
+    "mapping": {
+      "idle_null": 0,
+      "thinking": 1,
+      "working": 11
+    },
+    "unsupported": [
+      "result",
+      "success",
+      "waiting",
+      "error"
+    ],
+    "duplicate_counter_renews_ttl": false
+  },
+  "upstream_device_report": {
+    "path": "apps/round-pet/reports/2026-11-05-400-framed-peer.md",
+    "sha256": "e226d894071be39df2b5d56ad493fb438d242f66567bb5809ca43ea958e200d1",
+    "read_only": true,
+    "this_turn_device_access": false
+  },
+  "boundaries": {
+    "plugin_installed": false,
+    "profile_started": false,
+    "production_listener_started": false,
+    "pet_write_calls": false,
+    "dsh_session_listeners_added": false,
+    "firmware_written": false,
+    "commit_push": false
+  },
+  "sources": {
+    "packages/runtime/native400-pet-bridge.mjs": "f1627fa89ea0f3ce48c4093ca7e4d9d6693f3f632d8047b8fe9692add978f531",
+    "packages/runtime/native400-pet-reader.mjs": "7e3e8352461108d4b8f50b3f062c43c3d341bd9460235416177415cbb6c2d6b5",
+    "apps/dsh-plugin/host-022.mjs": "04fe2f40b9debefb8b65705bd536d0d435bba7ceb565e50881c948276be5703f",
+    "scripts/build-dsh022.mjs": "aa2cdf15218ca39856850df71cfcab8a66396eb86521d299d883bed53b337e67",
+    "tests/native400-pet-bridge.test.mjs": "bf4247029cc8dfa9927756620af6efd94836f298a54769b88759bf82eb4d9923",
+    "scripts/verify-native400-pet-bridge.mjs": "3a5b1b729b4f8dec70a022f134030d813a836eb9a24f8d5929f706a97d84c5f3"
+  }
+}

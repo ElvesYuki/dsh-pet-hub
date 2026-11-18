@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "private-local-request-and-device-JSON-offline-validation-only",
+  "tests": {
+    "specialized_and_isolated": 18,
+    "check": "passed",
+    "full_with_build": 1568,
+    "full_exit_code": 0,
+    "full_wall_ms": 102392.340458,
+    "final_build_exit_code": 0
+  },
+  "isolated": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 105,
+    "temporary_environment_removed": true
+  },
+  "cases": [
+    "REQ01 closed file supplies data only, separate fresh LAN decision is mandatory",
+    "REQ02 preparation/read never enumerate NIC or start TCP, snapshot has no private references",
+    "REQ03 identity sorting/copy and exact recipe preserve raw index domain",
+    "REQ04 shared or empty/oversized/private directory files reject and are preserved",
+    "REQ05 symlink/hardlink rejected without opening a second source",
+    "REQ06 decoded duplicate keys and malformed UTF8/numeric aliases fail strictly",
+    "REQ07 same-byte inode replacement and mutations are detected before preparation",
+    "REQ08 failure paths close fd and expose stable errors without request/path text",
+    "REQ09 pure device JSON matches upstream closed schema with exact index rename and sorted records",
+    "REQ10 pure configuration rejects loopback/wildcard/multicast/DNS/port overrides",
+    "REQ11 SSID uses UTF8 bytes/scalar Unicode and no NUL, not JS character count",
+    "REQ12 password empty or printable ASCII 8..63, newline and unknown fields rejected",
+    "REQ13 request close is idempotent and permanently fences config handoff",
+    "REQ14 unstarted actual UDS winner cannot hand off, attaching process has no owner",
+    "REQ15 public methods/fake owner/other option cannot forge endpoint or readiness",
+    "REQ16 expired and closed actual owners cannot issue endpoint or renew window",
+    "REQ17 actual owned loopback endpoint cannot be exported as device configuration",
+    "REQ18 new preparation or raw source approval cannot bind to an older owner"
+  ],
+  "source_sha256": {
+    "packages/core/native400-tcp-network.mjs": "ad6566f5360e27e98f413d25823e7f670b9f462ebb21568f2b3cdddd16b6818d",
+    "packages/runtime/native400-tcp-lan-profile.mjs": "664cf33e2ba53d48042bcd87d8a5a5c8f1c091e510e3df5acd0b98d5c4764410",
+    "packages/runtime/native400-tcp-lan-host.mjs": "df374669a4c11ed661a8ef279fbb8655ceb6b5c392728959a5c0ee1b7abfbc20",
+    "packages/runtime/native400-tcp-lan-request.mjs": "7dca9133089f975f099c2c70447160c198f5db88260b248ad4d67fddc784d4df",
+    "tests/native400-tcp-lan-request.test.mjs": "7bcdc33fb2148594e868c1f5d8af78f6757f903453eae1895ff0fb952f97e0f0",
+    "scripts/verify-native400-tcp-lan-request.mjs": "ce9f464c5aeebf614263f0dfd786c5cd3ac556f1858ceab7176b4e1469daec5d"
+  },
+  "unchanged_transport_and_service": {
+    "packages/runtime/native400-tcp-owner.mjs": {
+      "sha256": "762136ac16945019c6baebb71f18378b9d29d4c57635667d7df97a63e87e2c54",
+      "matches_tcp09": true
+    },
+    "packages/runtime/native400-tcp-lan-owner.mjs": {
+      "sha256": "3549d191df49058ffa476d9f1d05684ffc7ef16ef9d277822d2c884862905bd4",
+      "matches_tcp09": true
+    },
+    "packages/runtime/native400-tcp.mjs": {
+      "sha256": "d297bb3642dd227180f1465ac21ef415444793e16d08c261b65d870b0b379922",
+      "matches_tcp09": true
+    },
+    "packages/runtime/service.mjs": {
+      "sha256": "e1f83c1bbb63f23ee7ac9b79b5500b9fc744509a5f781f7b1925930cfdf79e44",
+      "matches_tcp09": true
+    }
+  },
+  "readonly_endpoint_sha256": {
+    "docs/context/current-status.md": "0a618b3106118a05cbf442be6bafbe9194281d6c1208feb4c3475828952fc8b8",
+    "docs/context/current-todos.md": "19efec45fb04b56a8300dc645e4813e10d4187fe28d5f51ab55c15c279417eee",
+    "docs/protocol/round-pet400-usb-provision.md": "e00fe41efe6cbaffd74e4456b852a5e1c6256b345bdf5a0fa2181fa34c04f285",
+    "apps/round-pet/reports/2026-11-05-400-usb-provision.md": "84f020517698583f431fb6b6d37bb14eb59c7f451779f464476eaf16eac3bab3",
+    "apps/round-pet/reports/2026-11-05-400-usb-provision.json": "6cd586f74394abe40b2f4459daa0e839de6069c67f4d1ddd660003553a29eb34",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_identity.h": "459c2d768f8f2f4473fe0b3b4e864cf13681c08f88bd5fb74b2415a38b8adbed",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/boot_catalog.h": "ff4877666b00f08b5a394a2329efc9cc8f8d23b4d6812af1437f771e725863fb",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/usb_lan_config.h": "55c75abcadf6e7a2a3c9dbd150d3e1a8734bfb7f9aac124721abc840f030e634",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/control_owner_firmware.cpp": "a7d642f0d00d94202be9fe4e655dbb410a71e32fb343fd24dc14d476eecbaf87",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/station_bootstrap.h": "f37755e4484a29c17859c59ca24733a5818ce1e7b2f043bb901b07d99b0c49b1",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/station_bootstrap_firmware.cpp": "6b9671d513a0c8c4e00cd45e373dd7f1bc275e0fbfce3b4a362f45e1d67d27c7",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/app_main.cpp": "a52a796ecc031cddf4972fe97c9e3f61e38f3922638e66021b94d28924bc6964",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/CMakeLists.txt": "d0b1b21414874fb2a48dcf4b191a77a4caad9084657836a6c84d0e541f5784d0",
+    "tools/round-pet/native400_usb_config.py": "0318c2a415a677f2246b8a97d46b7172dc4ed692d623bba693b1b729bfe19ff9"
+  },
+  "metadata_review": {
+    "status": "read-only-metadata-identity-review-not-material-purpose-approval-or-live-inventory",
+    "manifest_sha256": "a1c7c2a6a6a5ffeb113e403262252739271afc18db0a6d53ab40f1ebbab94ae5",
+    "recipe": "native400-compact-approved-v1",
+    "actions": 78,
+    "visual_approval_existing": true,
+    "raw_indexes": {
+      "library78": "5bd657d47a288b055c4806e4245c07c470ad9057edf37338c75d8450fe19df29",
+      "role8": "afdda0e87d05ebad3117a25100ad330f58c6b6564adaf10c881b060ce2b92f99"
+    },
+    "records": [
+      {
+        "id": 0,
+        "bytes": 4607051,
+        "frames": 241,
+        "sha256": "c4f7ef90127f02bfb617da30811dfdb429de93369b2c3a8b5563564b6ab4c3fb"
+      },
+      {
+        "id": 1,
+        "bytes": 3568101,
+        "frames": 241,
+        "sha256": "8a408b12da9f2161917e9a15cc5bc40c77f557b62a62132e94c006261af73d76"
+      },
+      {
+        "id": 4,
+        "bytes": 3972049,
+        "frames": 241,
+        "sha256": "35ce44888bcc2263d7e9d8aca8e55527833523a6e4985ba650877febf34e7980"
+      },
+      {
+        "id": 11,
+        "bytes": 4172848,
+        "frames": 241,
+        "sha256": "e13c50b66a3d8240b8ceeda7da18223ca1176d03a58206e15f76c5b42ac025ce"
+      }
+    ],
+    "frame42": 118,
+    "media_rehashed": false,
+    "new_purpose_approval": false
+  },
+  "upstream_boundary": {
+    "namespace_manifest_samples_checked_in_firmware_arm": true,
+    "role_index_compared_to_independent_compiled_constant": false,
+    "role_index_participates_in_mapping": true,
+    "reported_upstream_tool_tests": 189,
+    "upstream_tests_rerun": false,
+    "station_candidate_deployed": false
+  },
+  "actual_owned_UDS_and_loopback": true,
+  "actual_LAN_bind": false,
+  "successful_live_LAN_owner_handoff": false,
+  "handed_off_success_then_second_call_branch_tested": false,
+  "real_USB_STA_ESP": false,
+  "real_credentials_or_request_generated": false,
+  "new_material_usage_approval": false,
+  "firmware_scripts_executed": false,
+  "new_UI_CLI_product_entry": false,
+  "existing_service_config_changes": false,
+  "not_covered": [
+    "R0 independent material purpose decision and actual current cache provenance",
+    "Successful live LAN endpoint to one-shot device config and second-handoff rejection branch",
+    "Trusted caller credential/file lifecycle and same-boot USB operation",
+    "Actual STA resources worst latency worker/View and cleanup evidence",
+    "STATE media streaming persistence V3"
+  ],
+  "document_links_checked": 13,
+  "source_hashes_match": true,
+  "dist_matches_source": true,
+  "dist_license_current": true,
+  "endpoint_final_recheck_changes": []
+}

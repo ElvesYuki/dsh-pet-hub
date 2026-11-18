@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-node-load-audit.test.mjs'],expected:27,timeoutMs:30000,layer:'native400-observed-Node-imports',prefix:'tcp16-',scope:'Fresh fixed Node child, copied reviewed manager module only, actual loader source bytes, declared JSON/static/dynamic imports, closed resolution failures, private snapshot lease, timeout/abort/actual child+stdio cleanup. No service start, upstream Python/serial, device, credentials or LAN window; not a sandbox or full execution closure.'});

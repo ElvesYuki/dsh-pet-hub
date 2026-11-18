@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-connection-controls.test.mjs'],expected:20,timeoutMs:30000,layer:'native400-Connection-candidate-contract-and-shared-controls',prefix:'tcp20-',scope:'Original audited metadata/cache, independent bounded window, real scoped IPC and temporary HTTP; injected rc.5 Connection contract, separate fixture host-owner admission and hub grants; streaming limits, cancellation/unload, CAS/idempotency, page regrant and candidate loader. Not installed DSH authentication or ESP.'});

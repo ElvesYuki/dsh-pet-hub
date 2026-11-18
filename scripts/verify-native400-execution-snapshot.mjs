@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-execution-snapshot.test.mjs'],expected:26,timeoutMs:30000,layer:'native400-declared-execution-snapshot',prefix:'tcp15-',scope:'Explicit reviewed file inventory and private copies, original Node child imports copied dependency, pre/post verification and actual child/stdio lease. Synthetic Python bytes only. Not full runtime/import closure, upstream Python/serial, device, LAN window or material approval.'});

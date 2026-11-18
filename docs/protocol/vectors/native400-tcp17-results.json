@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "pure-Node-launcher-and-actual-loopback-cached-control-only",
+  "tests": {
+    "isolated": 21,
+    "check": "passed",
+    "full_with_build": 1730,
+    "full_exit_code": 0,
+    "full_wall_ms": 103797.187833,
+    "final_build_exit_code": 0,
+    "full_runs": 1
+  },
+  "cases": [
+    "NODE01 explicit enable and genuine option required before runtime I/O",
+    "NODE02 winner starts only host transport, network readiness remains explicit",
+    "NODE03 existing IPC stays read-only and deviceTransport remains disabled",
+    "NODE04 attached launcher has no control and closing it cannot stop winner",
+    "NODE05 mismatching contender cannot replace a running winner or its config",
+    "NODE06 real cached 0/1/11 exchange needs independent simulated frame report",
+    "NODE07 touch keeps priority while latest remote base changes, then returns latest",
+    "NODE08 cancel converges and remote touch action4 stays forbidden",
+    "NODE09 reconnect does not replay base and explicit reapply preserves remaining TTL",
+    "NODE10 pause closes session, resume and network epochs never replay old target",
+    "NODE11 expired independent window closes transport without granting a replacement",
+    "NODE12 pre-abort creates no runtime directory or listener",
+    "NODE13 close during pending UDS startup cleans a late winner without starting TCP",
+    "NODE14 close fences synchronously and waits actual peer, TCP and UDS exit",
+    "NODE15 abort after ready closes owned resources and never changes another profile",
+    "NODE16 unsafe runtime directory fails without overwriting caller files",
+    "NODE17 public view never exposes endpoint, source hashes or local runtime path",
+    "NODE18 two independent Node processes with empty PATH elect one TCP owner",
+    "NODE19 pure Node process executes actual binary TCP and clean shutdown without Python",
+    "NODE20 TCP startup failure unwinds the elected service and does not expose raw errors",
+    "NODE21 uncertain service cleanup stays explicit until manual correction and close retry"
+  ],
+  "isolated": {
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 313,
+    "temporary_environment_removed": true
+  },
+  "source_sha256": {
+    "packages/runtime/index.mjs": "ba0f875c9d5c09fc48a80de98efa4d0c9d47e228842428c9375ffa4f4bb9ddef",
+    "packages/runtime/native400-node-control-window.mjs": "a1578737b5cfaa3b540362581f27d1062334c9f982860fe5831ac11417a1edba",
+    "tests/native400-node-control-window.test.mjs": "621acc5261c5c0a69ecef16fa84bff5658bc6a193bbaad1fc09a5fe6310da656",
+    "tests/fixtures/native400-node-window-child.mjs": "459657d4c8047089e51e50fb71bee66bdc80658024359cef9a0197a0580d20c4",
+    "scripts/verify-native400-node-control-window.mjs": "a99d685a4b51b35946ebe60e18ad0bc3f9423956e8c59508609cf83b9d209d86"
+  },
+  "existing_source_changes": [
+    "packages/runtime/index.mjs"
+  ],
+  "readonly_endpoint_initial_sha256": {
+    "docs/context/current-status.md": "edc921480097619124bc564a9475df6610f82950908ceee47456004a21e2a31c",
+    "docs/context/current-todos.md": "2467a8a83c4c558e5b677fc750a27fae3c62fb6eb400e336dde5ebb72f471b0a",
+    "apps/round-pet/reports/2026-11-05-400-pmu-device.md": "4cafa5cf181e294e624cdcc254fcd30b6db2e093c9ea27e18644736eab5ed741"
+  },
+  "readonly_endpoint_final_sha256": {
+    "docs/context/current-status.md": "796dccb9106c9d7c40ff6068057240208c87c59a4a5f3dc53f9e2b956c340a66",
+    "docs/context/current-todos.md": "c1cdbe3d6ee5ba325d84da9bd45041005bd2a932edde4705c8bb5101e88c72c3",
+    "apps/round-pet/reports/2026-11-05-400-pmu-device.md": "4cafa5cf181e294e624cdcc254fcd30b6db2e093c9ea27e18644736eab5ed741"
+  },
+  "endpoint_changes_during_turn": [
+    "docs/context/current-status.md",
+    "docs/context/current-todos.md"
+  ],
+  "additional_readonly_reference_sha256": {
+    "docs/context/plans/round-pet-400-startup-analysis.md": "931b1f480b679cfc6afb573e682275458c3231f003562075d6e288d1bc89644b"
+  },
+  "formal_manager_Python_required": false,
+  "Python_USB_tool_optional_external_development_only": true,
+  "actual_isolated_Node_service_startup": true,
+  "actual_UDS_singleton_and_loopback_TCP": true,
+  "actual_independent_Node_processes_with_empty_PATH": true,
+  "actual_binary_HELLO_OPEN_BASE_ACK_PRESENTED_CANCEL_with_original_model": true,
+  "frame0_is_simulated_device_report_not_ESP": true,
+  "cached_actions_tested": [
+    0,
+    1,
+    11
+  ],
+  "touch_4_only_local_model": true,
+  "reconnect_does_not_replay_and_reapply_preserves_remaining_TTL_tested": true,
+  "explicit_network_ready_required_tested": true,
+  "actual_startup_cancel_and_peer_TCP_UDS_shutdown": true,
+  "actual_descriptor_cleanup_failure_and_explicit_manual_retry_tested": true,
+  "service_core_owner_codec_and_TTL_unchanged": true,
+  "new_IPC_write_routes": false,
+  "new_product_UI_or_CLI": false,
+  "slice_actual_LAN_bind_or_ESP": false,
+  "firmware_or_USB_script_executed": false,
+  "real_credentials_or_inventory_read": false,
+  "real_material_or_window_approval_issued": false,
+  "existing_service_profile_changes": false,
+  "upstream_evidence_separate": {
+    "restored_app_prefix": "f5538cb9",
+    "playback_and_touch_confirmed": true,
+    "candidate20f4_third_start_failure_cause_unknown": true,
+    "real_TCP_business_accepted": false,
+    "current_frame_rate_and_fluency_user_accepted": true,
+    "strict_24fps_no_longer_acceptance_gate": true,
+    "nominal_material_24fps_and_CRC_SHA_resource_checks_preserved": true,
+    "executed_by_this_task": false
+  },
+  "not_covered": [
+    "Product UI/CLI controlled operation wiring and real LAN combined source/audit/window success",
+    "Real device networking/provisioning and ESP ACK/PRESENTED/cancel/link-loss evidence",
+    "Stable startup, actual RAM/stack/worst latency and performance regression under TCP load",
+    "Product Node/native USB/BLE pairing, STATE/media/persistence/V3"
+  ],
+  "document_links_checked": 16,
+  "dist_runtime_matches_source": true,
+  "dist_license_current": true
+}

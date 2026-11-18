@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-tcp-lan-host.test.mjs'],expected:13,timeoutMs:30000,layer:'native400-lan-single-instance-host',prefix:'tcp09-',scope:'Independent LAN host with original synthetic decisions and injected interfaces; actual private UDS/two processes/loopback only. Winner acquires once, attached read-only, failed cleanup retains UDS. No real LAN bind/STA/ESP/source approval/device config or production service changes.'});

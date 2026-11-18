@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-tcp-network.test.mjs'],expected:12,timeoutMs:30000,layer:'native400-tcp-peer-link-policy',prefix:'tcp06-',scope:'Pure explicit IPv4 peer selection and trusted local link epochs; real owned loopback owner sessions, reconnect and cleanup, original PC-source fixture. No LAN bind, ESP, real cache/material, firmware execution or production/config changes. IP/mapping are not authentication; no new wire or current playback proof.'});

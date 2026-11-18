@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "profile": "native400-provider-review/1",
+  "verification_date": "2026-11-03",
+  "documentation_completed": "2026-11-04",
+  "scope": "offline-original-fixtures-and-readonly-installed-source-review",
+  "license_ref": "MIT-original-test-code",
+  "device_evidence": false,
+  "tests": {
+    "host": 10,
+    "isolated_cli": 10,
+    "full": 1405,
+    "check": "syntax-only-passed",
+    "build": "passed"
+  },
+  "isolation": {
+    "passed": true,
+    "timeout": false,
+    "interrupted": false,
+    "observed_wall_ms": 761,
+    "temporary_environment_removed": true
+  },
+  "host_cases": [
+    "400-15-01 fixture page visit grants no source privilege or read",
+    "400-15-02 trusted handoff is HttpOnly same-site and no network mint path exists",
+    "400-15-03 original selected bytes traverse actual temporary proxy UDS reader journal",
+    "400-15-04 lost HTTP ACK manual identical retry does not reread or reapply",
+    "400-15-05 revoke during actual source gate blocks old page and waits I/O exit",
+    "400-15-06 unload reload preserves owner and current source result",
+    "400-15-07 unknown is blocked then reopen keeps history and denies old page",
+    "400-15-08 close releases owned gates sockets source and fixture directory",
+    "400-15-09 expired trusted fixture session can be explicitly replaced without extending original deadline",
+    "400-15-10 browser CLI drains explicit trusted commands and cleans own files on EOF"
+  ],
+  "installed_snapshot": {
+    "dsh_version": "0.2.1-rc.5",
+    "method": "readonly ASAR source inspection; six sources rechecked unchanged after review",
+    "dynamic_dsh_validation": false,
+    "sources": [
+      {
+        "file": "dsh/node_modules/@deepseek-ai/dsh-authorization/lib/index.js",
+        "bytes": 10324,
+        "sha256": "cfe0784f14f5cc55e0e1c18fc82290967e41e48afb964dc4f6384f84e4bab1ef"
+      },
+      {
+        "file": "dsh/node_modules/@deepseek-ai/dsh-desktop-host/package.json",
+        "bytes": 1201,
+        "sha256": "665a36c8736dbe49876023fb0c322dced6befef931141638bcfb4f010ee2e5a3"
+      },
+      {
+        "file": "dsh/node_modules/@deepseek-ai/dsh-host-webserver/lib/index.js",
+        "bytes": 21436,
+        "sha256": "08907285802f0edd3aeb68c91fb443be2804879ab3d41104c4600424be06f3ab"
+      },
+      {
+        "file": "lib/main.js",
+        "bytes": 516716,
+        "sha256": "9712da3c65d5d4262da7e6d41dad30586070c8eb47f078c62165de2bdba572c3"
+      },
+      {
+        "file": "dsh/node_modules/@deepseek-ai/dsh-client-connection/lib/index.js",
+        "bytes": 44434,
+        "sha256": "0ebcca7583e082716f79b0b55bc1749d48269cc8db2989b043b321b57abd3684"
+      },
+      {
+        "file": "lib/preload-app.cjs",
+        "bytes": 41075,
+        "sha256": "f323eb67f7ace407d3b1d858f264f7846e436d9ba3e80c02b0454a6da0aed968"
+      }
+    ]
+  },
+  "browser": {
+    "actual_dom": true,
+    "react_version": "18.3.1",
+    "browser_reported_ua_chrome": "156.0.0.0",
+    "react_seed_sha256": "42132116b0399614471d950ca2c915ca97048e6b87ed9515f32244e43c190bf5",
+    "seed_provenance": "previously locally prepared fixed seed; not an rc.5 frontend compatibility proof",
+    "observations": [
+      {
+        "id": "B01",
+        "result": "passed",
+        "scope": "Unprivileged actual DOM disables review/revalidation/cancel; original source reads=0."
+      },
+      {
+        "id": "B02",
+        "result": "passed",
+        "scope": "Explicit trusted test-side HttpOnly/SameSite=Strict cookie handoff; no file-path input; document.cookie cannot read review cookie."
+      },
+      {
+        "id": "B03",
+        "result": "passed",
+        "scope": "Actual start click reaches original reader/journal; revision1/current; one original pass=471 read callbacks."
+      },
+      {
+        "id": "B04",
+        "result": "passed",
+        "scope": "Historical reopen then actual revalidation click restores current without incrementing revision1."
+      },
+      {
+        "id": "B05",
+        "result": "passed",
+        "scope": "Actual cancellation displays wait for I/O while original gate holds busy/open_files1; release yields cancelled/io_exited and preserves revision1."
+      },
+      {
+        "id": "B06",
+        "result": "passed",
+        "scope": "Accepted ACK suppressed by HTTP503; actual confirm button repeats original request; new writes disabled; total read callbacks471->942, start HTTP requests1->3, revision remains1."
+      },
+      {
+        "id": "B07",
+        "result": "passed",
+        "scope": "Real page reload leaves callbacks942/start requests3/revision1 unchanged."
+      },
+      {
+        "id": "B08",
+        "result": "passed",
+        "scope": "Temporary proxy unload removes operation component, owner stays alive; reload restores usable operations. Not actual DSH module unload."
+      },
+      {
+        "id": "B09",
+        "result": "passed",
+        "scope": "Post-rename unknown blocks new writes; trusted reopen is historical revision2 and old page readonly; new session plus explicit revalidation yields current revision2."
+      },
+      {
+        "id": "B10",
+        "result": "passed",
+        "scope": "Own isolated context cookie explicitly cleared and own tab closed; both interactive fixtures report owned temporary environments removed; private browser-state removed."
+      }
+    ],
+    "page_identity": "synthetic trusted cookie handoff; not actual DSH identity",
+    "request_error_noise": "Expected401/404/503, expired polling and intentional transport faults; no zero-console-error claim."
+  },
+  "source_comparison": {
+    "existing_files": 344,
+    "unchanged": 344,
+    "modified": [],
+    "added": [
+      "scripts/verify-native400-15.mjs",
+      "scripts/native400-browser-review.mjs",
+      "tests/native400-15.test.mjs",
+      "tests/fixtures/native400-browser-harness.mjs"
+    ],
+    "deleted": []
+  },
+  "fixed_wire": {
+    "packages/core/native400-wire-contract.json": "49db914d608538b14e50feac5b92bcdddce904f0d77fce0393b97e64ffbea0e6",
+    "docs/protocol/vectors/native400-03-wire-v1.json": "8c88f723cd233df73f022f1b789c93adaf21a1c03a7b5db343d1d2d18c671876"
+  },
+  "original_map_sha256": "2402c4e86e1df3979fce573923bb2452d9b61f2bfe9f97fcfe7588711e1dd5d0",
+  "not_validated": [
+    "actual-DSH-user-identity",
+    "native-file-dialog",
+    "trusted-production-broker",
+    "rc5-profile-config-react-slots-load-reload-unload",
+    "desktop-custom-scheme-write-adapter",
+    "real-source-usage-device-production-admission"
+  ],
+  "defaults": {
+    "production_listener": false,
+    "installed_plugin": false,
+    "review_provider": "absent-unless-trusted-opt-in"
+  }
+}

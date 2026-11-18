@@ -1,0 +1,2 @@
+import {verifyIsolated} from './lib/isolated-verifier.mjs';
+await verifyIsolated({files:['tests/native400-pet-bridge.test.mjs'],expected:16,timeoutMs:30000,layer:'pet-public-reader-to-authorized-shared-TCP',prefix:'tcp21-',scope:'Original public HTTP/page reader fixtures, genuine audited window/shared IPC/real loopback TCP. No installed pet state, DSH profile or ESP accessed. Counter/TTL/unknown/authority/close boundaries.'});

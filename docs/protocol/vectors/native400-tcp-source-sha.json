@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-04",
+  "source": "ai-embedded-studio read-only snapshot",
+  "sha256": {
+    "docs/context/current-status.md": "0c4c8c61c25cd9fc860575e6ed96375a4a300cdb7bbcd27247d765e56f85f646",
+    "docs/context/current-system.md": "3602fa39387f8c93e950eaf7879177f101a02e58bfc312e17927ba6e44c4311a",
+    "docs/context/current-todos.md": "29a8328dd54d33bfe1adb42802d6e9dbc1829fae0cf420a054956c45f942b81d",
+    "docs/context/plans/round-pet-400-tcp-draft-spec.md": "bbbbaa4889d602f96d9083130e88e527fe5b27c2efac578d144c911da3641285",
+    "docs/context/plans/round-pet-400-tcp-draft-diff.md": "b40969692976c0040e3e030579ee253d7da30617b850d8db1b5a4204d06b5e54",
+    "docs/protocol/round-pet400-tcp-control-draft.md": "ef5cd4402eb3ab7a216747f844cb63708985999b96931d32883a63ad7cf2499b",
+    "docs/protocol/vectors/round-pet400-tcp-draft-v0.json": "870778cea3a59d7a3d9601d87ff6105d4d27c22ca36acbd8e846bd40359bc843",
+    "apps/round-pet/reports/2026-11-04-400-tcp-draft.md": "93bc2a7b77868d109ae965dab03a95d38128f6409912782e00ecda3cd6843107",
+    "apps/round-pet/devices/esp32s3-touch-amoled-175c/main/tcp_control_draft.h": "acf5a3c69ddd189b075972cbd421f3a33788facf90ef23d35e9cf5ae7df24837"
+  }
+}
