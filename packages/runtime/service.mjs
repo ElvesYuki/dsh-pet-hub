@@ -1,5 +1,5 @@
 import {native400NodeControlDescriptor,createNative400NodeControlChannel} from './native400-node-control-channel.mjs';
-import {createVp8ActionOwner, vp8ActionDescriptor} from './vp8-action-update.mjs';
+import {createDeviceUpdateOwner, deviceMediaDescriptor} from './device-update.mjs';
 import {native400LanHostDescriptor,createNative400LanHostOwner} from './native400-tcp-lan-host.mjs';
 import {createNative400ConfigOwner} from './native400-config-owner.mjs';
 import {createNative400ReviewedConfigSession} from './native400-private-config-session.mjs';
@@ -49,7 +49,7 @@ function readBody(req) {
   });
 }
 /** bind() is the ownership lock. Never unlink an existing socket to win startup. */
-export async function startOrAttach({ directory, source: sourceOptions = {}, deviceMode = 'disabled', simulationFactory, materialImport, materialQuotaBytes=1073741824, managedSessions, observationReview, roundPetAssembly, sourceReview, tcpReview, lanReview, nodeControl, vp8Update, onVp8LocalStop } = {}) {
+export async function startOrAttach({ directory, source: sourceOptions = {}, deviceMode = 'disabled', simulationFactory, materialImport, materialQuotaBytes=1073741824, managedSessions, observationReview, roundPetAssembly, sourceReview, tcpReview, lanReview, nodeControl, deviceUpdate, onDeviceLocalStop } = {}) {
   requireThat(Number.isSafeInteger(materialQuotaBytes)&&materialQuotaBytes>=1&&materialQuotaBytes<=8589934592,'invalid_quota');
   if (!['disabled','simulation'].includes(deviceMode) || (deviceMode === 'simulation' && (typeof simulationFactory !== 'function' || (sourceOptions.mode ?? 'disabled') !== 'disabled'))) throw new Error('invalid simulation configuration');
   if(materialImport && deviceMode!=='simulation') throw new Error('material import requires simulation');
@@ -67,18 +67,18 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
   if(lanReview&&(typeof directory!=='string'||!directory.length||deviceMode!=='disabled'||(sourceOptions.mode??'disabled')!=='disabled'||managedSessions||observationReview||roundPetAssembly||sourceReview||materialImport||tcpReview))throw new Error('lan review requires explicit directory and isolated disabled modes');
   const lanDescriptor=lanReview?native400LanHostDescriptor(lanReview):null;
   const nodeDescriptor=nodeControl?native400NodeControlDescriptor(nodeControl,lanReview):null;
-  if (vp8Update && (deviceMode !== 'disabled' || managedSessions || observationReview || roundPetAssembly ||
-      sourceReview || tcpReview || lanReview || nodeControl)) throw new Error('vp8_update_owner_conflict');
-  if (onVp8LocalStop !== undefined && (!vp8Update || typeof onVp8LocalStop !== 'function'))
-    throw new Error('vp8_local_stop_requires_owner');
-  const vp8Descriptor = vp8Update ? vp8ActionDescriptor(vp8Update) : null;
+  if (deviceUpdate && (deviceMode !== 'disabled' || managedSessions || observationReview || roundPetAssembly ||
+      sourceReview || tcpReview || lanReview || nodeControl)) throw new Error('device_update_owner_conflict');
+  if (onDeviceLocalStop !== undefined && (!deviceUpdate || typeof onDeviceLocalStop !== 'function'))
+    throw new Error('device_local_stop_requires_owner');
+  const deviceUpdateDescriptor = deviceUpdate ? deviceMediaDescriptor(deviceUpdate) : null;
   const paths = runtimePaths(directory, true);
   const source = createSource(sourceOptions);
-  const sourceKey = createHash('sha256').update(JSON.stringify({...(vp8Descriptor?{vp8Update:vp8Descriptor}:{}),...(onVp8LocalStop?{vp8LocalStop:true}:{}),...(lanDescriptor?{lanReview:lanDescriptor}:{}),...(nodeDescriptor?{nodeControl:nodeDescriptor}:{}),...(tcpDescriptor?{tcpReview:tcpDescriptor}:{}),...(sourceReviewDescriptor?{sourceReview:sourceReviewDescriptor}:{}),...(assemblyDescriptor?{roundPetAssembly:assemblyDescriptor}:{}),...(observationDescriptor?{observationReview:observationDescriptor}:{}),...(managedDescriptor?{managedSessions:managedDescriptor}:{}), materialQuotaBytes,materialImport:materialImport??null, deviceMode, mode: sourceOptions.mode ?? 'disabled', base: sourceOptions.mode === 'http' ? sourceOptions.base : null })).digest('hex');
+  const sourceKey = createHash('sha256').update(JSON.stringify({...(deviceUpdateDescriptor?{deviceUpdate:deviceUpdateDescriptor}:{}),...(onDeviceLocalStop?{localDeviceStop:true}:{}),...(lanDescriptor?{lanReview:lanDescriptor}:{}),...(nodeDescriptor?{nodeControl:nodeDescriptor}:{}),...(tcpDescriptor?{tcpReview:tcpDescriptor}:{}),...(sourceReviewDescriptor?{sourceReview:sourceReviewDescriptor}:{}),...(assemblyDescriptor?{roundPetAssembly:assemblyDescriptor}:{}),...(observationDescriptor?{observationReview:observationDescriptor}:{}),...(managedDescriptor?{managedSessions:managedDescriptor}:{}), materialQuotaBytes,materialImport:materialImport??null, deviceMode, mode: sourceOptions.mode ?? 'disabled', base: sourceOptions.mode === 'http' ? sourceOptions.base : null })).digest('hex');
   const instanceId = randomUUID(), token = randomBytes(32).toString('hex');
   let config = { schemaVersion: 1, revision: 0, displayName: '实体宠物设备' };
   let closed = false, ready=false, closing, sessions=null, simulation = null, materials = null, materialStore = null, catalogFailure=null, lifecycle=null, roles=null;
-  let observationOwner=null,assembly=null,sourceReviewOwner=null,tcpOwner=null,lanOwner=null,configOwner=null,lanConfig=null,nodeChannel=null,vp8Owner=null;
+  let observationOwner=null,assembly=null,sourceReviewOwner=null,tcpOwner=null,lanOwner=null,configOwner=null,lanConfig=null,nodeChannel=null,deviceUpdateOwner=null;
   const server = http.createServer(async (req, res) => {
     const reply = (status, body) => { if(res.destroyed||res.writableEnded)return;
       let text=JSON.stringify({instanceId,...body});const limit=req.method==='POST'&&req.url==='/v1/roles/frame'?FRAME_RESPONSE_BYTES:SMALL_RESPONSE_BYTES;
@@ -90,18 +90,18 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
     try {
       if(closed||!ready)return reply(503,{error:'service_starting_or_stopping'});
       if (req.method === 'POST' && req.url === '/v1/desktop-query/stop') {
-        if (!onVp8LocalStop || !vp8Owner?.snapshot().queryOnly) return reply(404, {error: 'vp8_local_stop_disabled'});
-        if (!vp8Owner.authorize(req.headers['x-hub-review'])) return reply(401, {error: 'vp8_unauthorized'});
-        res.once('finish', onVp8LocalStop);
+        if (!onDeviceLocalStop || !deviceUpdateOwner?.snapshot().queryOnly) return reply(404, {error: 'device_local_stop_disabled'});
+        if (!deviceUpdateOwner.authorize(req.headers['x-hub-review'])) return reply(401, {error: 'device_unauthorized'});
+        res.once('finish', onDeviceLocalStop);
         return reply(200, {stopping: true});
       }
-      if (req.url === '/v1/vp8-action/status' || req.url === '/v1/vp8-action/command') {
-        if (!vp8Owner) return reply(404, {error: 'vp8_disabled'});
-        if (!vp8Owner.authorize(req.headers['x-hub-review'])) return reply(401, {error: 'vp8_unauthorized'});
-        if (req.method === 'GET' && req.url.endsWith('/status')) return reply(200, {update: vp8Owner.snapshot()});
-        if (req.method !== 'POST' || !req.url.endsWith('/command')) return reply(404, {error: 'vp8_route'});
-        try { return reply(200, {update: vp8Owner.command(await readNative400ReviewBody(req))}); }
-        catch (error) { return reply(error.status === 409 ? 409 : 400, {error: 'vp8_command_rejected'}); }
+      if (req.url === '/v1/device-update/status' || req.url === '/v1/device-update/command') {
+        if (!deviceUpdateOwner) return reply(404, {error: 'device_disabled'});
+        if (!deviceUpdateOwner.authorize(req.headers['x-hub-review'])) return reply(401, {error: 'device_unauthorized'});
+        if (req.method === 'GET' && req.url.endsWith('/status')) return reply(200, {update: deviceUpdateOwner.snapshot()});
+        if (req.method !== 'POST' || !req.url.endsWith('/command')) return reply(404, {error: 'device_route'});
+        try { return reply(200, {update: deviceUpdateOwner.command(await readNative400ReviewBody(req))}); }
+        catch (error) { return reply(error.status === 409 ? 409 : 400, {error: 'device_command_rejected'}); }
       }
       if (req.method === 'GET' && req.url === '/v1/status') {
         let lanView=null;if(lanReview){try{lanView=publicNative400LanHostView(lanOwner.snapshot(),lanOwner.resources());}catch{return reply(503,{error:'lan_review_unavailable'});}}
@@ -110,8 +110,8 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
         if(sourceReview){try{sourceView=publicNative400SourceReviewView(sourceReviewOwner.snapshot());requireThat(sourceView,'invalid_source_review');}catch{return reply(503,{error:'source_review_unavailable'});}}
         const state = simulation?.snapshot(),review=assembly?.snapshot();
         return reply(200, { protocol:'hub-ipc/1',phase:lanOwner?'LAN-host-review':tcpOwner?'TCP-host-review':sourceReviewOwner?'400-source-review':state?'S2-simulation':assembly?'A5-assembly-review':observationOwner?'A3-observation-review':'P1-scaffold',displayName:config.displayName,
-          ...(lanView?{lanReview:lanView}:{}), ...(vp8Owner ? {vp8ActionUpdate:true,
-            ...(vp8Owner.snapshot().queryOnly ? {vp8QueryOnly:true} : {})} : {}),
+          ...(lanView?{lanReview:lanView}:{}), ...(deviceUpdateOwner ? {deviceUpdateAvailable:true,
+            ...(deviceUpdateOwner.snapshot().queryOnly ? {deviceQueryOnly:true} : {})} : {}),
           ...(tcpView?{tcpReview:tcpView}:{}),
           ...(sourceView?{sourceReview:sourceView}:{}),
           ...(review?{assemblyReview:review.assemblyReview,observationReview:review.observationReview}:observationOwner?{observationReview:publicObservationView(observationOwner.snapshot())}:{}),
@@ -188,7 +188,7 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
     if(lanOwner){lanOwner.fence();configOwner?.fence();const results=await Promise.allSettled([lanOwner.close(),configOwner?.close()]);requireThat(results.every(r=>r.status==='fulfilled'),'lan_cleanup_incomplete');const r=lanOwner.resources();requireThat(!r.listening&&['sockets','sessions','timers','active'].every(k=>r[k]===0)&&(!configOwner||configOwner.resources().sessions===0),'lan_cleanup_incomplete');}
     if(nodeChannel)await nodeChannel.close();
     const failures=[];
-    for(const release of [...(vp8Owner?[()=>vp8Owner.close()]:[]),...(tcpOwner?[()=>tcpOwner.close()]:[]),...(sourceReviewOwner?[()=>sourceReviewOwner.close()]:[]),()=>source.stop(),()=>assembly?.close(),()=>observationOwner?.close(),()=>sessions?.close(),()=>roles?.close(),()=>simulation?.stop(),()=>materialStore?.close(),()=>lifecycle?.idle()]){try{await release();}catch(error){failures.push(error);}}
+    for(const release of [...(deviceUpdateOwner?[()=>deviceUpdateOwner.close()]:[]),...(tcpOwner?[()=>tcpOwner.close()]:[]),...(sourceReviewOwner?[()=>sourceReviewOwner.close()]:[]),()=>source.stop(),()=>assembly?.close(),()=>observationOwner?.close(),()=>sessions?.close(),()=>roles?.close(),()=>simulation?.stop(),()=>materialStore?.close(),()=>lifecycle?.idle()]){try{await release();}catch(error){failures.push(error);}}
     try{if(descriptorAt(paths).instanceId===instanceId)unlinkSync(paths.descriptor);}catch(error){if(error.code!=='ENOENT')failures.push(error);}
     server.closeAllConnections();await new Promise(resolve=>server.close(resolve));
     if(failures.length)throw new AggregateError(failures,'owned service cleanup failed');
@@ -245,7 +245,7 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
       const live=()=>requireThat(!closed&&ready,'config_owner_closed');
       lanConfig={adopt(task){live();return configOwner.adopt(task);},startReviewed(options){live();keys(options,['request','wifi','directory','consumer','signal','timeoutMs','beforeConsume','fault']);return configOwner.start(()=>createNative400ReviewedConfigSession({...options,owner:lanOwner}));},resources:()=>configOwner.resources()};
       publicNative400LanHostView(lanOwner.snapshot(),lanOwner.resources());}
-    if (vp8Update) vp8Owner = createVp8ActionOwner(vp8Update, instanceId);
+    if (deviceUpdate) deviceUpdateOwner = createDeviceUpdateOwner(deviceUpdate, instanceId);
     source.start();ready=true;
   } catch (e) {try{await cleanupOwned();}catch(cleanupError){throw new AggregateError([e,cleanupError],'service initialization and cleanup failed');}throw e;}
   return {

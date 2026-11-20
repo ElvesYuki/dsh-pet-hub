@@ -4,6 +4,10 @@ scripts/character-states.mjs及相关自然动作/预览改动为本仓库原创
 
 # 第三方与素材边界
 
+## VP8 城市搜索（2026-11-19）
+
+搜索响应来自 Open-Meteo 的非商业 Geocoding API，地点数据来源为 GeoNames。页面标注来源，应用只在当前页面显示所需字段和经纬度，不打包数据集。候选测试使用原创合成地名。适配、界面及夹具代码为本仓库原创 MIT，编译对拍使用固件仓库的公开头文件作为只读输入。[Geocoding API](https://open-meteo.com/en/docs/geocoding-api) · [服务条款与数据许可](https://open-meteo.com/en/terms) · [GeoNames](https://www.geonames.org/export/)
+
 ## dsh-pet 0.4.9 的 400 复查与补录
 
 只读来源为 PC2005-cloud/dsh-pet `v0.4.9`（`4e589f6dacabbd3170e91e7a213b2a7afff1a09b`）内置 WebM，使用本机已安装同版副本并与上游 Git 树摘要对照。原型「溟月」署名上善无形，女仆鲸鱼娘设计署名 ZipZipPipe，动画来源署名 PC2005-cloud/dsh-pet。仅作本地非商业裁切、黑底合成、预览和编码，原素材与派生媒体均适用上游公布的 CC BY-NC-SA 4.0 形象边界，媒体仅存忽略目录。复查与编码代码为本仓库原创 MIT，仅使用本机 FFmpeg/libvpx。 [固定许可说明](https://github.com/PC2005-cloud/dsh-pet/blob/4e589f6dacabbd3170e91e7a213b2a7afff1a09b/README.md#许可) · [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
@@ -428,3 +432,7 @@ PBP1 管理端编解码、模拟 USB、RAM 租用及固定向量为本仓库原�
 PBP1 独占串口、人工入口和 PTY 桥为本仓库原创 MIT，使用 POSIX termios 和 Node 内置模块。测试只打开自建 PTY，编译产物留在临时目录。[串口报告](docs/reports/2026-11-12-native400-pbp1-serial.md)
 
 PMA1 单动作 LAN 调用者、type 5 宿主编码及回环测试为本仓库原创 MIT。固件格式和校验只读核对，测试使用合成配对材料及原创 PET4。[联调报告](docs/reports/2026-11-12-native400-pma1-lan.md)
+
+## 木子恶魔版大肥鱼 3D 离线评估（2026-11-19）
+
+`BlueFatFish.vrm.br` 来自 [drliuhuan/dsh-plugin-vrmpet3d 固定快照](https://github.com/drliuhuan/dsh-plugin-vrmpet3d/blob/462bda9bcdcd4d0d14a4c33ab675bffbfadbcffc/assets/models/README.md)。[模型作者配布](https://www.aplaybox.com/details/model/ayXkRzVflmnd)列出非商业、禁止二次配布、允许修改及视频外用途，公开插件仅记载其自身随包分发授权。此次副本的内嵌 VRM 条款禁止修改，并限制作为化身的使用者。原文件用于本机只读观察，具体板端改编权限待核。原作者木子恶魔、形象原型上善无形与女仆设计 ZipZipPipe 的署名随预览保留，待机帧另署名 PC2005-cloud/dsh-pet。Three.js 0.180.0 和 three-vrm 3.4.4 仅在本地缓存用于临时渲染，附各自 MIT 许可。模型、依赖副本及预览图片均在 `.cache`。[评估证据](docs/reports/2026-11-19-esp32-3d-bluefatfish.md)

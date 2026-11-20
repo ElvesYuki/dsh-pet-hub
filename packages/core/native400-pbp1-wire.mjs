@@ -8,7 +8,7 @@ const layouts = new Map([[1, ['info', 0]], [2, ['offer', 96]], [3, ['confirm', 2
 const bindingLayouts = new Map([[6, ['binding-info', 0]], [7, ['binding-challenge', 1]],
   [8, ['binding-enroll', 173]], [9, ['binding-resume', 100]], [129, ['binding-status', 84]],
   [130, ['binding-nonce', 40]], [131, ['binding-active', 56]], [132, ['binding-enrolled', 88]]]);
-const vp8ProofLayouts = new Map([[10, ['vp8-binding-proof', 64]], [133, ['vp8-binding-proof-result', 136]]]);
+const proofLayouts = new Map([[10, ['vp8-binding-proof', 64]], [133, ['vp8-binding-proof-result', 136]]]);
 const phases = ['empty', 'pending', 'host-confirmed', 'active'];
 const events = ['ok', 'rejected', 'timed-out'];
 
@@ -42,20 +42,20 @@ function* crcInput(prefix, body) {
 }
 
 /** Inspect one complete fixed-size header before collecting its body. */
-export function pbp1Header(prefix, {allowBinding = false, allowVp8BootProof = false} = {}) {
+export function pbp1Header(prefix, {allowBinding = false, allowBootProof = false} = {}) {
   need(prefix instanceof Uint8Array && prefix.length === PBP1_HEADER_BYTES &&
     magic.every((byte, i) => byte === prefix[i]) && prefix[4] === 1 && prefix[6] === 0 && prefix[7] === 0);
   const type = prefix[5];
   const layout = layouts.get(type) ?? (allowBinding ? bindingLayouts.get(type) : undefined) ??
-    (allowVp8BootProof ? vp8ProofLayouts.get(type) : undefined);
+    (allowBootProof ? proofLayouts.get(type) : undefined);
   need(layout && view(prefix).getUint32(8, true) === layout[1]);
   return {kind: layout[0], length: layout[1]};
 }
 
 /** Encode a PBP1 frame. An OFFER result contains the PSK and is caller-owned. */
-export function encodePbp1Frame(frame, {allowBinding = false, allowVp8BootProof = false} = {}) {
+export function encodePbp1Frame(frame, {allowBinding = false, allowBootProof = false} = {}) {
   const {kind} = frame;
-  const entry = [...layouts, ...(allowBinding ? bindingLayouts : []), ...(allowVp8BootProof ? vp8ProofLayouts : [])]
+  const entry = [...layouts, ...(allowBinding ? bindingLayouts : []), ...(allowBootProof ? proofLayouts : [])]
     .find(([, layout]) => layout[0] === kind);
   need(entry);
   const [type, [, length]] = entry;
@@ -63,7 +63,7 @@ export function encodePbp1Frame(frame, {allowBinding = false, allowVp8BootProof 
   const prefix = packet.subarray(0, PBP1_HEADER_BYTES);
   const body = packet.subarray(PBP1_HEADER_BYTES);
   const fields = view(body);
-  if (bindingLayouts.has(type) || vp8ProofLayouts.has(type) || kind === 'lan-arm') {
+  if (bindingLayouts.has(type) || proofLayouts.has(type) || kind === 'lan-arm') {
     need(frame.body instanceof Uint8Array && frame.body.length === length);
     body.set(frame.body);
   } else if (kind !== 'info') fields.setBigUint64(0, u64(frame.boot), true);
@@ -109,7 +109,7 @@ export function decodePbp1Frame(packet, options) {
   const body = packet.subarray(PBP1_HEADER_BYTES);
   need(body.length === length && view(prefix).getUint32(12, true) === crc32(crcInput(prefix, body)));
   if (kind === 'info') return {kind};
-  if (kind === 'lan-arm' || bindingLayouts.has(prefix[5]) || vp8ProofLayouts.has(prefix[5])) return {kind, body};
+  if (kind === 'lan-arm' || bindingLayouts.has(prefix[5]) || proofLayouts.has(prefix[5])) return {kind, body};
   const fields = view(body);
   const boot = fields.getBigUint64(0, true).toString();
   const id = offset => toHex(body.subarray(offset, offset + 16));

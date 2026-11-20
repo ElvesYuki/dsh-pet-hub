@@ -1,0 +1,8 @@
+{
+  "dist-connection/package.json": "9c1797ebc9b0736387322188688b0f2953cc419dcfa575482f20f34ba6affa98",
+  "dist-connection/client.js": "1cf67a696282502ee4537d3ad61a5dc9275808d9c7ec3146dda002b48acc83eb",
+  "dist-connection/apps/dsh-plugin/connection-host.mjs": "64515eea63c33c97be8a3cd51714436fcfbb6aa6cd4dbbe215282a49f0f3d14a",
+  "dist-connection/apps/dsh-plugin/node-control-connection.mjs": "2615a1b610a12b2ceb0c633849e253cf25cbfe6b92cfa2ce54a6ca961ec878aa",
+  "dist-connection/packages/core/native400-tcp-control.mjs": "a2ce5c294266171aa0101a3753d5695e66874b4d98d0bc80c64d130f82b22fa9",
+  "dist-connection/packages/core/native400-tcp-playback.mjs": "b937296998194f2e871a936c8a4e8db6e48a908781cf6413bbd7c5834b4a27a7"
+}

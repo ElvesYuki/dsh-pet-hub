@@ -18,22 +18,22 @@ function localListenerOrigin(socket) {
   return new URL(`${encrypted ? 'https' : 'http'}://${localAddress === '::1' ? '[::1]' : localAddress}:${localPort}`);
 }
 
-export function createHostPlugin(client,{reviewAccess,controlAccess,vp8UpdateOrigin,vp8DesktopQuery=false,managedVp8,desktopBattery=false}={}) {
-  if (vp8DesktopQuery && vp8UpdateOrigin) throw new Error('choose one VP8 host transport');
-  if (managedVp8 && (!vp8DesktopQuery || typeof managedVp8 !== 'function')) throw new Error('invalid managed query provider');
-  let reviewOrigin,controlOrigin,vp8Origin;
-  const listenerOrigin = vp8UpdateOrigin === 'loopback-listener';
-  if (vp8UpdateOrigin && !listenerOrigin) {
-    vp8Origin = new URL(vp8UpdateOrigin);
-    if (!['http:', 'https:'].includes(vp8Origin.protocol) || !['127.0.0.1', '[::1]'].includes(vp8Origin.hostname) ||
-        vp8Origin.origin !== vp8UpdateOrigin) throw new Error('invalid VP8 host origin');
+export function createHostPlugin(client,{reviewAccess,controlAccess,deviceUpdateOrigin,desktopDeviceQuery=false,managedDeviceUpdate,desktopBattery=false}={}) {
+  if (desktopDeviceQuery && deviceUpdateOrigin) throw new Error('choose one device update transport');
+  if (managedDeviceUpdate && (!desktopDeviceQuery || typeof managedDeviceUpdate !== 'function')) throw new Error('invalid managed query provider');
+  let reviewOrigin,controlOrigin,updateOrigin;
+  const listenerOrigin = deviceUpdateOrigin === 'loopback-listener';
+  if (deviceUpdateOrigin && !listenerOrigin) {
+    updateOrigin = new URL(deviceUpdateOrigin);
+    if (!['http:', 'https:'].includes(updateOrigin.protocol) || !['127.0.0.1', '[::1]'].includes(updateOrigin.hostname) ||
+        updateOrigin.origin !== deviceUpdateOrigin) throw new Error('invalid device update origin');
   }
   if(reviewAccess){reviewOrigin=new URL(reviewAccess.origin);if(!['http:','https:'].includes(reviewOrigin.protocol)||!['127.0.0.1','[::1]'].includes(reviewOrigin.hostname)||reviewOrigin.origin!==reviewAccess.origin||typeof reviewAccess.resolve!=='function')throw new Error('invalid review provider');}
 
   if(controlAccess){controlOrigin=new URL(controlAccess.origin);if(!['http:','https:'].includes(controlOrigin.protocol)||!['127.0.0.1','[::1]'].includes(controlOrigin.hostname)||controlOrigin.origin!==controlAccess.origin||typeof controlAccess.resolve!=='function')throw new Error('invalid control provider');}
 
   return function apply(ctx) {
-    if (vp8DesktopQuery) mountDesktopVp8Query(ctx, client, managedVp8, desktopBattery);
+    if (desktopDeviceQuery) mountDesktopDeviceQuery(ctx, client, managedDeviceUpdate, desktopBattery);
     ctx.effect(() => {
       const active = new Set();let mounted=true;
       const unregister = ctx.webServer.register({
@@ -50,34 +50,34 @@ export function createHostPlugin(client,{reviewAccess,controlAccess,vp8UpdateOri
             res.writeHead(code,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(text);
           };
           try {
-            const vp8RequestOrigin = listenerOrigin ? localListenerOrigin(req.socket) : vp8Origin;
+            const updateRequestOrigin = listenerOrigin ? localListenerOrigin(req.socket) : updateOrigin;
             if (req.method === 'GET' && req.url === '/dsh-pet-hub/health') return reply(200, { phase: 'P1-scaffold', bleProvisioning: false });
             if (req.method === 'GET' && req.url === '/dsh-pet-hub/status') {
               const result = await client.request('GET', '/v1/status', undefined, { signal: controller.signal });
               let sourceReview;
               if(Object.hasOwn(result,'sourceReview')){sourceReview=publicNative400SourceReviewView(result.sourceReview);if(!sourceReview)throw new Error('invalid source review');}
               // Do not expose service descriptor, token or filesystem paths to the page.
-              const vp8Enabled = result.vp8ActionUpdate === true && (vp8DesktopQuery ? result.vp8QueryOnly === true :
-                (listenerOrigin ? vp8RequestOrigin?.host === req.headers.host : vp8Origin));
-              const vp8DesktopNoCode = vp8Enabled && managedVp8?.()?.instanceId === result.instanceId;
-              return reply(200, { ...(vp8Enabled ? {vp8ActionUpdate:true} : {}), ...(vp8DesktopNoCode ? {vp8DesktopNoCode:true} : {}), ...(sourceReview?{sourceReview}:{}),...(result.assemblyReview?{assemblyReview:publicAssemblyView(result.assemblyReview)}:{}),...(result.observationReview?{observationReview:publicObservationView(result.observationReview)}:{}),roles:result.roles,catalog:result.catalog,phase: result.phase, displayName: result.displayName, source: result.source, devices: result.devices, capabilities: result.capabilities, deviceMode: result.deviceMode, synthetic: result.synthetic, simulation: result.simulation, serviceInstanceId: result.instanceId });
+              const deviceUpdateEnabled = result.deviceUpdateAvailable === true && (desktopDeviceQuery ? result.deviceQueryOnly === true :
+                (listenerOrigin ? updateRequestOrigin?.host === req.headers.host : updateOrigin));
+              const desktopDeviceNoCode = deviceUpdateEnabled && managedDeviceUpdate?.()?.instanceId === result.instanceId;
+              return reply(200, { ...(deviceUpdateEnabled ? {deviceUpdateAvailable:true} : {}), ...(desktopDeviceNoCode ? {desktopDeviceNoCode:true} : {}), ...(sourceReview?{sourceReview}:{}),...(result.assemblyReview?{assemblyReview:publicAssemblyView(result.assemblyReview)}:{}),...(result.observationReview?{observationReview:publicObservationView(result.observationReview)}:{}),roles:result.roles,catalog:result.catalog,phase: result.phase, displayName: result.displayName, source: result.source, devices: result.devices, capabilities: result.capabilities, deviceMode: result.deviceMode, synthetic: result.synthetic, simulation: result.simulation, serviceInstanceId: result.instanceId });
             }
-            if (['/dsh-pet-hub/vp8-action/status', '/dsh-pet-hub/vp8-action/command'].includes(req.url)) {
-              const origin = vp8RequestOrigin;
-              if (!origin || !mounted) return reply(404, {error: 'vp8_disabled'});
+            if (['/dsh-pet-hub/device-update/status', '/dsh-pet-hub/device-update/command'].includes(req.url)) {
+              const origin = updateRequestOrigin;
+              if (!origin || !mounted) return reply(404, {error: 'device_disabled'});
               const post = req.url.endsWith('/command');
-              if (req.method !== (post ? 'POST' : 'GET')) return reply(404, {error: 'vp8_route'});
+              if (req.method !== (post ? 'POST' : 'GET')) return reply(404, {error: 'device_route'});
               if (req.headers.host !== origin.host ||
                   (req.headers.origin !== undefined && req.headers.origin !== origin.origin) ||
                   (req.headers['sec-fetch-site'] !== undefined && req.headers['sec-fetch-site'] !== 'same-origin') ||
                   (post && (req.headers.origin !== origin.origin || req.headers['content-type'] !== 'application/json' ||
-                    req.headers['x-pet-hub'] !== '1'))) return reply(403, {error: 'vp8_origin'});
+                    req.headers['x-pet-hub'] !== '1'))) return reply(403, {error: 'device_origin'});
               const reviewToken = req.headers['x-pet-hub-operator'];
-              if (typeof reviewToken !== 'string' || !/^[a-f0-9]{32,64}$/.test(reviewToken)) return reply(401, {error:'vp8_unauthorized'});
+              if (typeof reviewToken !== 'string' || !/^[a-f0-9]{32,64}$/.test(reviewToken)) return reply(401, {error:'device_unauthorized'});
               try {
                 const body = post ? await readNative400ReviewBody(req, {signal: controller.signal}) : undefined;
                 if (!mounted || controller.signal.aborted) return;
-                if (body?.operation === 'wave') return reply(403, {error: 'vp8_query_only'});
+                if (body?.operation === 'wave') return reply(403, {error: 'device_query_only'});
                 const result = await client.request(req.method, req.url.replace('/dsh-pet-hub', '/v1'), body,
                   {signal: controller.signal, reviewToken});
                 const {revision, phase, compatible, saved, existing, cancellable, error, protocol, device, receipt, ota, upgradeAvailability} = result.update;
@@ -86,7 +86,7 @@ export function createHostPlugin(client,{reviewAccess,controlAccess,vp8UpdateOri
                 const upgrade = protocol === 'media2' && ota ? {ota: {targetVersion: ota.targetVersion, selectedSeen: ota.selectedSeen,
                   rebootSent: ota.rebootSent, success: ota.success}} : {};
                 return reply(200, {instanceId: result.instanceId, update: {revision, phase, compatible, saved, existing, cancellable, error, ...media2, ...upgrade}});
-              } catch (error) { return reply([400, 401, 404, 409].includes(error.status) ? error.status : 503, {error: 'vp8_request_rejected'}); }
+              } catch (error) { return reply([400, 401, 404, 409].includes(error.status) ? error.status : 503, {error: 'device_request_rejected'}); }
             }
             const nodeRoute=['/dsh-pet-hub/node-control/controls','/dsh-pet-hub/node-control/command'].includes(req.url);
             if(nodeRoute||['/dsh-pet-hub/source-review/controls','/dsh-pet-hub/source-review/start','/dsh-pet-hub/source-review/cancel'].includes(req.url)){
@@ -140,7 +140,7 @@ export function createHostPlugin(client,{reviewAccess,controlAccess,vp8UpdateOri
   };
 }
 
-function mountDesktopVp8Query(ctx, client, managedVp8, desktopBattery) {
+function mountDesktopDeviceQuery(ctx, client, managedDeviceUpdate, desktopBattery) {
   ctx.effect(() => {
     const stop = new AbortController(), disposers = [];
     const close = () => {
@@ -152,27 +152,27 @@ function mountDesktopVp8Query(ctx, client, managedVp8, desktopBattery) {
       const battery = local && path === 'battery';
       const signal = AbortSignal.any([stop.signal, request.signal, AbortSignal.timeout(battery ? 4500 : 2500)]);
       const url = new URL(request.url);
-      const prefix = local ? '/api/pet-hub-vp8-local/' : '/api/pet-hub-vp8/';
+      const prefix = local ? '/api/pet-hub-device/' : '/api/pet-hub-update/';
       if (request.method !== method || url.pathname !== prefix + path || url.search)
-        return reply(404, {error: 'vp8_route'});
+        return reply(404, {error: 'device_route'});
       const token = request.headers.get('x-pet-hub-operator');
       if (local ? token !== null : !token || !/^[a-f0-9]{32,64}$/.test(token))
-        return reply(401, {error: 'vp8_unauthorized'});
+        return reply(401, {error: 'device_unauthorized'});
       try {
         signal.throwIfAborted();
         let body;
         if (method === 'POST') {
           if (!request.body || request.headers.get('content-type') !== 'application/json' || request.headers.get('x-pet-hub') !== '1')
-            return reply(403, {error: 'vp8_request_rejected'});
+            return reply(403, {error: 'device_request_rejected'});
           const stream = Readable.fromWeb(request.body, {signal});
           try { body = await readNative400ReviewBody(stream, {signal}); }
           finally { stream.destroy(); }
           if (battery) {
-            if (!['sample', 'cancel'].includes(body?.operation)) return reply(403, {error: 'vp8_query_only'});
-            const access = managedVp8();
+            if (!['sample', 'cancel'].includes(body?.operation)) return reply(403, {error: 'device_query_only'});
+            const access = managedDeviceUpdate();
             if (!access?.battery || Object.keys(body).length !== 3 || body.instanceId !== access.instanceId ||
                 typeof body.requestId !== 'string' || !/^[a-f0-9]{32}$/.test(body.requestId))
-              return reply(409, {error: 'vp8_query_only'});
+              return reply(409, {error: 'device_query_only'});
             signal.throwIfAborted();
             if (body.operation === 'cancel') {
               access.battery.cancel(body.requestId);
@@ -182,56 +182,58 @@ function mountDesktopVp8Query(ctx, client, managedVp8, desktopBattery) {
             signal.throwIfAborted();
             return reply(200, result);
           }
-          if (!(local ? ['query'] : ['query', 'wave']).includes(body?.operation)) return reply(403, {error: 'vp8_query_only'});
+          if (!(local ? ['query'] : ['query', 'wave']).includes(body?.operation)) return reply(403, {error: 'device_query_only'});
           if (!local) {
-            const current = await client.request('GET', '/v1/vp8-action/status', undefined, {signal, reviewToken: token});
+            const current = await client.request('GET', '/v1/device-update/status', undefined, {signal, reviewToken: token});
             if (current.update.queryOnly !== true || body.instanceId !== current.instanceId)
-              return reply(409, {error: 'vp8_query_only'});
+              return reply(409, {error: 'device_query_only'});
             if (body.operation === 'wave' && current.update.wave?.available !== true)
-              return reply(403, {error: 'vp8_wave_unavailable'});
+              return reply(403, {error: 'device_wave_unavailable'});
           }
         }
         signal.throwIfAborted();
-      let result, usbStatus, batteryAvailable = false;
+        let result, usbStatus, statusSource, batteryAvailable = false;
         if (local) {
-          const access = managedVp8();
-          if (!access) return reply(409, {error: 'vp8_managed_owner_unavailable'});
+          const access = managedDeviceUpdate();
+          if (!access) return reply(409, {error: 'device_managed_owner_unavailable'});
           if (body && (Object.keys(body).length !== 3 || body.instanceId !== access.instanceId ||
-              !Number.isSafeInteger(body.revision) || body.revision < 0)) return reply(409, {error: 'vp8_query_only'});
+              !Number.isSafeInteger(body.revision) || body.revision < 0)) return reply(409, {error: 'device_query_only'});
           result = body ? await access.query(body.revision, signal) : await access.status(signal);
           usbStatus = access.usbStatus?.();
+          statusSource = access.statusSource?.();
           batteryAvailable = desktopBattery && Boolean(access.battery);
-        } else result = await client.request(method, '/v1/vp8-action/' + path, body, {signal, reviewToken: token});
+        } else result = await client.request(method, '/v1/device-update/' + path, body, {signal, reviewToken: token});
         signal.throwIfAborted();
         const {instanceId, update} = result;
-        if (update.queryOnly !== true || (local && update.wave)) return reply(409, {error: 'vp8_query_only'});
+        if (update.queryOnly !== true || (local && update.wave)) return reply(409, {error: 'device_query_only'});
         const {revision, phase, device, wave} = update;
         return reply(200, {instanceId, update: {revision, phase, protocol: 'media2', queryOnly: true,
           ...(usbStatus ? {...usbStatus, usbContended: update.error === 'usb_busy'} : {}),
           ...(batteryAvailable ? {batteryAvailable: true} : {}),
+          ...statusSource,
           ...(local && update.error === 'usb_identity_unavailable' ? {deviceUnavailable: true} : {}),
           ...(wave ? {wave: {available: wave.available, phase: wave.phase, frames: wave.frames,
             returnedIdle: wave.returnedIdle, error: wave.error}} : {}),
           device: device ? {version: device.version, slot: device.slot, selected: device.selected, busy: device.busy} : null}});
       } catch (error) {
-        return reply([400, 401, 404, 409].includes(error.status) ? error.status : 503, {error: 'vp8_request_rejected'});
+        return reply([400, 401, 404, 409].includes(error.status) ? error.status : 503, {error: 'device_request_rejected'});
       }
     }
     try {
       const routes = [['GET', 'status', false], ['POST', 'command', false]];
-      if (managedVp8) routes.push(['GET', 'status', true], ['POST', 'query', true]);
-      if (managedVp8 && desktopBattery) routes.push(['POST', 'battery', true]);
+      if (managedDeviceUpdate) routes.push(['GET', 'status', true], ['POST', 'query', true]);
+      if (managedDeviceUpdate && desktopBattery) routes.push(['POST', 'battery', true]);
       for (const [method, path, local] of routes) {
-        disposers.push(ctx.connection.fetch.register({path: (local ? '/api/pet-hub-vp8-local/' : '/api/pet-hub-vp8/') + path,
+        disposers.push(ctx.connection.fetch.register({path: (local ? '/api/pet-hub-device/' : '/api/pet-hub-update/') + path,
           methods: [method], requestBody: method === 'POST' ? 'streaming' : 'buffered',
           fetch: request => dispatch(request, method, path, local)}));
       }
     } catch (error) { close(); throw error; }
     return close;
-  }, 'pet-hub: Desktop VP8 query');
+  }, 'pet-hub: Desktop device query');
 }
 /** Connect only: unloading the plugin must never stop the shared service. */
-export function apply(ctx, config = {}, {managedVp8, desktopBattery} = {}) {
+export function apply(ctx, config = {}, {managedDeviceUpdate, desktopBattery} = {}) {
   return createHostPlugin(createHubClient(config.runtimeDirectory),
-    {vp8UpdateOrigin: config.vp8UpdateOrigin, vp8DesktopQuery: config.vp8DesktopQuery, managedVp8, desktopBattery})(ctx);
+    {deviceUpdateOrigin: config.deviceUpdateOrigin, desktopDeviceQuery: config.desktopDeviceQuery, managedDeviceUpdate, desktopBattery})(ctx);
 }

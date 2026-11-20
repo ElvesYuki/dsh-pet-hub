@@ -32,7 +32,7 @@ test('Desktop manual owner starts once, restricts stopping and releases private 
   const auth = {reviewToken: operatorToken};
   let initial;
   for (let attempt = 0; attempt < 50 && !initial; attempt++) {
-    try { initial = await client.request('GET', '/v1/vp8-action/status', undefined, auth); }
+    try { initial = await client.request('GET', '/v1/device-update/status', undefined, auth); }
     catch { await delay(25); }
   }
   assert.equal(initial?.update.queryOnly, true);
@@ -44,7 +44,7 @@ test('Desktop manual owner starts once, restricts stopping and releases private 
   await assert.rejects(client.request('POST', '/v1/desktop-query/stop', undefined, {
     ...auth, expectedInstanceId: 'other-instance',
   }), {status: 409});
-  assert.equal((await client.request('GET', '/v1/vp8-action/status', undefined, auth)).instanceId, initial.instanceId);
+  assert.equal((await client.request('GET', '/v1/device-update/status', undefined, auth)).instanceId, initial.instanceId);
   assert.match((await run('stop')).stdout, /已停止/);
   assert.deepEqual(await exit, [0, null]);
   assert.match((await run('stop')).stdout, /已停止/);

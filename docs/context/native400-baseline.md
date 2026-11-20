@@ -1,6 +1,6 @@
 # 当前管理端目标：1.75C-EN／400×400
 
-2026-11-18 真机使用 VP8 `0.1.6-battery-usb-pair-test`／`ota_0`，保留板上 `0.1.5-usb-pair-test`／`ota_1` 回退、57 个素材与持久绑定记录。DSH 已实测查询、绑定核对和 USB 电池。[当前实装](../reports/2026-11-18-vp8-desktop-battery.md)
+2026-11-19 固件任务记录真机使用 VP8 `0.1.32`／`ota_0`，`0.1.30`／`ota_1` 可回退。此前核对 60 个素材对象。Status v2 已验实际 USB、隔离 VPL1 TCP 和板端首帧。日常 DSH 已启用 USB STATUS3，持续无线和 AP 物理断网待验。[当前状态](current-system.md) · [状态来源与交接](../reports/2026-11-19-vp8-status-v2-hub.md)
 
 离线素材目录登记 96 项，0–77 引用冻结的原 78 动作，78–95 为本次从上游复查选入的 VP8 补充候选。当前板上库存与验证口径见上一段。[114 段复查与 18 段补录](../reports/2026-11-18-native400-upstream-action-review.md)
 

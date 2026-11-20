@@ -13,8 +13,8 @@ export function makeClientFactory({nodeControlTransport='raw'}={}) {
       name: 'pet-hub-client', inject: ['slots'],
       apply(ctx) {
         async function request(path, signal, report, operator) {
-          const endpoint = desktop && path.startsWith('vp8-local/') ? '/api/pet-hub-vp8-local/' + path.slice('vp8-local/'.length) :
-            desktop && path.startsWith('vp8-action/') ? '/api/pet-hub-vp8/' + path.slice('vp8-action/'.length) :
+          const endpoint = desktop && path.startsWith('local-device/') ? '/api/pet-hub-device/' + path.slice('local-device/'.length) :
+            desktop && path.startsWith('device-update/') ? '/api/pet-hub-update/' + path.slice('device-update/'.length) :
             path.startsWith('node-control/') ? nodePrefix + path.slice('node-control'.length) : `/dsh-pet-hub/${path}`;
           const res = await fetch(endpoint, {
             signal, credentials: 'same-origin',
@@ -26,10 +26,10 @@ export function makeClientFactory({nodeControlTransport='raw'}={}) {
           return res.json();
         }
         const Panel = makeHubPanel(React, {
-          vp8Status: (operator, signal) => request('vp8-action/status', signal, undefined, operator),
-          vp8Command: (operator, report, signal) => request('vp8-action/command', signal, report, operator),
-          ...(desktop ? {vp8LocalStatus: signal => request('vp8-local/status', signal),
-            vp8LocalQuery: (report, signal) => request('vp8-local/query', signal, report)} : {}),
+          deviceUpdateStatus: (operator, signal) => request('device-update/status', signal, undefined, operator),
+          deviceUpdateCommand: (operator, report, signal) => request('device-update/command', signal, report, operator),
+          ...(desktop ? {localDeviceStatus: signal => request('local-device/status', signal),
+            localDeviceQuery: (report, signal) => request('local-device/query', signal, report)} : {}),
           nodeControlStatus: signal => request('node-control/controls',signal),
           nodeControlCommand: (report,signal) => request('node-control/command',signal,report),
           reviewStatus: signal => request('source-review/controls',signal),

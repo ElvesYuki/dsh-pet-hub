@@ -75,3 +75,8 @@ coverage/
 dist-dsh022/
 dist-dsh022-rc3/
 dist-dsh022-rc3-combined/
+dist-dsh022-rc5-combined/
+dist-connection/
+dist-connection-legacy/
+dist-desktop/
+dist-desktop-legacy/

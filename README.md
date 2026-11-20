@@ -1,5 +1,15 @@
 # dsh-pet-hub
 
+日常 DSH profile 已安装 Hub `0.0.8` Hooks 包。上次联调的设备页显示「TCP 实时状态」、已核对的持久绑定和「联动已关闭」。上一份主动状态包和配置已备份。[日常换装与回退](docs/reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装)
+
+VP8 主动状态使用 Status v2，设备每 3 秒上报。隔离真机已通过实体拔插、纯电池 TCP、受控失联后切 USB、重连停 USB，以及配网和升级前只读串口交接。AP 物理断网和 OTA 写入另行验收。[真机验证](docs/reports/2026-11-20-vp8-0133-live.md)
+
+DSH 本机任务联动已通过真机首帧。真实 DSH 会话驱动思考、工作和一次庆祝，三次播放均收到匹配的设备接收与首帧回执。验收后已恢复联动关闭。[真机联调](docs/reports/2026-11-20-vp8-dsh-task-motion-live.md)
+
+设备页已有「动画联动」入口，当前关闭。DSH 随包控制器通过六档验证。Codex 项目级 Hooks 已用 App 随包引擎验证思考、工作、整理、等待审批和回空闲。Codex 的明确完成与出错仍由已配置的 App Server 读取。日常 Codex 来源待配置，App 的 Hook 审阅与圆屏联调待验。[Codex App 验证](docs/reports/2026-11-20-vp8-codex-app-hooks.md)
+
+设备管理源码按状态、连接、登记、播放和界面职责命名。新桌面候选构建输出为 `dist-desktop/`，管理端新配置和板端协议的对应关系集中在文档。[命名与构建](docs/context/plans/device-code-naming.md) · [固件命名交接](docs/protocol/device-naming-firmware-handoff.md)
+
 DeepSeek Harness Desktop `0.2.2-rc.3` 的「设置 → 桌面宠物设备」已实测持久绑定核对和免码查询。归属待核对时，查询结果独立显示。显式 `start-wave` 仍使用原授权码。[实装验收与回退](docs/reports/2026-11-17-vp8-desktop-device-page.md)
 
 VP8 真板已通过 CLI 一键 USB 首绑和拔插复验。未登记设备从设置页发起首次绑定仍待真机验证。现场 Keychain 继续使用原私有作用域；保留同一签名助手的本机长期副本与原路径恢复已通过合成 Keychain 验证。[首绑证据](docs/reports/2026-11-17-vp8-usb-desktop-hotload.md) · [凭据恢复](docs/reports/2026-11-17-vp8-keychain-continuity.md)
@@ -8,7 +18,7 @@ VP8 真板已通过 CLI 一键 USB 首绑和拔插复验。未登记设备从设
 
 1.75C-EN 在独立 DSH `0.2.2-rc.3` 设置页完成一次正常 OTA，重连读到原生 400 VP8 固件 `0.1.4`／`ota_0`。固件侧独立验证升级后 57 个对象、动作 67 离线播放与故障恢复。日常 Launcher 的 rc.1 一键入口已在临时 profile 验证，迁移与可信发布材料仍待就绪。插件入口默认关闭，旧 `56644ffd` 动作 1 入口保留。[OTA 真机报告](docs/reports/2026-11-16-vp8-ota14-dsh.md) · [日常部署](docs/reports/2026-11-16-vp8-ota-daily.md)
 
-400×400 离线素材库共有 **96 段**，包括原有 78 段和新补录的 18 段 VP8。当前 1.75C-EN 板上有 **57 段**可直接播放，新收录片段已通过宿主逐帧验证，待真机安装验证。原 PET4 compact78 保留作为兼容回退。[素材复查与补录](docs/reports/2026-11-18-native400-upstream-action-review.md) · [当前 400 基线](docs/context/native400-baseline.md)
+400×400 离线素材库共有 **96 段**，包括原有 78 段和补录的 18 段 VP8。固件任务在 `0.1.24` 核对了 **60 个板上素材对象**。Hub 和固件的 VP8 VPC1 控制已通过本机 TCP 对拍，VPL1 认证适配已通过宿主回环，真实无线接入待验。[素材复查与补录](docs/reports/2026-11-18-native400-upstream-action-review.md) · [当前 400 基线](docs/context/native400-baseline.md) · [VPC1 离线验证](docs/reports/2026-11-18-vp8-vpc1-hub.md)
 
 PTC1 播放控制继续走原 shared owner。TCP29 已在隔离宿主验证原创 HTTP 来源、权限 IPC、TCP 控制和退出。真实 pet 身份及自然状态变化仍待验。 [TCP29 报告](docs/reports/2026-11-06-tcp29.md)
 
@@ -24,7 +34,9 @@ PTC1 播放控制继续走原 shared owner。TCP29 已在隔离宿主验证原�
 
 管理端采用共享 React 界面、Node.js 单实例服务和独立设备核心。VP8 安装通过独占 USB 发命令，由设备从同网段临时 HTTP 下载。旧 PET4 保留明文二进制 TCP。pet 提供只读任务状态，宿主 HTTP 权限与服务内部 UDS IPC 继续保留。管理端无需 Python 或 pyserial。
 
-固件仓库的Python USB临时配网工具仅供开发人员按独立方案人工使用；本仓库已有默认关闭的工具适配器保留兼容，纯Node启动入口不调用它，也不接收Wi-Fi密码。产品USB/BLE配网另设计Node/原生辅助方案，当前未实现。
+rc.3 组合主包 `0.0.6` 和独立登记包 `0.0.3` 新增已绑定设备 USB Wi-Fi 配置候选。实际 rc.3 Connection 隔离验证已通过，固件任务在 `0.1.25` 经登记包验证保存、重连和校时。完整设置窗口的真机读回待验。Hub 配网使用 Node 和现有独占串口助手，BLE 配网待实施。[USB Wi-Fi 配置与回退](docs/reports/2026-11-19-vp8-desktop-network.md)
+
+组合主包 `0.0.7` 与登记包 `0.0.4` 新增独立天气地点候选。城市搜索与 USB 分开，选定后经同一已绑定串口保存经纬度。已通过离线验证。固件任务已用 `0.1.26` 经实际 rc.5 页面验证选城保存与复位读回，后续 `0.1.29` 修复天气任务调度。[天气地点](docs/reports/2026-11-19-vp8-desktop-weather.md)
 
 ## 本地验证
 

@@ -1,21 +1,23 @@
 import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync } from 'node:fs';
 // Fixed, audited pure modules only; no dependency resolver or execution of upstream code.
-const modules = ['packages/source-pet/schema.mjs', 'packages/source-pet/page.mjs', 'packages/ui/frame-preview.mjs', 'packages/core/observation-view.mjs', 'packages/core/assembly-view.mjs', 'packages/ui/round-pet-observations.mjs', 'packages/core/native400-source-review-view.mjs', 'packages/ui/native400-source-review.mjs', 'packages/core/native400-review-controls-view.mjs', 'packages/core/native400-review-access.mjs', 'packages/ui/native400-review-controls.mjs', 'packages/core/native400-node-control-access.mjs', 'packages/ui/native400-node-controls.mjs', 'packages/ui/vp8-action-update.mjs', 'packages/ui/index.mjs', 'apps/dsh-plugin/client.mjs'];
+const modules = ['packages/source-pet/schema.mjs', 'packages/source-pet/page.mjs', 'packages/ui/frame-preview.mjs', 'packages/core/observation-view.mjs', 'packages/core/assembly-view.mjs', 'packages/ui/round-pet-observations.mjs', 'packages/core/native400-source-review-view.mjs', 'packages/ui/native400-source-review.mjs', 'packages/core/native400-review-controls-view.mjs', 'packages/core/native400-review-access.mjs', 'packages/ui/native400-review-controls.mjs', 'packages/core/native400-node-control-access.mjs', 'packages/ui/native400-node-controls.mjs', 'packages/ui/device-update-panel.mjs', 'packages/ui/index.mjs', 'apps/dsh-plugin/client.mjs'];
 const bundle = paths => paths.map(path => readFileSync(path, 'utf8').replace(/^import .*;\n/gm, '').replace(/^export /gm, '')).join('\n');
 const body = bundle(modules);
 rmSync('dist', { recursive: true, force: true }); mkdirSync('dist', { recursive: true });
 writeFileSync('dist/client.js', `(() => {\n${body}\nwindow.__ModuleLoader__.load({id:'dsh-pet-hub',factory:makeClientFactory()});\n})();\n`);
 writeFileSync('dist/client.connection.js', `(() => {\n${body}\nwindow.__ModuleLoader__.load({id:'dsh-pet-hub',factory:makeClientFactory({nodeControlTransport:'connection'})});\n})();\n`);
-const boot = bundle(['packages/ui/vp8-boot-settings.mjs', 'apps/dsh-plugin/vp8-boot-client.mjs']);
-writeFileSync('dist/client.boot-review.js', `(() => {\n${body}\n${boot}\nwindow.__ModuleLoader__.load({id:'dsh-pet-hub',factory:makeVp8BootReviewClientFactory()});\n})();\n`);
-const desktopDevice = bundle(['packages/ui/vp8-desktop-device-page.mjs', 'apps/dsh-plugin/client-desktop-combined.mjs']);
+const boot = bundle(['packages/ui/enrollment-settings.mjs', 'apps/dsh-plugin/enrollment-client.mjs']);
+writeFileSync('dist/client.boot-review.js', `(() => {\n${body}\n${boot}\nwindow.__ModuleLoader__.load({id:'dsh-pet-hub',factory:makeEnrollmentClientFactory()});\n})();\n`);
+const desktopDevice = bundle(['packages/ui/device-settings-style.mjs', 'packages/ui/device-settings-view.mjs',
+  'packages/ui/wifi-settings.mjs', 'packages/ui/weather-settings.mjs', 'packages/ui/device-settings-page.mjs',
+  'packages/ui/task-source-settings.mjs', 'apps/dsh-plugin/client-desktop-combined.mjs']);
 writeFileSync('dist/client.desktop-combined.js', `(() => {\n${body}\n${desktopDevice}\nwindow.__ModuleLoader__.load({id:'dsh-pet-hub',factory:makeCombinedDesktopClientFactory()});\n})();\n`);
 cpSync('packages', 'dist/packages', { recursive: true, filter: path => !/(^|\/)simulator(\/|$)/.test(path) });
 mkdirSync('dist/apps/dsh-plugin', { recursive: true });
 cpSync('apps/dsh-plugin/index.mjs', 'dist/apps/dsh-plugin/index.mjs');
 cpSync('apps/dsh-plugin/host.mjs', 'dist/apps/dsh-plugin/host.mjs');
 cpSync('apps/dsh-plugin/node-control-connection.mjs', 'dist/apps/dsh-plugin/node-control-connection.mjs');
-cpSync('apps/dsh-plugin/vp8-boot-settings.mjs', 'dist/apps/dsh-plugin/vp8-boot-settings.mjs');
+cpSync('apps/dsh-plugin/enrollment-routes.mjs', 'dist/apps/dsh-plugin/enrollment-routes.mjs');
 cpSync('apps/dsh-plugin/cordis.patch.yml', 'dist/cordis.patch.yml');
 cpSync('LICENSE', 'dist/LICENSE'); cpSync('THIRD_PARTY.md', 'dist/THIRD_PARTY.md');
 cpSync('apps/dsh-plugin/package.template.json', 'dist/package.json');

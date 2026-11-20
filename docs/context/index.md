@@ -1,5 +1,33 @@
 # 长期上下文索引
 
+ESP32 实时 3D 独立路线 · [大肥鱼模型、圆屏对照与资源盘点](../reports/2026-11-19-esp32-3d-bluefatfish.md) · [评估计划](plans/esp32-3d-character-evaluation.md)。
+
+VP8 TCP／USB 主动状态 · [真机联调证据](../reports/2026-11-20-vp8-0133-live.md) · [真机验收方案](plans/vp8-0133-live-acceptance.md) · [离线候选与回退](../reports/2026-11-19-vp8-desktop-vpl1-lifecycle.md)。
+
+VP8 DSH 工作状态联动 · [真机首帧与恢复](../reports/2026-11-20-vp8-dsh-task-motion-live.md) · [真机 Spec 与 Diff](plans/vp8-dsh-task-motion-live.md) · [早期 pet 兼容候选](../reports/2026-11-20-vp8-dsh-task-motion.md)。
+
+VP8 DSH／Codex 本机来源 · [日常 DSH 换装与回退](../reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装) · [Hooks 验证](../reports/2026-11-20-vp8-codex-app-hooks.md) · [Hooks Spec 与 Diff](plans/vp8-codex-app-hooks.md) · [六档与 App Server 证据](../reports/2026-11-20-vp8-local-task-phases.md) · [来源选择契约](plans/vp8-local-task-sources.md)。
+
+设备代码整理 · [源码命名、协议索引与部署边界](plans/device-code-naming.md) · [固件命名交接](../protocol/device-naming-firmware-handoff.md)。
+
+VP8 设备设置页新版 · [布局与清理验收](../reports/2026-11-19-vp8-desktop-device-layout.md) · [Spec 与 Diff](plans/vp8-desktop-device-layout.md)。
+
+400 VP8 Status v2 · [USB／TCP、日常换包与回退](../reports/2026-11-19-vp8-status-v2-hub.md) · [Spec](plans/vp8-status-v2-hub-spec.md) · [Diff](plans/vp8-status-v2-hub-diff.md) · [换包方案](plans/vp8-status-v2-desktop-deploy.md)。
+
+400 VP8 VPL1 认证 TCP · [候选、对拍和隔离真机入口](../reports/2026-11-19-vp8-vpl1-hub.md) · [Spec](plans/vp8-vpl1-hub-spec.md) · [Diff](plans/vp8-vpl1-hub-diff.md)。
+
+400 VP8 TCP 状态与 USB 回退 · [宿主验证及固件交接](../reports/2026-11-19-vp8-desktop-status.md) · [Spec](plans/vp8-desktop-status-spec.md) · [Diff](plans/vp8-desktop-status-diff.md)。
+
+400 VP8 rc.5 单包 · [实际宿主验收和迁移](../reports/2026-11-19-vp8-desktop-single-rc5.md) · [Spec](plans/vp8-desktop-single-rc5-spec.md) · [Diff](plans/vp8-desktop-single-rc5-diff.md)。
+
+400 VP8 独立天气地点 · [离线验证与候选包](../reports/2026-11-19-vp8-desktop-weather.md) · [Spec](plans/vp8-desktop-weather-spec.md) · [Diff](plans/vp8-desktop-weather-diff.md)。
+
+400 VP8 USB Wi-Fi 配置 · [候选包、离线验证与回退](../reports/2026-11-19-vp8-desktop-network.md) · [Spec](plans/vp8-desktop-network-spec.md) · [Diff](plans/vp8-desktop-network-diff.md)。
+
+400 VP8 Wi-Fi 控制 · [Hub 离线验证与对拍命令](../reports/2026-11-18-vp8-vpc1-hub.md) · [协议与无线认证提案](../protocol/vp8-vpc1-hub.md) · [Spec 与 Diff](plans/vp8-vpc1-hub.md)。
+
+400 VP8 USB 传感器在原电池会话中读取。查看[宿主候选与验收](../protocol/vp8-desktop-sensors.md)。
+
 400 全素材复查 · [114 段审计与 18 段 VP8 补录](../reports/2026-11-18-native400-upstream-action-review.md) · [Spec 与 Diff](plans/native400-upstream-action-review.md)。
 
 400 VP8 USB 电池 · [0.0.4 现场验收、宿主回归与回退](../reports/2026-11-18-vp8-desktop-battery.md) · [Spec](plans/vp8-desktop-battery-spec.md) · [Diff](plans/vp8-desktop-battery-diff.md)。

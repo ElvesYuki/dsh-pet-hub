@@ -8,8 +8,8 @@ import {mountDesktopQueryService} from '../apps/dsh-plugin/desktop-query-service
 import {createHostPlugin} from '../apps/dsh-plugin/index.mjs';
 import {createHubClient} from '../packages/runtime/client.mjs';
 import {startOrAttach} from '../packages/runtime/service.mjs';
-import {prepareVp8ActionUpdate} from '../packages/runtime/vp8-action-update.mjs';
-import {prepareDesktopQuery} from '../packages/runtime/vp8-desktop-query.mjs';
+import {prepareDeviceUpdate} from '../packages/runtime/device-update.mjs';
+import {prepareDesktopQuery} from '../packages/runtime/desktop-device-query.mjs';
 
 const config = {schema: 1, port: '/dev/cu.usbmodem-hub-fixture', usbIdentity: '1/001122334455', operatorToken: 'fd'.repeat(32)};
 const auth = {reviewToken: config.operatorToken};
@@ -22,7 +22,7 @@ async function setup(t) {
     await rm(root, {recursive: true, force: true});
   });
   await writeFile(join(root, 'query.json'), JSON.stringify(config), {mode: 0o600});
-  const client = createHubClient(directory), status = () => client.request('GET', '/v1/vp8-action/status', undefined, auth);
+  const client = createHubClient(directory), status = () => client.request('GET', '/v1/device-update/status', undefined, auth);
   function mount(options) {
     let dispose;
     const access = mountDesktopQueryService({effect(install) { dispose = install(); }}, directory, options);
@@ -67,8 +67,8 @@ test('desktop lifecycle releases owned IPC and serializes a rapid re-enable', as
 test('desktop lifecycle attaches without taking over either the external owner or incompatible wave', async t => {
   if (process.platform !== 'darwin') return t.skip('macOS Desktop owner');
   const fixture = await setup(t);
-  const external = await startOrAttach({directory: fixture.directory, vp8Update: prepareDesktopQuery(fixture.root, config),
-    onVp8LocalStop() {}});
+  const external = await startOrAttach({directory: fixture.directory, deviceUpdate: prepareDesktopQuery(fixture.root, config),
+    onDeviceLocalStop() {}});
   fixture.disposers.push(() => external.close());
   const attach = Promise.withResolvers();
   const {dispose: close, access} = fixture.mount({start: async options => {
@@ -82,8 +82,8 @@ test('desktop lifecycle attaches without taking over either the external owner o
   assert.equal((await fixture.status()).instanceId, external.instanceId);
   await external.close();
 
-  const wave = await startOrAttach({directory: fixture.directory, vp8Update: prepareDesktopQuery(fixture.root, config, {waveTest: true}),
-    onVp8LocalStop() {}});
+  const wave = await startOrAttach({directory: fixture.directory, deviceUpdate: prepareDesktopQuery(fixture.root, config, {waveTest: true}),
+    onDeviceLocalStop() {}});
   fixture.disposers.push(() => wave.close());
   const failed = Promise.withResolvers();
   const {dispose: reject, access: conflictAccess} = fixture.mount({report: () => failed.resolve()});
@@ -98,7 +98,7 @@ test('desktop disposer awaits exclusive serial close during a status request', a
   const fixture = await setup(t);
   const written = Promise.withResolvers(), release = Promise.withResolvers();
   t.after(() => release.resolve());
-  const claim = prepareVp8ActionUpdate({...config, port: '/dev/ttys00', helper: '/fixture/tty',
+  const claim = prepareDeviceUpdate({...config, port: '/dev/ttys00', helper: '/fixture/tty',
     protocol: 'media2', queryOnly: true}, {
     identifyUsb: () => config.usbIdentity,
     openTty: async () => ({
@@ -111,9 +111,9 @@ test('desktop disposer awaits exclusive serial close during a status request', a
       async close() { await release.promise; },
     }),
   });
-  const {dispose} = fixture.mount({start: options => startOrAttach({...options, vp8Update: claim})});
+  const {dispose} = fixture.mount({start: options => startOrAttach({...options, deviceUpdate: claim})});
   const {instanceId, update} = await fixture.ready();
-  await fixture.client.request('POST', '/v1/vp8-action/command', {instanceId, revision: update.revision, operation: 'query'}, auth);
+  await fixture.client.request('POST', '/v1/device-update/command', {instanceId, revision: update.revision, operation: 'query'}, auth);
   await written.promise;
   let finished = false;
   const closing = dispose().then(() => { finished = true; });
@@ -130,14 +130,14 @@ test('managed Connection scopes credential use to exact status/query and denies 
   if (process.platform !== 'darwin') return t.skip('macOS Desktop owner');
   const fixture = await setup(t);
   let opens = 0;
-  const claim = prepareVp8ActionUpdate({...config, port: '/dev/ttys00', helper: '/fixture/tty',
+  const claim = prepareDeviceUpdate({...config, port: '/dev/ttys00', helper: '/fixture/tty',
     protocol: 'media2', queryOnly: true}, {
     identifyUsb: () => '2/001122334455',
     openTty() { opens++; throw Error('unregistered board'); },
   });
-  const {access, dispose} = fixture.mount({start: options => startOrAttach({...options, vp8Update: claim})});
+  const {access, dispose} = fixture.mount({start: options => startOrAttach({...options, deviceUpdate: claim})});
   const routes = new Map();
-  createHostPlugin(fixture.client, {vp8DesktopQuery: true, managedVp8: access})({
+  createHostPlugin(fixture.client, {desktopDeviceQuery: true, managedDeviceUpdate: access})({
     effect(install) { fixture.disposers.push(install()); },
     connection: {fetch: {register(route) {
       routes.set(route.path, route.fetch);
@@ -145,7 +145,7 @@ test('managed Connection scopes credential use to exact status/query and denies 
     }}},
     webServer: {register: () => () => {}},
   });
-  const prefix = '/api/pet-hub-vp8-local/';
+  const prefix = '/api/pet-hub-device/';
   const send = (path, body, headers = {'X-Pet-Hub':'1'}, suffix = '') =>
     routes.get(prefix + path)(new Request('http://127.0.0.1' + prefix + path + suffix, {
       method: body ? 'POST' : 'GET',
@@ -177,5 +177,48 @@ test('managed Connection scopes credential use to exact status/query and denies 
   await dispose();
   assert.equal((await send('status')).status, 409);
   await assert.rejects(previous.status(new AbortController().signal));
+  await fixture.released();
+});
+
+test('managed owner supplies TCP status to local Connection and gates periodic USB requests', async t => {
+  if (process.platform !== 'darwin') return t.skip('macOS Desktop owner');
+  const fixture = await setup(t);
+  const connected = Promise.withResolvers();
+  let closed = 0, subscription;
+  const {access, dispose} = fixture.mount({sharedUsb: true, connectTelemetry({attach, usbIdentity, signal}) {
+    subscription = signal;
+    assert.equal(usbIdentity, config.usbIdentity);
+    connected.resolve(attach({usbIdentity, probe: n => assert.equal(n, 1), close: () => closed++}));
+  }});
+  const session = await connected.promise;
+  const routes = new Map();
+  createHostPlugin(fixture.client, {desktopDeviceQuery: true, managedDeviceUpdate: access, desktopBattery: true})({
+    effect(install) { fixture.disposers.push(install()); },
+    connection: {fetch: {register(route) {
+      routes.set(route.path, route.fetch);
+      return () => routes.delete(route.path);
+    }}},
+    webServer: {register: () => () => {}},
+  });
+  async function call(path, body) {
+    const route = '/api/pet-hub-device/' + path;
+    const response = await routes.get(route)(new Request('http://dsh.internal' + route, body ? {method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-Pet-Hub': '1'}, body: JSON.stringify(body)} : {}));
+    assert.equal(response.status, 200);
+    return response.json();
+  }
+  const initial = await call('status');
+  assert.equal(initial.update.usbPresent, false);
+  assert.equal(initial.update.networkStatus, undefined);
+  const sample = {operation: 'sample', instanceId: initial.instanceId, requestId: 'a'.repeat(32)};
+  assert.deepEqual(await call('battery', sample), {status: 'disconnected'});
+  assert.equal(session.receive(1, {schema: 1, version: '0.1.29', slot: 'ota_0', identity: config.usbIdentity}), true);
+  assert.deepEqual((await call('status')).update.networkStatus,
+    {device: {version: '0.1.29', slot: 'ota_0'}, battery: null, sensors: null});
+  assert.deepEqual(await call('battery', sample), {status: 'network_active'});
+  await dispose();
+  assert.equal(closed, 1);
+  assert.equal(subscription.aborted, true);
+  assert.equal(session.receive(1, {schema: 1, version: '0.1.29', slot: 'ota_0'}), false);
   await fixture.released();
 });

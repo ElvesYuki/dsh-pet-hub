@@ -9,7 +9,7 @@ export function validatePetUrl(base) {
   return new URL(`${u.href}/state`);
 }
 /** Node HTTP deliberately ignores proxy env and does not follow redirects. */
-export function readPetState(base, { signal } = {}) {
+export function requestPetState(base, signal, parse) {
   const url = validatePetUrl(base);
   return new Promise((resolve, reject) => {
     const req = http.get(url, { signal }, res => {
@@ -22,7 +22,7 @@ export function readPetState(base, { signal } = {}) {
       });
       res.on('error', reject);
       res.on('end', () => {
-        try { resolve(parsePetState(JSON.parse(Buffer.concat(chunks).toString('utf8')))); }
+        try { resolve(parse(JSON.parse(Buffer.concat(chunks).toString('utf8')))); }
         catch { reject(new Error('invalid pet response')); }
       });
     });
@@ -30,4 +30,8 @@ export function readPetState(base, { signal } = {}) {
     req.on('close', () => clearTimeout(deadline));
     req.on('error', reject);
   });
+}
+
+export function readPetState(base, {signal} = {}) {
+  return requestPetState(base, signal, parsePetState);
 }

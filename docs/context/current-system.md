@@ -1,6 +1,26 @@
-# 当前系统（2026-11-18）
+# 当前系统（2026-11-20）
 
-签名 DeepSeek Harness Desktop `0.2.2-rc.3` 现场留驻主 Hub `0.0.4` 和登记包 `0.0.2`，原 profile 补丁逐字节一致。「设置 → 桌面宠物设备」主卡已实测自动更新电池、离页再进重新采样、免码查询和持久绑定核对。再次离页后，连续 6 秒 12 次宿主检查均未见串口占用。归属未确认时查询结果独立展示。主包 `0.0.2` 已备份供回退。[电池实装验收](../reports/2026-11-18-vp8-desktop-battery.md#dsh-页面现场验收) · [合并页实装](../reports/2026-11-17-vp8-desktop-device-page.md)
+ESP32 实时 3D 独立路线已完成木子恶魔版大肥鱼原模型的离线评估。466 圆屏 12 角度对照中，正面人物高度保持 266 像素，可见轮廓均未越圆。原版 45,663 三角面、146 蒙皮关节，贴图规模需为板端重新评估。配布网页与 VRM 内嵌修改条款有差异，设备素材转换及帧率待验证。[评估报告和本机入口](../reports/2026-11-19-esp32-3d-bluefatfish.md)
+
+日常 DSH Desktop `0.2.2-rc.5` 仍安装 Hub `0.0.8` Hooks 包。DSH 真机联动收尾时原窗口显示「TCP 实时状态」、已核对持久绑定和「联动已关闭」，读回 `0.1.39-l-battery-usb-pair-test`／`ota_0`。最近一次状态查阅见日常 profile 的 Hub 开关为关闭。Codex 来源等待配置，上一份主动状态包与 profile 已备份。[真机联调与恢复](../reports/2026-11-20-vp8-dsh-task-motion-live.md) · [此前日常换装](../reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装)
+
+仓库的设备管理源码、界面和测试已用职责命名，桌面候选从 `desktop-host.mjs` 装配并输出至 `dist-desktop/`。管理端私有配置、路由和索引同步采用新名字。设备收发字节及现有日常部署沿用原来的契约。[名称与切换边界](plans/device-code-naming.md) · [固件交接](../protocol/device-naming-firmware-handoff.md)
+
+VP8 `0.1.33` 阶段的主动状态复用原 USB 登记、Keychain 和 VPL1 mode 3。隔离真机通过 USB 首条、实体拔插与纯电池 TCP、受控 TCP 失联 6／9 秒回退和关闭、重连停 USB，以及配网 INFO、升级前 STATUS3 的串口交接。实际 AP 物理断网与 OTA 写入仍待独立验收。此前 `0.1.32` 首帧属于原 Ping 版隔离真机证据。[0.1.33 真机证据](../reports/2026-11-20-vp8-0133-live.md) · [原状态版验证](../reports/2026-11-19-vp8-status-v2-hub.md)
+
+DSH 独立状态源经真实 DSH 任务在 `0.1.39` 验证思考、工作和完成的动作 1／2／3，同一认证连接均收到匹配的 `Accepted`、`Presented`，整理沿用 2 并去重，庆祝一次。首帧语义由设备 DMA 提交确认。整段目测、触摸和断线另验。[真机联调](../reports/2026-11-20-vp8-dsh-task-motion-live.md)
+
+设备页可选择并保存独立 DSH 或 Codex 来源。DSH rc.5 随包控制器通过六档。Codex 可连接已配置 App Server，也可从一个已授权项目的 Hooks 接收本机状态。后者已用 App 随包引擎跑通思考、工作、整理、等待审批、结束／中断回空闲。失败尝试会清除活动，明确完成与出错仍需 App Server 的回合终态。实际桌面窗口的 Hook 审阅、既有对话和 Codex 圆屏首帧待验。[Hooks 验证与回退](../reports/2026-11-20-vp8-codex-app-hooks.md)
+
+固件任务用 `0.1.26` 和实际 rc.5 设置页验证独立天气地点保存和复位读回，后续 `0.1.29` 修复天气调度。管理端继续用 DESKWEATHER1 通过登记 USB 读写地点。Wi-Fi、时钟与天气设置的 USB 路径分别按现有能力工作。[管理端候选](../reports/2026-11-19-vp8-desktop-weather.md)
+
+rc.3 组合主包 `0.0.6` 与登记包 `0.0.3` 提供 DESKNET2 配网候选。实际 rc.3 Connection 和 Desktop 转发函数的隔离装配已验证二进制请求、超时不重发、取消和回收。固件任务经同一登记包实板验证保存、联网、原绑定及软复位后 SNTP。管理端的独立 INFO 请求因当前环境串口读写受限返回不可用，完整设置窗口读回待验。[配网验证与回退](../reports/2026-11-19-vp8-desktop-network.md)
+
+早期 `0.1.33`／`ota_1` 留驻验收通过签名镜像读回和板端 USB 订阅，当时保留 `0.1.32`／`ota_0` 和本机 `0.1.30` 回退。固件任务在该阶段核对了分区、绑定、网络、天气和 60 个 VP8 素材对象。当前测试固件的可用回退以固件任务为准。[0.1.33 阶段联调方案](plans/vp8-0133-live-acceptance.md)
+
+在 DSH `0.2.2-rc.3` 阶段，主 Hub `0.0.5` 与固件 `0.1.10` 实测显示触点、三轴加速度和角速度。离开后 11 秒内 21 次检查均未见串口占用，原主包 `0.0.4` 用于当时的回退。[传感器验收](../protocol/vp8-desktop-sensors.md)
+
+早期 rc.3 主 Hub `0.0.4` 和登记包 `0.0.2` 已实装验证电池自动采样、免码查询和持久绑定核对。再次离页后，连续 6 秒 12 次宿主检查均未见串口占用。归属未确认时查询结果独立展示。[电池实装验收](../reports/2026-11-18-vp8-desktop-battery.md#dsh-页面现场验收) · [合并页实装](../reports/2026-11-17-vp8-desktop-device-page.md)
 
 Connection owner 继续自动托管免码 STATUS2 查询。此前已在真实 Desktop 验证停用释放 USB 和 IPC、重新启用恢复只读实例。应用退出由宿主测试覆盖。原手动命令和 pet 0.4.8 保留，显式 `start-wave` 继续使用原授权码。[免输入实测](../reports/2026-11-17-vp8-desktop-no-code.md) · [托管生命周期](../reports/2026-11-17-vp8-desktop-managed.md)
 
@@ -8,9 +28,9 @@ Connection owner 继续自动托管免码 STATUS2 查询。此前已在真实 De
 
 VP8 一键 USB 真板首绑由 CLI 完成。固件任务核对了 NVS 持久记录、拔插、设备复位及原 Keychain 引用。历史 BOOT 入口保留，未登记设备从真实设置页发起首绑仍待验证。[首绑实装](../reports/2026-11-17-vp8-usb-desktop-hotload.md)
 
-1.75C-EN 现场运行 `0.1.6-battery-usb-pair-test`／`ota_0`，已从 `0.0.4` 设备页免码查回。固件任务实测恒流、恒压、限流及 60 秒内 13 次 5 秒 USB 轮询。57 个素材保留，`0.1.5-usb-pair-test`／`ota_1` 是板上回退，`0.1.4` 留本机完整槽备份。旧 `56644ffd` 动作 1 与 PET4/PMA1 保留兼容回退。[USB 电池与主包](../reports/2026-11-18-vp8-desktop-battery.md) · [0.1.4 OTA 验收](../reports/2026-11-16-vp8-ota14-dsh.md)
+早期电池验收从 `0.0.4` 设备页免码查回 `0.1.6-battery-usb-pair-test`／`ota_0`。固件任务实测恒流、恒压、限流及 60 秒内 13 次 5 秒 USB 轮询。该阶段有 57 个素材，`0.1.4` 留本机完整槽备份。旧 `56644ffd` 动作 1 与 PET4/PMA1 保留兼容回退。[USB 电池与主包](../reports/2026-11-18-vp8-desktop-battery.md) · [0.1.4 OTA 验收](../reports/2026-11-16-vp8-ota14-dsh.md)
 
-400×400 离线素材库共有 96 段。0–77 引用冻结的原 78 段，78–95 为从 dsh-pet 0.4.9 全部 114 段源素材中筛选的 18 段 VP8，已通过宿主双解码。当前板上可直接播放 57 段，新增片段待真机安装及调度验证。[400 素材复查与补录](../reports/2026-11-18-native400-upstream-action-review.md)
+400×400 离线素材库共有 96 段。0–77 引用冻结的原 78 段，78–95 为从 dsh-pet 0.4.9 全部 114 段源素材中筛选的 18 段 VP8，已通过宿主双解码。板上读回库存见当前版本记录。[400 素材复查与补录](../reports/2026-11-18-native400-upstream-action-review.md)
 
 日常 Personal DSH Launcher active 为 `0.2.2-rc.1`。同一设置页的一键入口已通过该运行包的临时 profile 与双端口复验。默认无可信发布，保留人工查询；只有明确配置签名元数据、发布公钥及独立 SPKI 指纹并核对镜像后，才允许人工升级。日常 profile 无 Hub，未进行安装、重启或实体设备操作。[日常部署](../reports/2026-11-16-vp8-ota-daily.md)
 

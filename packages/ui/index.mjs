@@ -1,5 +1,5 @@
 import {makeNative400NodeControls} from './native400-node-controls.mjs';
-import {makeVp8ActionPanel} from './vp8-action-update.mjs';
+import {makeDeviceUpdatePanel} from './device-update-panel.mjs';
 import {makeNative400ReviewControls} from './native400-review-controls.mjs';
 import {publicNative400SourceReviewView} from '../core/native400-source-review-view.mjs';
 import {renderNative400SourceReview} from './native400-source-review.mjs';
@@ -37,7 +37,7 @@ export function simulationRequest(status,clientId,action,requestId) {
 export function makeHubPanel(React,transport,readPage) {
   const {createElement:h,useState,useEffect}=React;
   const NodeControls=transport.nodeControlStatus?makeNative400NodeControls(React,transport):null;
-  const Vp8Panel=transport.vp8Status?makeVp8ActionPanel(React,transport):null;
+  const DeviceUpdateSection=transport.deviceUpdateStatus?makeDeviceUpdatePanel(React,transport):null;
   const ReviewControls=transport.reviewStatus?makeNative400ReviewControls(React,transport):null;
   const MaterialPicker=makeMaterialPicker(React);
   const RepositoryPanel=makeRepositoryPanel(React,transport);
@@ -79,11 +79,11 @@ export function makeHubPanel(React,transport,readPage) {
       finally{session.busy=false;if(!session.controller.signal.aborted)setPending(false);}
     }
     return renderHubPanel(h,hubViewModel(status),error,{act,pending:pending || !session,MaterialPicker,RepositoryPanel,RolePanel,ReviewControls,NodeControls,
-      Vp8Panel:status?.vp8ActionUpdate===true?Vp8Panel:null,serviceInstanceId:status?.serviceInstanceId,
-      vp8NoCode:!!transport.vp8LocalStatus && status?.vp8DesktopNoCode === true});
+      DeviceUpdateSection:status?.deviceUpdateAvailable===true?DeviceUpdateSection:null,serviceInstanceId:status?.serviceInstanceId,
+      deviceNoCode:!!transport.localDeviceStatus && status?.desktopDeviceNoCode === true});
   };
 }
-export function renderHubPanel(h,model,error='',{act,pending=false,MaterialPicker,RepositoryPanel,RolePanel,ReviewControls,NodeControls,Vp8Panel,serviceInstanceId,vp8NoCode=false}={}) {
+export function renderHubPanel(h,model,error='',{act,pending=false,MaterialPicker,RepositoryPanel,RolePanel,ReviewControls,NodeControls,DeviceUpdateSection,serviceInstanceId,deviceNoCode=false}={}) {
   const card={padding:'18px',border:'1px solid #8885',borderRadius:'12px',marginBottom:'16px'},row={display:'flex',flexWrap:'wrap',gap:'8px',margin:'12px 0'};
   const labels={disabled:'未启用',pending:'等待首拍',connected:'已连接',unsupported:'pet 未提供页面状态接口',unavailable:'不可用',online:'在线',offline:'离线',stale:'心跳过期',bound:'已绑定',accepted:'已受理',verified:'素材已校验',playing:'首帧已提交',failed:'失败',cancelled:'已取消'};
   const materialLabels={verifying:'后台校验中',submitting:'解码首帧中',unassigned:'未选择',unsupported:'不兼容',accepted:'已受理',verified:'素材已校验',playing:'模拟首帧已提交',failed:'校验失败',offline:'离线（保留最后观测）',metadata_only:'仅规格参考'};
@@ -103,7 +103,7 @@ export function renderHubPanel(h,model,error='',{act,pending=false,MaterialPicke
     renderNative400SourceReview(h,model.sourceReview),
     model.sourceReview&&ReviewControls?h(ReviewControls,null):null,
     NodeControls?h(NodeControls,null):null,
-    Vp8Panel?h(Vp8Panel,{key:serviceInstanceId,serviceInstanceId,noCode:vp8NoCode}):null,
+    DeviceUpdateSection?h(DeviceUpdateSection,{key:serviceInstanceId,serviceInstanceId,noCode:deviceNoCode}):null,
     renderObservationPanel(h,model.observationReview),
     h('article',{style:card},h('h3',null,'任务状态来源'),h('p',null,`${model.source.mode} / ${labels[model.source.status] ?? '未知状态'}`),h('p',null,`任务语义：${model.source.status==='connected'?model.source.state ?? '空闲':'—'}`),
       h('small',null,model.simulation?'此处为合成状态，不读取桌面 pet。':'读取 pet 的聚合状态；桌面宠物保持独立播放。')),
@@ -120,7 +120,7 @@ export function renderHubPanel(h,model,error='',{act,pending=false,MaterialPicke
         button(device.connection==='offline'?`${device.name} 重连`:`${device.name} 断连`,{operation:device.connection==='offline'?'reconnect':'offline',device_id:device.device_id})))),
     h('article',{style:card},h('h3',null,'实体设备'),h('p',null,model.devices.length?'以上均为模拟设备；暂无真实设备接入':'暂无已接入设备'),
       h('p',null,'配对、角色与动作映射、素材分发和设备运行状态将在后续阶段接入。'),h('button',{type:'button',disabled:true,title:'BLE 配对尚未实现'},'添加设备（待开放）')),
-    vp8NoCode ? null : h('p',null,model.simulation?'播放与虚拟时间重启后重置；已确认素材偏好保存在此模拟服务目录，重启恢复。':Vp8Panel?'VP8 安装须经本地授权。已保存以设备回执或查询为准。':NodeControls?'缓存动作需可信宿主授权；提交后仍需设备首帧回执。':'当前页面不会连接设备或下发动作。'));
+    deviceNoCode ? null : h('p',null,model.simulation?'播放与虚拟时间重启后重置；已确认素材偏好保存在此模拟服务目录，重启恢复。':DeviceUpdateSection?'安装素材须经本地授权。已保存以设备回执或查询为准。':NodeControls?'缓存动作需可信宿主授权；提交后仍需设备首帧回执。':'当前页面不会连接设备或下发动作。'));
 }
 
 /** Draft is local; polling does not select or save a recommendation. Revision key resets after refresh. */
