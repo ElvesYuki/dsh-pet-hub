@@ -3,7 +3,7 @@ import {addAbortListener, once} from 'node:events';
 import {createServer} from 'node:net';
 import {decodePbp1Frame, encodePbp1Frame} from '../core/native400-pbp1-wire.mjs';
 import {native400UsbPairingScope} from './native400-usb-pairing.mjs';
-import {isPrivateMediaIPv4} from './native400-tcp-media-socket.mjs';
+import {isPrivateIPv4} from './private-ipv4.mjs';
 import {prepareNative400LanMediaTransfer} from './native400-tcp-media.mjs';
 
 const armedPairings = new WeakSet();
@@ -13,7 +13,7 @@ function need(ok, code) {
 }
 
 export function encodeNative400LanArm({boot, proposal, address, port, beginSha, ssid, password, key}) {
-  need(isPrivateMediaIPv4(address) && Number.isInteger(port) && port >= 1 && port <= 65535, 'media_lan_endpoint');
+  need(isPrivateIPv4(address) && Number.isInteger(port) && port >= 1 && port <= 65535, 'media_lan_endpoint');
   need(ssid instanceof Uint8Array && ssid.length >= 1 && ssid.length <= 32 && !ssid.includes(0) &&
     password instanceof Uint8Array && (password.length === 0 || (password.length >= 8 && password.length <= 63 &&
       password.every(byte => byte >= 32 && byte <= 126))), 'media_lan_wifi');
@@ -66,7 +66,7 @@ export function createNative400LanMaintenance(options, makeServer = createServer
   need(options?.enabled === true, 'media_lan_disabled');
   const {address, port, pairing, openArmTransport} = options;
   const endpoint = Object.freeze({address, port});
-  need(isPrivateMediaIPv4(address) && Number.isInteger(port) && port >= 1 && port <= 65535, 'media_lan_endpoint');
+  need(isPrivateIPv4(address) && Number.isInteger(port) && port >= 1 && port <= 65535, 'media_lan_endpoint');
   const scope = native400UsbPairingScope(pairing);
   need(scope && typeof openArmTransport === 'function', 'media_lan_scope');
   const job = prepareNative400LanMediaTransfer(options, endpoint);

@@ -59,7 +59,7 @@ test('VP8 BOOT text uses actual exclusive PTY with fragmentation, cancellation a
   const tty = join(root, 'tty'), pty = join(root, 'pty');
   const cc = ['-std=c11', '-D_DEFAULT_SOURCE', '-Wall', '-Wextra', '-Werror'];
   const options = {timeout: 10000};
-  execFileSync('cc', [...cc, 'native/native400-pbp1-tty.c', '-o', tty], options);
+  execFileSync('cc', [...cc, 'native/exclusive-tty.c', '-o', tty], options);
   execFileSync('cc', [...cc, 'tests/fixtures/native400-pbp1-pty.c', '-o', pty,
     ...(process.platform === 'linux' ? ['-lutil'] : [])], options);
   const child = spawn(pty, ['--review'], {stdio: ['pipe', 'pipe', 'inherit']});

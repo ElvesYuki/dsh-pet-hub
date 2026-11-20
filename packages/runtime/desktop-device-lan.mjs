@@ -3,7 +3,7 @@ import {createServer} from 'node:net';
 import {networkInterfaces} from 'node:os';
 import {setTimeout as delay} from 'node:timers/promises';
 import {requireThat} from '../core/protocol.mjs';
-import {isPrivateMediaIPv4} from './native400-tcp-media-socket.mjs';
+import {isPrivateIPv4} from './private-ipv4.mjs';
 import {createDeviceTcpAdapter} from './device-tcp-session.mjs';
 
 const ipNumber = address => address.split('.').reduce((ip, byte) => ip * 256 + Number(byte), 0);
@@ -14,7 +14,7 @@ function endpointGate({address, port}, interfaces, fixture) {
     requireThat(address === '127.0.0.1', 'device_lan_fixture');
     return socket => socket.localAddress === address && socket.remoteAddress === address;
   }
-  requireThat(isPrivateMediaIPv4(address), 'device_lan_address');
+  requireThat(isPrivateIPv4(address), 'device_lan_address');
   const local = Object.values(interfaces()).flat().filter(entry => entry?.address === address &&
     entry.family === 'IPv4' && entry.internal === false);
   requireThat(local.length === 1 && local[0].cidr && local[0].netmask, 'device_lan_interface');
@@ -23,7 +23,7 @@ function endpointGate({address, port}, interfaces, fixture) {
   const mask = ipNumber(local[0].netmask);
   const subnet = ipNumber(address) & mask;
   return socket => socket.localAddress === address && socket.localPort === port &&
-    isPrivateMediaIPv4(socket.remoteAddress) && (ipNumber(socket.remoteAddress) & mask) === subnet;
+    isPrivateIPv4(socket.remoteAddress) && (ipNumber(socket.remoteAddress) & mask) === subnet;
 }
 
 function closeServer(server) {

@@ -8,6 +8,8 @@ ESP32 实时 3D 独立路线已完成木子恶魔版大肥鱼原模型的离线�
 
 仓库的设备管理源码、界面和测试已用职责命名，桌面候选从 `desktop-host.mjs` 装配并输出至 `dist-desktop/`。管理端私有配置、路由和索引同步采用新名字。设备收发字节及现有日常部署沿用原来的契约。[名称与切换边界](plans/device-code-naming.md) · [固件交接](../protocol/device-naming-firmware-handoff.md)
 
+登记、升级和状态查询共用 `exclusive-tty.mjs` 与 `native/exclusive-tty.c`。桌面、素材与历史验证共用 `private-ipv4.mjs` 和 `read-json-body.mjs`，按各入口应用原有授权、期限与回执规则。[共用运行层整理](plans/shared-runtime-cleanup.md)
+
 VP8 `0.1.33` 阶段的主动状态复用原 USB 登记、Keychain 和 VPL1 mode 3。隔离真机通过 USB 首条、实体拔插与纯电池 TCP、受控 TCP 失联 6／9 秒回退和关闭、重连停 USB，以及配网 INFO、升级前 STATUS3 的串口交接。实际 AP 物理断网与 OTA 写入仍待独立验收。此前 `0.1.32` 首帧属于原 Ping 版隔离真机证据。[0.1.33 真机证据](../reports/2026-11-20-vp8-0133-live.md) · [原状态版验证](../reports/2026-11-19-vp8-status-v2-hub.md)
 
 DSH 独立状态源经真实 DSH 任务在 `0.1.39` 验证思考、工作和完成的动作 1／2／3，同一认证连接均收到匹配的 `Accepted`、`Presented`，整理沿用 2 并去重，庆祝一次。首帧语义由设备 DMA 提交确认。整段目测、触摸和断线另验。[真机联调](../reports/2026-11-20-vp8-dsh-task-motion-live.md)

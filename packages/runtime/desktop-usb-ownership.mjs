@@ -1,12 +1,12 @@
 import {requireThat} from '../core/protocol.mjs';
-import {openExclusiveNative400Tty} from './native400-pbp1-serial.mjs';
+import {openExclusiveTty} from './exclusive-tty.mjs';
 
 const key = Symbol.for('dsh-pet-hub.desktop-usb/1');
 const stateFor = (scope = globalThis) => scope[key] ??= {targets: new Map(), lease: null};
 
 /** Run both Desktop packages through a single USB lease. POSIX flock and
  * TIOCEXCL still protect the descriptor across other processes. */
-export function desktopUsbOpener(open = openExclusiveNative400Tty, scope = globalThis, {yieldToForeground} = {}) {
+export function desktopUsbOpener(open = openExclusiveTty, scope = globalThis, {yieldToForeground} = {}) {
   const state = stateFor(scope);
   return async function acquire(options) {
     requireThat(!state.waiting, 'device_desktop_usb_busy');

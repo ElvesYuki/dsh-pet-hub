@@ -1,6 +1,6 @@
 import {Readable} from 'node:stream';
 import {keys, uint64} from '../../packages/core/protocol.mjs';
-import {readNative400ReviewBody} from '../../packages/runtime/native400-review-channel.mjs';
+import {readJsonBody} from '../../packages/runtime/read-json-body.mjs';
 import {decodeNetworkBody, networkBodyLimit} from '../../packages/runtime/usb-wifi-settings.mjs';
 import {validateWeatherRequest} from '../../packages/runtime/usb-weather-settings.mjs';
 import {parseWeatherSearch, searchWeatherPlaces} from '../../packages/runtime/weather-geocoding.mjs';
@@ -110,7 +110,7 @@ export function registerEnrollmentRoutes(ctx, {owner, authorize, transport = 'de
         if (post) {
           const stream = Readable.fromWeb(request.body, {signal});
           try {
-            input = await readNative400ReviewBody(stream, {signal});
+            input = await readJsonBody(stream, {signal});
             if (route === 'weather-search') input = parseWeatherSearch(input);
             else if (route === 'weather') validateWeatherRequest(input);
             else {

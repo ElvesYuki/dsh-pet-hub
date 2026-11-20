@@ -6,7 +6,8 @@ import {createNative400ReviewedConfigSession} from './native400-private-config-s
 import {publicNative400LanHostView} from '../core/native400-tcp-lan-host-view.mjs';
 import {native400TcpHostDescriptor,createNative400TcpHostOwner} from './native400-tcp-host.mjs';
 import {publicNative400TcpHostView} from '../core/native400-tcp-host-view.mjs';
-import {readNative400ReviewBody,native400ReviewError} from './native400-review-channel.mjs';
+import {readJsonBody} from './read-json-body.mjs';
+import {native400ReviewError} from './native400-review-channel.mjs';
 import {native400SourceReviewDescriptor,createNative400SourceReviewOwner} from './native400-source-review-host.mjs';
 import {publicNative400SourceReviewView} from '../core/native400-source-review-view.mjs';
 import {FRAME_RESPONSE_BYTES,SMALL_RESPONSE_BYTES} from '../core/material-profile.mjs';
@@ -100,7 +101,7 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
         if (!deviceUpdateOwner.authorize(req.headers['x-hub-review'])) return reply(401, {error: 'device_unauthorized'});
         if (req.method === 'GET' && req.url.endsWith('/status')) return reply(200, {update: deviceUpdateOwner.snapshot()});
         if (req.method !== 'POST' || !req.url.endsWith('/command')) return reply(404, {error: 'device_route'});
-        try { return reply(200, {update: deviceUpdateOwner.command(await readNative400ReviewBody(req))}); }
+        try { return reply(200, {update: deviceUpdateOwner.command(await readJsonBody(req))}); }
         catch (error) { return reply(error.status === 409 ? 409 : 400, {error: 'device_command_rejected'}); }
       }
       if (req.method === 'GET' && req.url === '/v1/status') {
@@ -119,11 +120,11 @@ export async function startOrAttach({ directory, source: sourceOptions = {}, dev
           source:state?.source ?? source.snapshot(),devices:state?.devices.map(d=>({...d,...(materials?{material:materials.view(d.device_id)}:{})})) ?? [],capabilities:{bleProvisioning:false,deviceTransport:false,simulation:!!state} });
       }
       if(sourceReviewOwner?.reviewChannel&&((req.method==='GET'&&req.url==='/v1/source-review/controls')||(req.method==='POST'&&['/v1/source-review/start','/v1/source-review/cancel'].includes(req.url)))){
-        try{const body=req.method==='POST'?await readNative400ReviewBody(req):undefined;return reply(200,sourceReviewOwner.reviewChannel.request(req.headers['x-hub-review'],req.method,req.url,body));}
+        try{const body=req.method==='POST'?await readJsonBody(req):undefined;return reply(200,sourceReviewOwner.reviewChannel.request(req.headers['x-hub-review'],req.method,req.url,body));}
         catch(e){const failure=native400ReviewError(e);return reply(failure.status,{error:failure.error});}
       }
       if(nodeChannel&&((req.method==='GET'&&req.url==='/v1/node-control/controls')||(req.method==='POST'&&req.url==='/v1/node-control/command'))){
-        try{const body=req.method==='POST'?await readNative400ReviewBody(req):undefined;return reply(200,nodeChannel.request(req.headers['x-hub-review'],req.method,req.url,body));}
+        try{const body=req.method==='POST'?await readJsonBody(req):undefined;return reply(200,nodeChannel.request(req.headers['x-hub-review'],req.method,req.url,body));}
         catch(e){const failure=native400ReviewError(e);return reply(failure.status,{error:failure.error});}
       }
       if(lanReview)return reply(404,{error:'lan_review_read_only'});

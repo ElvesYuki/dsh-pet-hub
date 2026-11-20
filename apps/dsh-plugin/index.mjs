@@ -1,7 +1,8 @@
 import {Readable} from 'node:stream';
 import {native400NodeControlEnvelope,native400NodeControlAck} from '../../packages/core/native400-node-control-access.mjs';
 import {native400ReviewEnvelope,native400StartAck,native400CancelAck} from '../../packages/core/native400-review-access.mjs';
-import {readNative400ReviewBody,native400ReviewError} from '../../packages/runtime/native400-review-channel.mjs';
+import {readJsonBody} from '../../packages/runtime/read-json-body.mjs';
+import {native400ReviewError} from '../../packages/runtime/native400-review-channel.mjs';
 import {publicNative400SourceReviewView} from '../../packages/core/native400-source-review-view.mjs';
 import {FRAME_RESPONSE_BYTES,SMALL_RESPONSE_BYTES} from '../../packages/core/material-profile.mjs';
 import { createHubClient } from '../../packages/runtime/client.mjs';
@@ -75,7 +76,7 @@ export function createHostPlugin(client,{reviewAccess,controlAccess,deviceUpdate
               const reviewToken = req.headers['x-pet-hub-operator'];
               if (typeof reviewToken !== 'string' || !/^[a-f0-9]{32,64}$/.test(reviewToken)) return reply(401, {error:'device_unauthorized'});
               try {
-                const body = post ? await readNative400ReviewBody(req, {signal: controller.signal}) : undefined;
+                const body = post ? await readJsonBody(req, {signal: controller.signal}) : undefined;
                 if (!mounted || controller.signal.aborted) return;
                 if (body?.operation === 'wave') return reply(403, {error: 'device_query_only'});
                 const result = await client.request(req.method, req.url.replace('/dsh-pet-hub', '/v1'), body,
@@ -99,7 +100,7 @@ export function createHostPlugin(client,{reviewAccess,controlAccess,deviceUpdate
                 const scoped=await access.resolve(req,{signal:controller.signal});
                 if(!mounted||controller.signal.aborted)return;
                 if(!scoped||typeof scoped.request!=='function')return reply(401,{error:'controls_unauthorized'});
-                const input=post?await readNative400ReviewBody(req,{signal:controller.signal}):undefined;
+                const input=post?await readJsonBody(req,{signal:controller.signal}):undefined;
                 if(!mounted||controller.signal.aborted)return;
                 const result=await scoped.request(req.method,req.url.replace('/dsh-pet-hub','/v1'),input,{signal:controller.signal});
                 if(!mounted||controller.signal.aborted)return;
@@ -165,7 +166,7 @@ function mountDesktopDeviceQuery(ctx, client, managedDeviceUpdate, desktopBatter
           if (!request.body || request.headers.get('content-type') !== 'application/json' || request.headers.get('x-pet-hub') !== '1')
             return reply(403, {error: 'device_request_rejected'});
           const stream = Readable.fromWeb(request.body, {signal});
-          try { body = await readNative400ReviewBody(stream, {signal}); }
+          try { body = await readJsonBody(stream, {signal}); }
           finally { stream.destroy(); }
           if (battery) {
             if (!['sample', 'cancel'].includes(body?.operation)) return reply(403, {error: 'device_query_only'});

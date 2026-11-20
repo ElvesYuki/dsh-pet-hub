@@ -1,5 +1,5 @@
 import {Readable} from 'node:stream';
-import {readNative400ReviewBody} from '../../packages/runtime/native400-review-channel.mjs';
+import {readJsonBody} from '../../packages/runtime/read-json-body.mjs';
 
 const prefix = '/api/pet-hub-task-source/';
 
@@ -21,7 +21,7 @@ export function registerTaskSourceRoutes(ctx, owner) {
       if (!post) return reply(200, owner.view());
       const stream = Readable.fromWeb(request.body, {signal});
       let input;
-      try { input = await readNative400ReviewBody(stream, {signal}); }
+      try { input = await readJsonBody(stream, {signal}); }
       catch { return reply(400, {error: 'task_source_invalid'}); }
       finally { stream.destroy(); }
       signal.throwIfAborted();

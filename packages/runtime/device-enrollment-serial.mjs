@@ -2,7 +2,7 @@ import {lstat} from 'node:fs/promises';
 import {setTimeout as delay} from 'node:timers/promises';
 import {decodePbp1Frame} from '../core/native400-pbp1-wire.mjs';
 import {requireThat as need} from '../core/protocol.mjs';
-import {openExclusiveNative400Tty} from './native400-pbp1-serial.mjs';
+import {openExclusiveTty} from './exclusive-tty.mjs';
 import {identifyMaintenanceUsb} from './device-maintenance-usb.mjs';
 
 const allow = {allowBinding: true, allowBootProof: true};
@@ -31,7 +31,7 @@ function sameNode(a, b) {
 /** Explicitly selected USB callout or isolated PTY. USB identity is verified
  * on both sides of opening, then the fd never changes during the attempt. */
 export function createBootSerial({port, usbIdentity, helper, fixture = false, timeoutMs = 1500},
-  {identify = identifyMaintenanceUsb, openTty = openExclusiveNative400Tty, inspect = lstat} = {}) {
+  {identify = identifyMaintenanceUsb, openTty = openExclusiveTty, inspect = lstat} = {}) {
   need((fixture ? fixturePath : devicePath).test(port) && (fixture ? usbIdentity === undefined :
     typeof usbIdentity === 'string' && /^\d+\/[a-f0-9:-]{8,48}$/.test(usbIdentity)), 'device_serial_endpoint');
   need(Number.isInteger(timeoutMs) && timeoutMs >= 25 && timeoutMs <= 5000, 'device_serial_timeout');

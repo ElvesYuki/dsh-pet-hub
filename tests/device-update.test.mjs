@@ -12,7 +12,7 @@ import {runInNewContext} from 'node:vm';
 import test from 'node:test';
 import {startOrAttach} from '../packages/runtime/service.mjs';
 import {createHostPlugin} from '../apps/dsh-plugin/index.mjs';
-import {openExclusiveNative400Tty} from '../packages/runtime/native400-pbp1-serial.mjs';
+import {openExclusiveTty} from '../packages/runtime/exclusive-tty.mjs';
 import {prepareDeviceUpdate, readDeviceMediaObject, LEGACY_MEDIA_BYTES, LEGACY_MEDIA_ROUTE, MEDIA_INSTALL_OBJECT} from '../packages/runtime/device-update.mjs';
 import {minimalStatusV2, usbStatus3Reply} from './fixtures/device-status-fixture.mjs';
 import {loadTrustedRelease} from '../packages/runtime/firmware-release.mjs';
@@ -121,7 +121,7 @@ test('built plugin settings and exact command proxy use the shared runtime', {ti
   t.after(() => rm(root, {recursive: true, force: true}));
   const helper = join(root, 'tty'), bridge = join(root, 'pty');
   const cc = ['-std=c11', '-D_DEFAULT_SOURCE', '-Wall', '-Wextra', '-Werror'];
-  execFileSync('cc', [...cc, 'native/native400-pbp1-tty.c', '-o', helper]);
+  execFileSync('cc', [...cc, 'native/exclusive-tty.c', '-o', helper]);
   execFileSync('cc', [...cc, 'tests/fixtures/native400-pbp1-pty.c', '-o', bridge,
     ...(process.platform === 'linux' ? ['-lutil'] : [])]);
   const {apply} = await import('../dist/apps/dsh-plugin/index.mjs');
@@ -204,7 +204,7 @@ test('built plugin settings and exact command proxy use the shared runtime', {ti
       child.stdin.on('error', () => {});
       const input = createInterface({input: child.stdout});
       const lines = input[Symbol.asyncIterator]();
-      const io = await openExclusiveNative400Tty({enabled, helper, port: (await lines.next()).value});
+      const io = await openExclusiveTty({enabled, helper, port: (await lines.next()).value});
       child.stdin.write('!');
       const usbTask = Promise.resolve().then(() => handlePeer({
         async command() { return (await lines.next()).value; },

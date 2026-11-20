@@ -100,7 +100,7 @@ test('native PBP1 TTY and injected pairing over owned PTYs',
     const helper = join(root, 'tty'), bridge = join(root, 'pty');
     t.after(() => rmSync(root, {recursive: true, force: true}));
     const cc = ['-std=c11', '-D_DEFAULT_SOURCE', '-Wall', '-Wextra', '-Werror'];
-    execFileSync('cc', [...cc, 'native/native400-pbp1-tty.c', '-o', helper], {timeout: 5000});
+    execFileSync('cc', [...cc, 'native/exclusive-tty.c', '-o', helper], {timeout: 5000});
     execFileSync('cc', [...cc, 'tests/fixtures/native400-pbp1-pty.c', '-o', bridge,
       ...(process.platform === 'linux' ? ['-lutil'] : [])], {timeout: 5000});
 

@@ -12,6 +12,8 @@ VP8 DSH／Codex 本机来源 · [日常 DSH 换装与回退](../reports/2026-11-
 
 Hub 设备代码整理 · [源码命名、协议索引与部署边界](plans/device-code-naming.md)。迁移前的固件路径见 [历史命名交接](../protocol/device-naming-firmware-handoff.md)。
 
+同仓共用运行层 · [独占串口、局域网和请求体读取](plans/shared-runtime-cleanup.md)。
+
 VP8 设备设置页新版 · [布局与清理验收](../reports/2026-11-19-vp8-desktop-device-layout.md) · [Spec 与 Diff](plans/vp8-desktop-device-layout.md)。
 
 400 VP8 Status v2 · [USB／TCP、日常换包与回退](../reports/2026-11-19-vp8-status-v2-hub.md) · [Spec](plans/vp8-status-v2-hub-spec.md) · [Diff](plans/vp8-status-v2-hub-diff.md) · [换包方案](plans/vp8-status-v2-desktop-deploy.md)。

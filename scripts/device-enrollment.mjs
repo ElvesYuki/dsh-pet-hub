@@ -28,7 +28,7 @@ function run(command, args, options = {}) {
 
 function compile(root) {
   const tty = join(root, 'tty-helper'), keychain = join(root, 'keychain-helper');
-  run('/usr/bin/xcrun', ['clang', '-Wall', '-Wextra', '-Werror', '-o', tty, 'native/native400-pbp1-tty.c']);
+  run('/usr/bin/xcrun', ['clang', '-Wall', '-Wextra', '-Werror', '-o', tty, 'native/exclusive-tty.c']);
   run('/usr/bin/xcrun', ['clang', '-fobjc-arc', '-Wall', '-Wextra', '-Werror', '-Wno-deprecated-declarations',
     '-framework', 'Foundation', '-framework', 'Security', '-o', keychain, 'native/device-keychain.m']);
   chmodSync(tty, 0o700);

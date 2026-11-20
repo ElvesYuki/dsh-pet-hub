@@ -5,7 +5,7 @@ import {Writable} from 'node:stream';
 import {parseArgs} from 'node:util';
 import {NATIVE400_BOOT_NAMESPACE} from '../packages/core/native400-bootstrap.mjs';
 import {createNative400LanMaintenance, createNative400UsbPairing, openNative400Pbp1Serial} from '../packages/runtime/index.mjs';
-import {isPrivateMediaIPv4} from '../packages/runtime/native400-tcp-media-socket.mjs';
+import {isPrivateIPv4} from '../packages/runtime/private-ipv4.mjs';
 import {sha256} from '../packages/runtime/material-import.mjs';
 import {createPbp1ConfirmationPrompt} from './native400-pbp1-pair.mjs';
 
@@ -20,7 +20,7 @@ async function main() {
   const u64 = value => /^[1-9][0-9]{0,19}$/.test(value ?? '') && BigInt(value) < 0xffffffffffffffffn;
   if (!args.run || !fields.every(field => args[field]) || process.platform !== 'darwin' || !process.stdin.isTTY ||
       !process.stdout.isTTY || !/^\/dev\/cu\.usbmodem[A-Za-z0-9_.-]*$/.test(args.port) ||
-      !/^[0-9a-fA-F]{32}$/.test(args.device) || /^0+$/.test(args.device) || !isPrivateMediaIPv4(args.address) ||
+      !/^[0-9a-fA-F]{32}$/.test(args.device) || /^0+$/.test(args.device) || !isPrivateIPv4(args.address) ||
       !/^[1-9][0-9]{0,4}$/.test(args['tcp-port']) || port > 65535 || !u64(args.root) || !u64(args.generation)) {
     throw new Error('media_lan_arguments');
   }

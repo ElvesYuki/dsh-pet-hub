@@ -1,20 +1,15 @@
-import {isIPv4, Socket} from 'node:net';
+import {Socket} from 'node:net';
 import {decodeMediaFrame, encodeMediaFrame, mediaHeader, MEDIA_HEADER_BYTES} from '../core/native400-tcp-media-wire.mjs';
+import {isPrivateIPv4} from './private-ipv4.mjs';
 
 export function openMediaLoopbackIO(socket) {
   return openBoundMediaIO(socket, value => value.localAddress === '127.0.0.1' && value.remoteAddress === '127.0.0.1',
     'media_loopback_required');
 }
 
-export function isPrivateMediaIPv4(address) {
-  if (!isIPv4(address)) return false;
-  const [first, second] = address.split('.').map(Number);
-  return first === 10 || (first === 172 && second >= 16 && second <= 31) || (first === 192 && second === 168);
-}
-
 export function openMediaLanIO(socket, {address, port}) {
-  return openBoundMediaIO(socket, value => isPrivateMediaIPv4(address) && value.localAddress === address &&
-    value.localPort === port && isPrivateMediaIPv4(value.remoteAddress), 'media_lan_endpoint', true);
+  return openBoundMediaIO(socket, value => isPrivateIPv4(address) && value.localAddress === address &&
+    value.localPort === port && isPrivateIPv4(value.remoteAddress), 'media_lan_endpoint', true);
 }
 
 function openBoundMediaIO(socket, matches, reason, noDelay = false) {

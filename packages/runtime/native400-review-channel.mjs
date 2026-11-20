@@ -1,20 +1,8 @@
 import {randomBytes,timingSafeEqual} from 'node:crypto';
-import {parseRoundPetJson} from '../core/round-pet-identity.mjs';
 import {NATIVE400_CONTROL_ERRORS} from '../core/native400-review-controls-view.mjs';
 import {native400ReviewEnvelope,native400StartAck,native400CancelAck} from '../core/native400-review-access.mjs';
 const channelFail=code=>Object.assign(new Error(code),{code});
 export function native400ReviewError(e){const code=NATIVE400_CONTROL_ERRORS.includes(e?.code)||['controls_invalid_response','controls_body_too_large'].includes(e?.code)?e.code:'controls_operation_failed';return {status:code==='controls_body_too_large'?413:['controls_unauthorized','controls_session_expired'].includes(code)?401:code==='controls_invalid_request'?400:code==='controls_invalid_response'||code==='controls_operation_failed'?503:409,error:code};}
-/** Strict bounded JSON at both HTTP and UDS trust boundaries; drain excess without buffering. */
-export function readNative400ReviewBody(req,{signal}={}){
- return new Promise((resolve,reject)=>{let bytes=0,done=false;const chunks=[];
-  const finish=(error,value)=>{if(done)return;done=true;clearTimeout(timer);signal?.removeEventListener('abort',abort);chunks.length=0;if(error)reject(error);else resolve(value);};
-  const abort=()=>finish(channelFail('controls_cancelled')),timer=setTimeout(()=>finish(channelFail('controls_deadline')),2500);
-  signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted||req.aborted){abort();return;}
-  req.on('data',chunk=>{if(done)return;bytes+=chunk.length;if(bytes>4096)finish(channelFail('controls_body_too_large'));else chunks.push(chunk);});
-  req.on('error',e=>finish(e));req.on('aborted',abort);
-  req.on('end',()=>{if(done)return;try{finish(null,parseRoundPetJson(Buffer.concat(chunks)));}catch{finish(channelFail('controls_invalid_request'));}});
- });
-}
 /** Only an elected owner receives trusted authorize/choose/revoke. The separate
  * random credential lives in memory, never in a descriptor or global status.
  * close fences immediately and waits for the controller's actual I/O exit. */

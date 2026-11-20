@@ -2,7 +2,8 @@ import test from 'node:test';import assert from 'node:assert/strict';import http
 import {native400BootstrapFixture} from '../packages/simulator/native400-bootstrap-fixture.mjs';
 import {prepareNative400SourceReview as prepare,native400SourceReviewDescriptor as descriptor} from '../packages/runtime/native400-source-review-host.mjs';
 import {startOrAttach} from '../packages/runtime/service.mjs';import {createHubClient} from '../packages/runtime/client.mjs';
-import {readNative400ReviewBody,createNative400ReviewClient} from '../packages/runtime/native400-review-channel.mjs';
+import {readJsonBody} from '../packages/runtime/read-json-body.mjs';
+import {createNative400ReviewClient} from '../packages/runtime/native400-review-channel.mjs';
 import {createHostPlugin} from '../apps/dsh-plugin/index.mjs';import {native400ReviewEnvelope} from '../packages/core/native400-review-access.mjs';
 import {makeNative400ReviewControls} from '../packages/ui/native400-review-controls.mjs';import {sha256} from '../packages/runtime/material-import.mjs';
 const P='native400-source-review-controls/1',turn=()=>new Promise(r=>setImmediate(r));
@@ -66,4 +67,4 @@ test('400-14-39 built plugin candidate mounts controls through settings slot and
 test('400-14-40 old ACK replay never consumes a newer trusted selected reference',async t=>{const f=F(t),x=await f.selected(),req=request(await envelope(x));await x.client.request('POST','/v1/source-review/start',req);await x.hub.sourceReview.idle();await x.channel.choose(x.credential,{file:f.file,expectedRevision:'1'});const next=(await envelope(x)).selection;await x.client.request('POST','/v1/source-review/start',req);assert.deepEqual((await envelope(x)).selection,next);});
 
 test('400-14-41 incomplete authorized HTTP body expires without admitting work',async t=>{const f=F(t),x=await f.selected(),p=await proxy(f,x.hub.client,{scoped:x.client});const result=await new Promise((resolve,reject)=>{const req=http.request(p.origin+'/dsh-pet-hub/source-review/start',{method:'POST',headers:{origin:p.origin,cookie:`review=${p.cookie}`,'content-type':'application/json','x-pet-hub':'1'}},res=>{res.resume();res.on('end',()=>{req.end();resolve(res.statusCode);});});req.on('error',reject);req.write('{');});assert.equal(result,409);assert.equal(f.reads,0);assert.equal((await envelope(x)).controls.phase,'ready');});
-test('400-14-42 body-reader own cancellation exits immediately without waiting for peer end',async()=>{const stream=new PassThrough(),abort=new AbortController(),pending=readNative400ReviewBody(stream,{signal:abort.signal});stream.write('{');abort.abort();await assert.rejects(pending,e=>e.code==='controls_cancelled');stream.end('}');});
+test('400-14-42 body-reader own cancellation exits immediately without waiting for peer end',async()=>{const stream=new PassThrough(),abort=new AbortController(),pending=readJsonBody(stream,{signal:abort.signal});stream.write('{');abort.abort();await assert.rejects(pending,e=>e.code==='controls_cancelled');stream.end('}');});

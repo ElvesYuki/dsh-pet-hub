@@ -4,8 +4,8 @@ import {open} from 'node:fs/promises';
 import {createServer} from 'node:http';
 import {isAbsolute} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
-import {openExclusiveNative400Tty} from './native400-pbp1-serial.mjs';
-import {isPrivateMediaIPv4} from './native400-tcp-media-socket.mjs';
+import {openExclusiveTty} from './exclusive-tty.mjs';
+import {isPrivateIPv4} from './private-ipv4.mjs';
 import {identifyMaintenanceUsb, openVerifiedDeviceTty} from './device-maintenance-usb.mjs';
 import {serialLines} from './serial-lines.mjs';
 import {observeWave} from './usb-wave.mjs';
@@ -62,7 +62,7 @@ export function prepareDeviceUpdate({port, helper, file, address, ssid, password
     /^\d+\/[a-f0-9:-]{8,48}$/.test(usbIdentity)), 'device_usb_target');
   need(typeof waveTest === 'boolean' && (!waveTest || (queryOnly && usbIdentity)), 'device_wave_test');
   if (!queryOnly) {
-    need(isPrivateMediaIPv4(address), 'device_config');
+    need(isPrivateIPv4(address), 'device_config');
     need(typeof ssid === 'string' && typeof password === 'string' && !ssid.includes('\0') && !password.includes('\0') &&
       Buffer.byteLength(ssid) >= 1 && Buffer.byteLength(ssid) <= 32 &&
       (!password || (Buffer.byteLength(password) >= 8 && Buffer.byteLength(password) <= 63)), 'device_wifi_config');
@@ -75,7 +75,7 @@ export function prepareDeviceUpdate({port, helper, file, address, ssid, password
   const option = Object.freeze({});
   const config = {port, helper, file, address, ssid, password, protocol, firmware, queryOnly, usbIdentity, waveTest, token: Buffer.from(operatorToken),
     statusV2, afterUpgradeStatusV2,
-    openTty: hooks.openTty ?? openExclusiveNative400Tty, identifyUsb: hooks.identifyUsb ?? identifyMaintenanceUsb,
+    openTty: hooks.openTty ?? openExclusiveTty, identifyUsb: hooks.identifyUsb ?? identifyMaintenanceUsb,
     listen: hooks.listen, timeoutMs: hooks.timeoutMs ?? 60000, reconnectMs: hooks.reconnectMs ?? 45000,
     waveTimeoutMs: hooks.waveTimeoutMs ?? 20000};
   claims.set(option, config);

@@ -71,7 +71,7 @@ async function exercise(work, legacyPathOnly) {
     buildKeychain(other, replacement);
     const originalHelper = readFileSync(original);
     assert.notDeepEqual(originalHelper, readFileSync(other));
-    build(join(source, 'tty-helper'), 'native/native400-pbp1-tty.c');
+    build(join(source, 'tty-helper'), 'native/exclusive-tty.c');
     writeFileSync(join(source, 'keychain-unlock'), randomBytes(32).toString('hex'), {mode: 0o600, flag: 'wx'});
     run('init-keychain', source);
     const device = 'f1'.repeat(16), key = await createBootKeychain(source).prepare({device});
