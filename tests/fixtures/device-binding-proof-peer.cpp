@@ -1,5 +1,5 @@
 #include "action_update.h"
-#include "vp8_pairing.h"
+#include "device_pairing.h"
 #include <cassert>
 #include <iostream>
 #include <memory>

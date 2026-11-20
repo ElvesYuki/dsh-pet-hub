@@ -1,5 +1,7 @@
 # dsh-pet-hub
 
+管理端和 1.75C-EN 圆屏固件在同一仓库开发。固件入口位于 `firmware/`，画布规格位于 `media/profiles/`，两端共用协议文档与字节向量。原固件仓保留为迁移前回退依据。 [固件构建与测试](firmware/README.md) · [设备协议](docs/protocol/firmware/README.md)
+
 日常 DSH profile 已安装 Hub `0.0.8` Hooks 包。上次联调的设备页显示「TCP 实时状态」、已核对的持久绑定和「联动已关闭」。上一份主动状态包和配置已备份。[日常换装与回退](docs/reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装)
 
 VP8 主动状态使用 Status v2，设备每 3 秒上报。隔离真机已通过实体拔插、纯电池 TCP、受控失联后切 USB、重连停 USB，以及配网和升级前只读串口交接。AP 物理断网和 OTA 写入另行验收。[真机验证](docs/reports/2026-11-20-vp8-0133-live.md)
@@ -60,6 +62,8 @@ npm run build
 | packages/ui | 共享展示模型及React管理组件工厂 |
 | apps/dsh-plugin | 宿主白名单IPC代理、客户端设置槽、bundle候选 |
 | apps/service | 显式启动本地共享服务的CLI |
+| firmware | 圆屏固件、板级驱动、独立构建和宿主验证 |
+| media/profiles | 素材规格、许可和离线生成工具 |
 | docs/context | 长期事实、待办、决策、协议与计划 |
 | docs/reports | 接口核验与测试证据 |
 

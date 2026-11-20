@@ -14,7 +14,7 @@ import {openDeviceBindingIndex} from '../packages/runtime/device-binding-index.m
 import {createEnrollmentCoordinator} from '../packages/runtime/device-enrollment-owner.mjs';
 import {createBootProof, decodeBootReply, encodeBootRequest} from '../packages/runtime/device-enrollment-wire.mjs';
 import {makeEnrollmentSettings} from '../packages/ui/enrollment-settings.mjs';
-import {compileBootPeer} from './fixtures/device-enrollment-cpp.mjs';
+import {compileBootPeer, firmwareHostTests, hasCryptoPeer} from './fixtures/device-enrollment-cpp.mjs';
 
 const wire = {allowBinding: true, allowBootProof: true};
 const device = Buffer.alloc(16, 0x11), boot = 9007199254740999n;
@@ -176,13 +176,12 @@ test('bad USB echoes and incomplete proofs leave durable pending without retrans
   }
 });
 
-const firmware = process.env.ROUND_PET_BOOT_PEER_ROOT;
 const vectors = process.env.ROUND_PET_USB_VECTORS;
 test('firmware fixed USB vectors match independently encoded Node status, accepted and fence replies',
-  {skip: !firmware || !vectors, timeout: 30000}, t => {
+  {skip: !hasCryptoPeer || !vectors, timeout: 30000}, t => {
     const root = mkdtempSync(join(tmpdir(), 'vp8-usb-vectors-'));
     t.after(() => rmSync(root, {recursive: true, force: true}));
-    const generator = compileBootPeer(firmware, root, join(firmware, 'tools/round-pet/vp8-probe/test_boot_pairing.cpp'),
+    const generator = compileBootPeer(root, join(firmwareHostTests, 'test_boot_pairing.cpp'),
       'usb-vectors');
     const actual = execFileSync(generator, ['--usb-vectors'], {encoding: 'utf8', timeout: 5000});
     assert.equal(actual, readFileSync(vectors, 'utf8'));
@@ -210,10 +209,10 @@ test('firmware fixed USB vectors match independently encoded Node status, accept
   });
 
 test('real firmware C++ direct USB replies confirm immediately and recover a lost Type 132 after reboot',
-  {skip: !firmware, timeout: 30000}, async t => {
+  {skip: !hasCryptoPeer, timeout: 30000}, async t => {
     const root = mkdtempSync(join(tmpdir(), 'vp8-usb-cpp-'));
     t.after(() => rmSync(root, {recursive: true, force: true}));
-    const binary = compileBootPeer(firmware, root, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
+    const binary = compileBootPeer(root, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
     for (const lost of [false, true]) {
       await t.test(lost ? 'recover without replay' : 'immediate complete proof', async t => {
         const child = spawn(binary, ['--p256', '--usb'], {stdio: ['pipe', 'pipe', 'inherit']});
@@ -253,10 +252,10 @@ test('real firmware C++ direct USB replies confirm immediately and recover a los
   });
 
 test('VPL1 ARM pins only after a C++ USB Fence on the same open descriptor and revokes on owner close',
-  {skip: !firmware, timeout: 15000}, async t => {
+  {skip: !hasCryptoPeer, timeout: 15000}, async t => {
     const root = mkdtempSync(join(tmpdir(), 'vp8-vpl1-fence-'));
     t.after(() => rmSync(root, {recursive: true, force: true}));
-    const binary = compileBootPeer(firmware, root, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
+    const binary = compileBootPeer(root, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
     const child = spawn(binary, ['--p256', '--usb'], {stdio: ['pipe', 'pipe', 'inherit']});
     const exited = once(child, 'exit');
     const lines = createInterface({input: child.stdout})[Symbol.asyncIterator]();

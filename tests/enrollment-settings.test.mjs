@@ -13,9 +13,8 @@ import {createHostPlugin} from '../apps/dsh-plugin/index.mjs';
 import {mountEnrollmentSettings} from '../apps/dsh-plugin/enrollment-routes.mjs';
 import {openDeviceBindingIndex} from '../packages/runtime/device-binding-index.mjs';
 import {createEnrollmentCoordinator} from '../packages/runtime/device-enrollment-owner.mjs';
-import {compileBootPeer} from './fixtures/device-enrollment-cpp.mjs';
+import {compileBootPeer, hasCryptoPeer} from './fixtures/device-enrollment-cpp.mjs';
 
-const firmware = process.env.ROUND_PET_BOOT_PEER_ROOT;
 const rawKind = line => Buffer.from(line.slice('VP8PAIR1 '.length).trimEnd(), 'base64')[5];
 const pending = {phase: 'pending', keyRef: 'fixture-key', target: {
   device: '11'.repeat(16), controller: '22'.repeat(16), binding: '33'.repeat(16),
@@ -136,9 +135,9 @@ test('settings candidate registers separately from the default desktop slot and 
 });
 
 test('isolated BOOT settings and default no-code query coexist across signed C++ pairing and lost receipt recovery',
-  {skip: !firmware, timeout: 30000}, async t => {
+  {skip: !hasCryptoPeer, timeout: 30000}, async t => {
     const directory = scratch(t);
-    const cpp = compileBootPeer(firmware, directory, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
+    const cpp = compileBootPeer(directory, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
     const child = spawn(cpp, ['--p256'], {stdio: ['pipe', 'pipe', 'inherit']});
     const exit = once(child, 'exit');
     const lines = createInterface({input: child.stdout})[Symbol.asyncIterator]();

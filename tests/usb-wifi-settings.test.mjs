@@ -1,3 +1,4 @@
+import {cxx, firmwareMain, hasCppPeer} from './fixtures/firmware.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createHash, generateKeyPairSync} from 'node:crypto';
@@ -52,12 +53,11 @@ test('DESKNET2 validates safe fields and operation-specific correlated receipts'
   assert.deepEqual(decodeNetworkReply(line('012345ab', 'storage_failed'), '012345ab', 'clear'), {status: 'storage_failed'});
 });
 
-const firmware = process.env.ROUND_PET_BOOT_PEER_ROOT;
-test('Node request bytes match the upstream C++ DESKNET2 command parser', {skip: !firmware}, t => {
+test('Node request bytes match the upstream C++ DESKNET2 command parser', {skip: !hasCppPeer}, t => {
   const root = mkdtempSync(join(tmpdir(), 'vp8-desknet-peer-'));
   t.after(() => rmSync(root, {recursive: true, force: true}));
   const output = join(root, 'peer');
-  execFileSync('c++', ['-std=c++20', '-Wall', '-Wextra', '-Werror', '-I', join(firmware, 'tools/round-pet/vp8-probe/main'),
+  execFileSync(cxx, ['-std=c++20', '-Wall', '-Wextra', '-Werror', '-I', firmwareMain,
     'tests/fixtures/wifi-settings-peer.cpp', '-o', output], {timeout: 15000});
   const input = decodeNetworkBody(body(settings, secret));
   const operations = ['info', 'set', 'clear'];

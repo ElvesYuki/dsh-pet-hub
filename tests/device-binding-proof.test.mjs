@@ -8,7 +8,7 @@ import test from 'node:test';
 import {decodePbp1Frame, encodePbp1Frame} from '../packages/core/native400-pbp1-wire.mjs';
 import {createBootEnrollment} from '../packages/runtime/device-enrollment.mjs';
 import {createBootProof, decodeBootReply, encodeBootRequest} from '../packages/runtime/device-enrollment-wire.mjs';
-import {compileBootPeer} from './fixtures/device-enrollment-cpp.mjs';
+import {compileBootPeer, firmwareHostTests, hasCryptoPeer} from './fixtures/device-enrollment-cpp.mjs';
 
 const boot = '9007199254740999', reboot = '9007199254741000';
 const key = Buffer.alloc(65, 0x44);
@@ -92,12 +92,11 @@ test('VP8 proof only yields fenced unbound for successful fresh fence and keeps 
     {...attempt, boot: reboot, kind: 'fenced_unbound'});
 });
 
-const root = process.env.ROUND_PET_BOOT_PEER_ROOT;
 test('Node receives and verifies actual firmware VP8 proof through BOOT, reboot, fence and storage fault',
-  {skip: !root, timeout: 30000}, t => {
+  {skip: !hasCryptoPeer, timeout: 30000}, t => {
     const work = mkdtempSync(join(tmpdir(), 'vp8-boot-proof-'));
     t.after(() => rmSync(work, {recursive: true, force: true}));
-    const vectors = compileBootPeer(root, work, join(root, 'tools/round-pet/vp8-probe/test_boot_pairing.cpp'), 'vectors');
+    const vectors = compileBootPeer(work, join(firmwareHostTests, 'test_boot_pairing.cpp'), 'vectors');
     const emitted = execFileSync(vectors, ['--vectors'], {encoding: 'utf8', timeout: 5000});
     const vectorFile = process.env.ROUND_PET_BOOT_VECTORS;
     if (vectorFile) assert.equal(emitted, readFileSync(vectorFile, 'utf8'));
@@ -124,7 +123,7 @@ test('Node receives and verifies actual firmware VP8 proof through BOOT, reboot,
       assert.equal(call.accept(fromFirmware).evidence?.kind, expected, name);
     }
 
-    const binary = compileBootPeer(root, work, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
+    const binary = compileBootPeer(work, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
 
     const enrollBody = Buffer.alloc(173), counters = Buffer.alloc(16);
     counters.writeBigUInt64LE(1n, 0);

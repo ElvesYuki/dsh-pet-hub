@@ -7,6 +7,7 @@ import {join} from 'node:path';
 import test from 'node:test';
 import {encodePbp1Frame} from '../packages/core/native400-pbp1-wire.mjs';
 import {decodeBootReply, encodeBootRequest} from '../packages/runtime/device-enrollment-wire.mjs';
+import {compileBootPeer, hasCryptoPeer} from './fixtures/device-enrollment-cpp.mjs';
 
 const old = JSON.parse(readFileSync(new URL('../docs/protocol/vectors/native400-pbp1-persistent-wire-draft-v1.json', import.meta.url)));
 const encode = (kind, body) => Buffer.from(encodePbp1Frame({kind, body}, {allowBinding: true}));
@@ -36,19 +37,10 @@ test('VP8 BOOT rejects unavailable capability, wrong direction, and noncanonical
   assert.equal(decodeBootReply(line(status).replace('\n', '\r\n')).state.phase, 0);
 });
 
-const peer = process.env.ROUND_PET_BOOT_PEER_ROOT;
-test('VP8 BOOT candidate against real firmware line parser and historical PBP1 C++ source', {skip: !peer, timeout: 30000}, t => {
+test('USB enrollment agrees with the firmware line parser and PBP1 C++ proof', {skip: !hasCryptoPeer, timeout: 30000}, t => {
   const work = mkdtempSync(join(tmpdir(), 'hub-vp8-boot-wire-'));
   t.after(() => rmSync(work, {recursive: true, force: true}));
-  const device = join(peer, 'apps/round-pet/devices/esp32s3-touch-amoled-175c');
-  const common = join(peer, 'apps/round-pet/common');
-  const openssl = process.env.OPENSSL_PREFIX ?? '/opt/homebrew/opt/openssl';
-  const binary = join(work, 'peer');
-  execFileSync('c++', ['-std=c++20', '-Wall', '-Wextra', '-Werror',
-    ...[join(peer, 'tools/round-pet/vp8-probe/main'), join(device, 'main'), common, join(common, 'playback_logic'),
-      join(common, 'protocol_types'), join(openssl, 'include')].flatMap(path => ['-I', path]),
-    'tests/fixtures/device-enrollment-peer.cpp', join(device, 'tests/native400/media_auth_openssl.cpp'),
-    '-L', join(openssl, 'lib'), '-Wl,-rpath,' + join(openssl, 'lib'), '-lcrypto', '-o', binary], {timeout: 15000});
+  const binary = compileBootPeer(work, 'tests/fixtures/device-enrollment-peer.cpp', 'peer');
 
   const probe = encode('binding-info', Buffer.alloc(0));
   const enroll = withOldFrame('enroll-proof');

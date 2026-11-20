@@ -1,5 +1,7 @@
 # 当前系统（2026-11-20）
 
+1.75C-EN 日常固件已从 `ai-embedded-studio` 的 `b04a192` 并入本仓库，日常开发入口为 `firmware/`。400×400 规格单列，锁定 ESP-IDF 6.0.2、Muse 和 SDK 组件。交叉编译、分区表一致性和 Node／C++ 回环已验证。新输出为未签名离线候选。固件任务交接的上次真机版本为 `0.1.40`／`ota_1`，回退 `0.1.39`／`ota_0`。本轮使用设备前仍按统一验收安排。 [构建与验证](../reports/2026-11-20-firmware-repository-migration.md)
+
 ESP32 实时 3D 独立路线已完成木子恶魔版大肥鱼原模型的离线评估。466 圆屏 12 角度对照中，正面人物高度保持 266 像素，可见轮廓均未越圆。原版 45,663 三角面、146 蒙皮关节，贴图规模需为板端重新评估。配布网页与 VRM 内嵌修改条款有差异，设备素材转换及帧率待验证。[评估报告和本机入口](../reports/2026-11-19-esp32-3d-bluefatfish.md)
 
 日常 DSH Desktop `0.2.2-rc.5` 仍安装 Hub `0.0.8` Hooks 包。DSH 真机联动收尾时原窗口显示「TCP 实时状态」、已核对持久绑定和「联动已关闭」，读回 `0.1.39-l-battery-usb-pair-test`／`ota_0`。最近一次状态查阅见日常 profile 的 Hub 开关为关闭。Codex 来源等待配置，上一份主动状态包与 profile 已备份。[真机联调与恢复](../reports/2026-11-20-vp8-dsh-task-motion-live.md) · [此前日常换装](../reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装)

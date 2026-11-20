@@ -17,8 +17,8 @@ import {prepareDeviceUpdate, readDeviceMediaObject, LEGACY_MEDIA_BYTES, LEGACY_M
 import {minimalStatusV2, usbStatus3Reply} from './fixtures/device-status-fixture.mjs';
 import {loadTrustedRelease} from '../packages/runtime/firmware-release.mjs';
 
-const realObject = process.env.ROUND_PET_MEDIA_ROOT && join(process.env.ROUND_PET_MEDIA_ROOT, '.cache/vp8-action-update/export/1-400.ivf');
-const media67 = process.env.ROUND_PET_MEDIA_ROOT && join(process.env.ROUND_PET_MEDIA_ROOT, '.cache/vp8-cache/export-full/67-400.ivf');
+const realObject = process.env.PET_HUB_LEGACY_MEDIA_FIXTURE;
+const media67 = process.env.PET_HUB_DEVICE_MEDIA_FIXTURE;
 const token = 'ab'.repeat(32);
 const scope = '/dsh-pet-hub/device-update';
 const reply = body => `@VP8_UPDATE ${body}\r\n`;
@@ -349,7 +349,7 @@ test('built plugin settings and exact command proxy use the shared runtime', {ti
     await command('query');
     assert.equal((await waitFor('saved')).saved, true);
     assert.equal(publications, 0);
-    t.diagnostic('Fixed object HTTP and terminal branches require ROUND_PET_MEDIA_ROOT with the approved export.');
+    t.diagnostic('Fixed object HTTP and terminal branches require PET_HUB_LEGACY_MEDIA_FIXTURE with the approved export.');
   }
 
   unmount();
@@ -449,6 +449,10 @@ test('built plugin settings and exact command proxy use the shared runtime', {ti
     nextPeer = startMedia;
     await command('install');
     assert.equal((await waitFor('unknown')).error, 'deadline_or_closed');
+  } else {
+    nextPeer = peer => probe2(peer);
+    await command('query');
+    assert.equal((await waitFor('ready')).upgradeAvailability, 'available');
   }
 
   const startOta = async peer => {

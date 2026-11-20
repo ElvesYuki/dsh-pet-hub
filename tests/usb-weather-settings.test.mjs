@@ -1,3 +1,4 @@
+import {cxx, firmwareMain, hasCppPeer} from './fixtures/firmware.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {mkdtempSync, rmSync} from 'node:fs';
@@ -31,12 +32,11 @@ test('weather requests accept only WGS84 integer coordinates and correlate persi
   assert.equal(decodeWeatherReply(reply('cleared configured=0 lat_e4=0 lon_e4=0'), requestId, 'clear'), null);
 });
 
-const firmware = process.env.ROUND_PET_BOOT_PEER_ROOT;
-test('Node weather bytes match the upstream C++ envelope and coordinate parsers', {skip: !firmware}, t => {
+test('Node weather bytes match the upstream C++ envelope and coordinate parsers', {skip: !hasCppPeer}, t => {
   const root = mkdtempSync(join(tmpdir(), 'vp8-deskweather-peer-'));
   t.after(() => rmSync(root, {recursive: true, force: true}));
   const output = join(root, 'peer');
-  execFileSync('c++', ['-std=c++20', '-Wall', '-Wextra', '-Werror', '-I', join(firmware, 'tools/round-pet/vp8-probe/main'),
+  execFileSync(cxx, ['-std=c++20', '-Wall', '-Wextra', '-Werror', '-I', firmwareMain,
     'tests/fixtures/weather-settings-peer.cpp', '-o', output], {timeout: 15000});
   const operations = ['info', 'set', 'info', 'clear', 'info'];
   const lines = operations.map(operation => encodeWeatherLine(requestId, operation, coords));

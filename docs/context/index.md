@@ -1,5 +1,7 @@
 # 长期上下文索引
 
+固件同仓开发 · [固件入口](../../firmware/README.md) · [共用协议](../protocol/firmware/README.md) · [迁移 Spec](plans/firmware-repository-migration-spec.md) · [Diff](plans/firmware-repository-migration-diff.md) · [验证与回退](../reports/2026-11-20-firmware-repository-migration.md)。
+
 ESP32 实时 3D 独立路线 · [大肥鱼模型、圆屏对照与资源盘点](../reports/2026-11-19-esp32-3d-bluefatfish.md) · [评估计划](plans/esp32-3d-character-evaluation.md)。
 
 VP8 TCP／USB 主动状态 · [真机联调证据](../reports/2026-11-20-vp8-0133-live.md) · [真机验收方案](plans/vp8-0133-live-acceptance.md) · [离线候选与回退](../reports/2026-11-19-vp8-desktop-vpl1-lifecycle.md)。
@@ -8,7 +10,7 @@ VP8 DSH 工作状态联动 · [真机首帧与恢复](../reports/2026-11-20-vp8-
 
 VP8 DSH／Codex 本机来源 · [日常 DSH 换装与回退](../reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装) · [Hooks 验证](../reports/2026-11-20-vp8-codex-app-hooks.md) · [Hooks Spec 与 Diff](plans/vp8-codex-app-hooks.md) · [六档与 App Server 证据](../reports/2026-11-20-vp8-local-task-phases.md) · [来源选择契约](plans/vp8-local-task-sources.md)。
 
-设备代码整理 · [源码命名、协议索引与部署边界](plans/device-code-naming.md) · [固件命名交接](../protocol/device-naming-firmware-handoff.md)。
+Hub 设备代码整理 · [源码命名、协议索引与部署边界](plans/device-code-naming.md)。迁移前的固件路径见 [历史命名交接](../protocol/device-naming-firmware-handoff.md)。
 
 VP8 设备设置页新版 · [布局与清理验收](../reports/2026-11-19-vp8-desktop-device-layout.md) · [Spec 与 Diff](plans/vp8-desktop-device-layout.md)。
 

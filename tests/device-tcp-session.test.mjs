@@ -22,7 +22,6 @@ import {VPL1, createVpl1Framer, decodeVpl1Status, openVpl1, sealVpl1, vpl1Frame,
   vpl1Transcript} from '../packages/runtime/device-tcp-wire.mjs';
 import {minimalStatusV2} from './fixtures/device-status-fixture.mjs';
 
-const firmware = process.env.ROUND_PET_VPL1_PEER_ROOT;
 const peer = process.env.ROUND_PET_VPL1_PEER_BIN;
 const peerV2 = process.env.ROUND_PET_VPL1_V2_PEER_BIN;
 const pushPeer = process.env.ROUND_PET_VPL1_PUSH_PEER_BIN;
@@ -56,10 +55,10 @@ function makeTrust(t, {pin = 7, mismatchedController = false, controller = priva
 }
 
 function vectorFile() {
-  return JSON.parse(readFileSync(join(firmware, 'docs/protocol/vectors/round-pet-vp8-vpl1.json')));
+  return JSON.parse(readFileSync(new URL('../docs/protocol/vectors/device-tcp.json', import.meta.url)));
 }
 
-test('VPL1 shared vectors match framing, transcript, directional keys, status and unchanged VPC1', {skip: !firmware}, () => {
+test('VPL1 shared vectors match framing, transcript, directional keys, status and unchanged VPC1', () => {
   const v = vectorFile();
   const full = decodeVpl1Status(hex(v.status_full));
   assert.deepEqual(full, {session: 1, sequence: 1, value: {schema: 1, version: '0.1.31-l-battery-usb-pair-test', slot: 'ota_1',
@@ -506,8 +505,8 @@ test('push mode authenticates, only ACKs fresh new statuses and falls back at th
   assert.equal(frames.length,0);
 });
 
-test('shared proactive vectors decode Status, authenticate ACK and match USB subscription lines', {skip: !firmware}, () => {
-  const vectors = JSON.parse(readFileSync(join(firmware, 'docs/protocol/vectors/round-pet-vp8-status-push.json')));
+test('shared proactive vectors decode Status, authenticate ACK and match USB subscription lines', () => {
+  const vectors = JSON.parse(readFileSync(new URL('../docs/protocol/vectors/device-status-push.json', import.meta.url)));
   assert.equal(vectors.device_hello_capabilities, '04');
   assert.equal(vectors.hub_auth_mode, '03');
   assert.deepEqual(sealVpl1(VPL1.statusAck,1,hex(vectors.ack_first_payload),hex(vectors.ack_test_key)),

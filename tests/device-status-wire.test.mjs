@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
-import {join} from 'node:path';
 import test from 'node:test';
 import {readDesktopBattery} from '../packages/runtime/usb-battery-sampler.mjs';
 import {exchangeDesktopNetwork} from '../packages/runtime/usb-wifi-settings.mjs';
@@ -11,11 +10,11 @@ import {decodeVpl1Status, openVpl1, sealVpl1, VPL1, vpl1Keys, vpl1Tag, vpl1Trans
 import {desktopDeviceCard} from '../packages/ui/device-settings-page.mjs';
 import {minimalStatusV2, usbStatus3Reply} from './fixtures/device-status-fixture.mjs';
 
-const root = process.env.ROUND_PET_VPL1_PEER_ROOT, binary = process.env.ROUND_PET_VPL1_V2_PEER_BIN;
-const vectors = root && JSON.parse(readFileSync(join(root, 'docs/protocol/vectors/round-pet-vp8-status-v2.json')));
+const binary = process.env.ROUND_PET_VPL1_V2_PEER_BIN;
+const vectors = JSON.parse(readFileSync(new URL('../docs/protocol/vectors/device-status.json', import.meta.url)));
 const hex = key => Buffer.from(vectors[key], 'hex');
 
-test('Status v2 shared vectors agree for USB, VPL1 and actual firmware C++', {skip: !vectors}, () => {
+test('Status v2 shared vectors agree for USB and authenticated TCP', () => {
   for (const name of ['full', 'minimal']) {
     const status = decodeStatusV2(hex('status_' + name));
     const usb = hex('usb_' + name + '_reply').toString();

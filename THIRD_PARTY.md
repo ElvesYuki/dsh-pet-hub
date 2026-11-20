@@ -4,6 +4,10 @@ scripts/character-states.mjs及相关自然动作/预览改动为本仓库原创
 
 # 第三方与素材边界
 
+## 圆屏固件导入（2026-11-20）
+
+设备固件保留源仓 Apache 2.0。Waveshare BSP 和字形素材保留各自声明。ESP-IDF、Muse 和 SDK 组件由构建按固定版本读取。Hub 源码继续使用 MIT，批准的动画与现场备份继续留在私有位置。 [固件来源与许可](firmware/SOURCE.md)
+
 ## VP8 城市搜索（2026-11-19）
 
 搜索响应来自 Open-Meteo 的非商业 Geocoding API，地点数据来源为 GeoNames。页面标注来源，应用只在当前页面显示所需字段和经纬度，不打包数据集。候选测试使用原创合成地名。适配、界面及夹具代码为本仓库原创 MIT，编译对拍使用固件仓库的公开头文件作为只读输入。[Geocoding API](https://open-meteo.com/en/docs/geocoding-api) · [服务条款与数据许可](https://open-meteo.com/en/terms) · [GeoNames](https://www.geonames.org/export/)

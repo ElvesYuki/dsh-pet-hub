@@ -1,3 +1,4 @@
+import {cxx, firmwareHostTests, firmwareMain, firmwareProtocol, hasCppPeer} from './fixtures/firmware.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync, spawn} from 'node:child_process';
 import {once} from 'node:events';
@@ -185,23 +186,19 @@ test('real loopback closes a partial EOF without publishing a receipt', {timeout
   assert.equal(owner.snapshot().firstFrame, null);
 });
 
-const firmware = process.env.ROUND_PET_VPC1_PEER_ROOT;
 test('the firmware VPC1 C++ core and Node owner exchange bytes over real loopback',
-  {skip: !firmware && 'set ROUND_PET_VPC1_PEER_ROOT', timeout: 20000}, async t => {
+  {skip: !hasCppPeer && 'requires a C++ compiler', timeout: 20000}, async t => {
     const temp = await mkdtemp(join(tmpdir(), 'vpc1-peer-'));
     t.after(() => rm(temp, {recursive: true, force: true}));
-    const probe = join(firmware, 'tools/round-pet/vp8-probe');
-    const common = join(firmware, 'apps/round-pet/common/protocol_types');
-    const compiler = process.env.CXX ?? 'clang++';
     const compile = (source, target) => {
       const output = join(temp, target);
-      execFileSync(compiler, ['-std=c++20', '-O1', '-Wall', '-Wextra', '-Werror', '-fsanitize=address,undefined',
-        '-I', common, '-I', join(probe, 'main'), join(probe, 'main/vp8_control.cpp'), join(probe, source),
+      execFileSync(cxx, ['-std=c++20', '-O1', '-Wall', '-Wextra', '-Werror', '-fsanitize=address,undefined',
+        '-I', firmwareProtocol, '-I', firmwareMain, join(firmwareMain, 'playback_control.cpp'), join(firmwareHostTests, source),
         '-o', output], {timeout: 12000});
       return output;
     };
-    execFileSync(compile('vp8_control_test.cpp', 'playback-test'), {timeout: 4000});
-    const executable = compile('vp8_control_loopback.cpp', 'playback-loopback');
+    execFileSync(compile('playback_control_test.cpp', 'playback-test'), {timeout: 4000});
+    const executable = compile('playback_loopback.cpp', 'playback-loopback');
     const server = await listener(t);
     const established = once(server, 'connection');
     const child = spawn(executable, [String(server.address().port)], {stdio: ['ignore', 'inherit', 'inherit']});

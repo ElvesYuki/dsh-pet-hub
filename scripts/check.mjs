@@ -10,4 +10,4 @@ function check(dir) {
     }
   }
 }
-for (const dir of ['packages', 'apps', 'scripts', 'tests']) check(dir);
+for (const dir of ['packages', 'apps', 'scripts', 'tests', 'firmware/tests', 'media/profiles']) check(dir);
