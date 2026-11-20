@@ -1,0 +1,3 @@
+# ESP32-S3 chip cache, configured at app startup (IDF 6.0.2 Kconfig.cache).
+# Keep 32KiB capacity/internal heap; widen burst lines for sequential PSRAM.
+CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y

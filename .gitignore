@@ -80,3 +80,12 @@ dist-connection/
 dist-connection-legacy/
 dist-desktop/
 dist-desktop-legacy/
+
+# Local ESP-IDF outputs and licensed media inputs
+/firmware/**/managed_components/
+/firmware/**/build/
+/firmware/**/sdkconfig
+/firmware/**/sdkconfig.old
+/firmware/**/*.bin
+__pycache__/
+*.ivf

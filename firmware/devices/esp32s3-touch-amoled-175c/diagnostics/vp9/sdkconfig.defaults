@@ -1,0 +1,2 @@
+# VP9 generic C has a 12.5 KiB convolution frame, nested under its tile decoder.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=32768

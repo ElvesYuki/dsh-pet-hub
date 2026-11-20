@@ -1,0 +1,12 @@
+{
+  "format": "VPL1 push mode and USB subscription golden vectors",
+  "device_hello_capabilities": "04",
+  "hub_auth_mode": "03",
+  "status_first_tcp": "01000000010000000201071e01302e312e33322d6c2d626174746572792d7573622d706169722d746573740101530102005b1002000000d10160f01700a00f0018fcff0000000000e80300",
+  "ack_test_key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "ack_first_payload": "0100000001000000",
+  "ack_first_record": "56504c3101132c000100000001000000010000009431fc042e0366e2b4e7cdea9453db0b6aa83187b7bec9ec58e7fc1cb0011b60",
+  "usb_subscribe": "STATUS3_SUB 4a01c0de\n",
+  "usb_first_report": "@VP8_STATUS3_PUSH id=4a01c0de seq=1 data=AgEAHgIwLjEuMzItbC1iYXR0ZXJ5LXVzYi1wYWlyLXRlc3Q=\n",
+  "usb_unsubscribe": "STATUS3_UNSUB 4a01c0de\n"
+}

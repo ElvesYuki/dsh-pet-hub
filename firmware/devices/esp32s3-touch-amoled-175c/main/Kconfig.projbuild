@@ -1,0 +1,9 @@
+config MUSE_VIDEO_VP8
+    bool
+    default y
+config MUSE_VIDEO_DECODER_IRAM
+    bool
+    default y
+config PET_BOARD_175C
+    bool
+    default y

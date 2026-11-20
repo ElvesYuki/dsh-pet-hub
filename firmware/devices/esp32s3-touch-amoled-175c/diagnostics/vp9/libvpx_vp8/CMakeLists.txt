@@ -1,0 +1,17 @@
+# The probe dependency name is shared so ESP-IDF can resolve it in its early scan.
+if(CMAKE_BUILD_EARLY_EXPANSION)
+    idf_component_register()
+    return()
+endif()
+# Use the ESP-IDF toolchain, including its libc ABI and longjmp wrapper.
+file(STRINGS "${VP9_BUILD}/libvpx_srcs.txt" vp9_files REGEX "\\.c$")
+set(vp9_sources)
+foreach(vp9_file IN LISTS vp9_files)
+    if(vp9_file STREQUAL "vpx_config.c")
+        list(APPEND vp9_sources "${VP9_BUILD}/${vp9_file}")
+    else()
+        list(APPEND vp9_sources "${VP9_SOURCE}/${vp9_file}")
+    endif()
+endforeach()
+idf_component_register(SRCS ${vp9_sources} INCLUDE_DIRS "${VP9_SOURCE}" PRIV_INCLUDE_DIRS "${VP9_BUILD}")
+target_compile_options(${COMPONENT_LIB} PRIVATE -O3)

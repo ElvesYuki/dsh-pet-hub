@@ -1,0 +1,1 @@
+set(PET_MEDIA_SIDE 400)

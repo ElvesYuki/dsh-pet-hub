@@ -1,0 +1,9 @@
+# 1.75C-EN dual-slot candidate. Initial migration requires the old full-Flash backup.
+nvsfactory,data,nvs,0x9000,0x32000
+nvs,data,nvs,0x3b000,0xd2000
+otadata,data,ota,0x10d000,0x2000
+phy_init,data,phy,0x10f000,0x1000
+model,data,0x82,0x110000,0xf0000
+ota_0,app,ota_0,0x200000,0x200000
+ota_1,app,ota_1,0x400000,0x200000
+pet_vp8,data,0x42,0x600000,0x1a00000

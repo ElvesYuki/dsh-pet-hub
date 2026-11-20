@@ -1,0 +1,64 @@
+# Target: Waveshare ESP32-S3-Touch-AMOLED-1.75C, 32MiB Flash / 8MiB PSRAM.
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_32MB=y
+
+# Use the board's full CPU frequency for the display-oriented bring-up baseline.
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+# The manufacturer documents OPI PSRAM in 8 MiB or 16 MiB variants.
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_BOOT_INIT=y
+CONFIG_SPIRAM_USE_MALLOC=y
+CONFIG_SPIRAM_MEMTEST=y
+
+# The board exposes the ESP32-S3 native USB connection on GPIO19/GPIO20.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# Keep the bring-up partition layout explicit and reproducible.
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="config/partitions.legacy.csv"
+
+# Small UI: enable only the additional font sizes used by the clock face.
+CONFIG_LV_FONT_MONTSERRAT_12=y
+CONFIG_LV_FONT_MONTSERRAT_20=y
+CONFIG_LV_FONT_MONTSERRAT_48=y
+# app_main performs the first LVGL refresh before enabling the backlight.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Required by the serial command reader in the minimal component build.
+CONFIG_VFS_SUPPORT_IO=y
+
+# Bundled LVGL CJK glyphs for the Chinese clock face.
+CONFIG_LV_FONT_SOURCE_HAN_SANS_SC_16_CJK=y
+
+# Weather HTTPS validation and additional watch face type.
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y
+CONFIG_LV_FONT_MONTSERRAT_32=y
+
+# USB diagnostic capture for on-device layout verification.
+CONFIG_LV_USE_SNAPSHOT=y
+
+# No extra 2MiB UI pool in the 8MiB PSRAM board profile.
+CONFIG_LV_MEM_POOL_EXPAND_SIZE_KILOBYTES=0
+
+# Validate cross-signed chains against an existing trusted root (e.g. GTS R4).
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_CROSS_SIGNED_VERIFY=y
+
+# Smooth cached transitions: performance compilation (assertions retained), 20ms scheduling.
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+CONFIG_LV_DEF_REFR_PERIOD=10
+
+# 1ms tick avoids 10ms quantization in LVGL port waits.
+CONFIG_FREERTOS_HZ=1000
+
+# Bound concurrent download/control RX memory on the 8MiB-PSRAM board.
+# Hardware settings and the other board/entrypoint defaults stay separate.
+CONFIG_LWIP_TCP_WND_DEFAULT=16384
+CONFIG_LWIP_TCP_RECVMBOX_SIZE=16
+
+# PET4 native 240px; persistent raw Flash objects, bounded decoder RAM.
+
+CONFIG_PET_BOARD_175C=y

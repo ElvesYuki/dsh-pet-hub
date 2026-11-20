@@ -1,0 +1,10 @@
+# OFFLINE BUILD CANDIDATE ONLY. Migration requires a verified current full backup.
+# This overlaps old app tail, factory storage and V1 pet_assets. Never autoformat.
+# Name, Type, SubType, Offset, Size
+nvsfactory,data,nvs,0x9000,0x32000
+nvs,data,nvs,0x3b000,0xd2000
+otadata,data,ota,0x10d000,0x2000
+phy_init,data,phy,0x10f000,0x1000
+model,data,0x82,0x110000,0xf0000
+factory,app,factory,0x200000,0x200000
+pet_assets360,data,0x41,0x400000,0x1c00000

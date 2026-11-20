@@ -1,0 +1,3 @@
+# Candidate only: keep Wi-Fi credentials and PHY calibration off existing Flash.
+CONFIG_ESP_WIFI_NVS_ENABLED=n
+CONFIG_ESP_PHY_CALIBRATION_AND_DATA_STORAGE=n
