@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 import {runInNewContext} from 'node:vm';
 import test from 'node:test';
 import {planDesktopPluginMigration} from '../scripts/lib/desktop-plugin-migration.mjs';
+import {makeTaskSourceSettings} from '../packages/ui/task-source-settings.mjs';
 
 const id = '11111111-1111-1111-1111-111111111111';
 const readStatus = (update = {}) => ({instanceId: 'query-instance', update: {queryOnly: true, revision: 2, phase: 'ready',
@@ -77,6 +78,38 @@ function button(tree, name) {
   return nodes(tree).find(item => item.tag === 'button' && childrenOf(item).includes(name));
 }
 
+test('animation settings choose all conversations without a session ID', () => {
+  const view = {instance: 'panel', revision: 'initial', source: 'codex', sessionId: '', scope: 'single',
+    available: ['off', 'dsh', 'codex'], aggregateSources: ['codex'], status: 'ready'};
+  let formState, cursor;
+  const component = makeTaskSourceSettings({
+    createElement: (tag, props, ...children) => ({tag, props, children}), useEffect() {}, useRef() {},
+    useState(initial) {
+      if (!formState) return [initial === null ? view : initial, () => {}];
+      const index = cursor++;
+      return [formState[index] ?? initial, value => { formState[index] = value; }];
+    },
+  }, {});
+  const form = nodes(component()).find(item => typeof item.tag === 'function');
+  let saved;
+  formState = [];
+  function render() {
+    cursor = 0;
+    return form.tag({...form.props, save: value => { saved = value; }});
+  }
+  const single = render();
+  assert.equal(nodes(single).filter(item => item.tag === 'input').length, 1);
+  assert.equal(button(single, '保存来源').props.disabled, true);
+  nodes(single).find(item => item.tag === 'select' && item.props.value === 'single').props.onChange({target: {value: 'all'}});
+  const all = render();
+  assert.equal(nodes(all).filter(item => item.tag === 'input').length, 0);
+  assert.equal(button(all, '保存来源').props.disabled, false);
+  all.props.onSubmit({preventDefault() {}});
+  assert.deepEqual(saved, {instance: 'panel', revision: 'initial', source: 'codex', sessionId: '', scope: 'all'});
+  nodes(all).find(item => item.tag === 'select' && item.props.value === 'codex').props.onChange({target: {value: 'dsh'}});
+  assert.equal(nodes(render()).filter(item => item.tag === 'select').length, 1);
+});
+
 test('single-package migration preserves unrelated patches and rejects ambiguous registration settings', () => {
   const main = 'dsh-pet-hub', old = 'dsh-pet-hub-boot-review';
   const config = {runtimeDirectory: '/synthetic/ipc', desktopDeviceQuery: true};
@@ -114,7 +147,7 @@ test('the actual paired rc.3 tarballs register one named slot, preserve identiti
     assert.match(bindingManifest.main, /enrollment-backend-host/);
     const singleManifest = JSON.parse(readFileSync(join(single, 'package.json'), 'utf8'));
     assert.equal(singleManifest.name, hubManifest.name);
-    assert.equal(singleManifest.version, '0.0.8');
+    assert.equal(singleManifest.version, '0.0.10');
     assert.equal(singleManifest.peerDependencies['@deepseek-ai/dsh-host-webserver'], '0.2.2-rc.5');
     assert.equal(singleManifest.peerDependencies['@deepseek-ai/dsh-client-connection'], '0.2.2-rc.5');
     assert.ok(existsSync(join(single, 'apps/dsh-plugin/desktop-enrollment-config.mjs')));
@@ -192,7 +225,8 @@ test('the actual paired rc.3 tarballs register one named slot, preserve identiti
       return snapshot;
     }
     const unregistered = view(bindStatus());
-    assert.match(visible(unregistered), /尚未绑定.*0\.1\.5-usb-pair-test.*ota_1/);
+    assert.match(visible(unregistered), /尚未绑定/);
+    assert.doesNotMatch(visible(unregistered), /0\.1\.5-usb-pair-test|ota_1|最后心跳/);
     assert.equal(button(unregistered, '绑定设备').props.disabled, false);
     const command = button(unregistered, '绑定设备').props.onClick();
     await button(unregistered, '查询设备').props.onClick();
@@ -238,7 +272,8 @@ test('the actual paired rc.3 tarballs register one named slot, preserve identiti
       if (bindingDetails) assert.doesNotMatch(JSON.stringify(bindingDetails), /0\.1\.5-usb-pair-test|ota_1/);
       const queryResult = nodes(unresolved).find(item => item.props?.['aria-label'] === 'USB 查询结果');
       assert.ok(queryResult);
-      assert.match(JSON.stringify(queryResult), /与绑定目标的关系待核对.*0\.1\.5-usb-pair-test.*ota_1/);
+      assert.match(JSON.stringify(queryResult), /与绑定目标的关系待核对/);
+      assert.doesNotMatch(JSON.stringify(queryResult), /0\.1\.5-usb-pair-test|ota_1/);
       assert.equal(button(unresolved, '查询设备').props.disabled, false);
     }
     for (const update of [{phase: 'failed'}, {device: {version: '0.1.5-usb-pair-test', slot: 'unknown'}}]) {
@@ -250,19 +285,32 @@ test('the actual paired rc.3 tarballs register one named slot, preserve identiti
         sample: {at: 100, present: true, percent: 0, mv: 4191, flow: 'charging', phase: 'cv', usbPower: true}}});
     for (const relation of [true, null]) {
       const tree = withBattery(relation);
-      assert.match(visible(tree), /0%.*4191 mV.*充电中 · 恒压/);
+      assert.match(visible(tree), /0%.*USB 供电.*充电中/);
+      assert.doesNotMatch(visible(tree), /电压|4191 mV/);
       const independent = nodes(tree).find(node => node.props?.['aria-label'] === 'USB 查询结果');
       assert.equal(Boolean(independent), relation === null);
-      if (independent) assert.match(JSON.stringify(independent), /0%.*4191 mV/);
+      if (independent) assert.match(JSON.stringify(independent), /0%.*USB 供电.*充电中/);
     }
-    assert.doesNotMatch(visible(withBattery(false)), /4191 mV/);
+    assert.doesNotMatch(visible(withBattery(false)), /"0%"|充电中/);
     assert.match(visible(withBattery(true, 2000, 'busy')), /上次读取.*等待下次采样/);
-    assert.doesNotMatch(visible(withBattery(true, 15200)), /4191 mV/);
+    assert.doesNotMatch(visible(withBattery(true, 15200)), /"0%"|充电中/);
+    const lastHeartbeatAt = 1_795_500_123_000;
+    const tcp = value => readStatus({networkStatus: {device: readStatus().update.device, lastHeartbeatAt: value}});
+    const live = view(bindStatus({phase: 'bound'}), tcp(lastHeartbeatAt));
+    assert.match(visible(live), /TCP 实时状态.*最后心跳/);
+    assert.doesNotMatch(visible(live), /0\.1\.5-usb-pair-test|ota_1/);
+    const time = nodes(live).find(item => item.tag === 'time');
+    assert.equal(time.props.dateTime, new Date(lastHeartbeatAt).toISOString());
+    assert.match(time.children.join(''), /^\d{2}:\d{2}:\d{2}$/);
+    for (const value of [undefined, '1795500123000', Number.MAX_SAFE_INTEGER])
+      assert.doesNotMatch(visible(view(bindStatus(), tcp(value))), /最后心跳/);
+    assert.doesNotMatch(visible(view(bindStatus(), tcp(lastHeartbeatAt), {queryError: true})), /最后心跳/);
     assert.match(visible(view(bindStatus({issue: 'usb_not_ready'}))), /设备尚未响应/);
     assert.match(visible(local), /当前绑定插件版本未提供 USB Wi-Fi 配置/);
 
     const networkCalls = [], networkReplies = [{status: 'ok', configured: true, link: 'online'}, {status: 'unknown'}];
     const networkClient = mountClient(hub, {fetch(url, options) {
+      if (url.endsWith('/status')) return Promise.resolve({ok: true, json: () => netBinding});
       assert.equal(url, '/api/pet-hub-enrollment/network');
       assert.equal(options.headers['Content-Type'], 'application/octet-stream');
       const data = Buffer.from(options.body), length = data.readUInt16BE();
@@ -277,6 +325,7 @@ test('the actual paired rc.3 tarballs register one named slot, preserve identiti
     assert.equal(networkCalls.length, 0);
     await button(openNetwork, '读取 Wi-Fi 状态').props.onClick({currentTarget: {form: null}});
     assert.equal(networkCalls[0].metadata.operation, 'info');
+    assert.equal(networkCalls[0].metadata.version, 3);
     assert.equal(networkCalls[0].password, '');
     const fields = Object.fromEntries(Object.entries({ssid: 'Test-Only', password: 'synthetic pass', timeHost: 'ntp.example',
       weatherHost: '', utcMinutes: '480', latitude: '', longitude: ''}).map(([name, value]) => [name, {value}]));
@@ -295,6 +344,34 @@ test('the actual paired rc.3 tarballs register one named slot, preserve identiti
     assert.match(visible(unknown), /结果未知/);
     assert.equal(button(unknown, '保存 Wi-Fi 配置').props.disabled, true);
     assert.equal(networkCalls.length, 2);
+
+    const profiles = [{id: '61', name: 'Fixture-A'}, {id: '62', name: 'Fixture-B'}];
+    const list = {version: 3, status: 'ok', configured: true, mode: 'online', link: 'online', active: '61', profiles};
+    const listCalls = [], listReplies = [list, {...list, status: 'removed', profiles: [profiles[0]]},
+      {status: 'ok', configured: true, link: 'online', readOnly: true}];
+    const listClient = mountClient(single, {fetch(url, options) {
+      if (url.endsWith('/status')) return Promise.resolve({ok: true, json: () => ({...netBinding, revision: '9'})});
+      const bytes = Buffer.from(options.body), length = bytes.readUInt16BE();
+      listCalls.push(JSON.parse(bytes.subarray(2, 2 + length)));
+      assert.equal(bytes.length, 2 + length);
+      return Promise.resolve({ok: true, json: () => listReplies.shift()});
+    }});
+    const listOpen = listClient.render({binding: netBinding, query: readStatus()});
+    await button(listOpen, '读取 Wi-Fi 状态').props.onClick({currentTarget: {form: null}});
+    const listReady = listClient.render(listClient.snapshot());
+    assert.match(visible(listReady), /在线模式.*已保存 2\/4.*Fixture-A.*当前联网/);
+    assert.equal(button(listReady, '清除设备 Wi-Fi'), undefined);
+    await nodes(listReady).find(node => node.props?.['aria-label'] === '移除 Fixture-B').props.onClick();
+    assert.deepEqual(listCalls, [
+      {operation: 'info', instanceId: id, revision: '9', version: 3},
+      {operation: 'remove', instanceId: id, revision: '9', version: 3, ssidHex: '62'},
+    ]);
+    const afterRemove = listClient.render(listClient.snapshot());
+    assert.doesNotMatch(visible(afterRemove), /Fixture-B/);
+    await button(afterRemove, '读取 Wi-Fi 状态').props.onClick({currentTarget: {form: null}});
+    const readOnly = listClient.render(listClient.snapshot());
+    assert.match(visible(readOnly), /仅取得旧版状态/);
+    assert.equal(button(readOnly, '清除设备 Wi-Fi'), undefined);
 
     const cityCalls = [], usbCalls = [], latest = Promise.withResolvers(), earlier = Promise.withResolvers();
     let readUnavailable = true;

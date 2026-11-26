@@ -15,6 +15,7 @@ struct DesktopStatus {
   Weather weather = Weather::none;
   int celsius{};
   WifiLink wifi = WifiLink::off;
+  bool usb_power{};
   bool operator==(const DesktopStatus &) const = default;
 };
 
@@ -31,9 +32,10 @@ class DesktopStatusCache {
       celsius_ = celsius;
     }
   }
-  void battery(int64_t now, int percent) {
+  void battery(int64_t now, int percent, bool usb_power) {
     battery_at_ = now;
     battery_ = percent;
+    usb_power_ = usb_power;
   }
   void wifi(WifiLink link) { wifi_ = link; }
   void clear_network() {
@@ -49,7 +51,10 @@ class DesktopStatusCache {
     data.wifi = wifi_;
     if (local_second_ >= 0)
       data.minute = int((local_second_ + (now - clock_at_) / 1000000) % 86400 / 60);
-    if (now - battery_at_ < battery_lifetime) data.battery = battery_;
+    if (now - battery_at_ < battery_lifetime) {
+      data.battery = battery_;
+      data.usb_power = usb_power_;
+    }
     if (now - weather_at_ < weather_lifetime) {
       data.weather = weather_;
       data.celsius = celsius_;
@@ -60,6 +65,7 @@ class DesktopStatusCache {
  private:
   int64_t clock_at_{}, weather_at_{}, battery_at_{};
   int local_second_ = -1, battery_ = -1, celsius_{};
+  bool usb_power_{};
   Weather weather_ = Weather::none;
   WifiLink wifi_ = WifiLink::off;
 };

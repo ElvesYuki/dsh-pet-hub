@@ -1,24 +1,32 @@
-# 当前系统（2026-11-20）
+# 当前系统（2026-11-26）
 
-1.75C-EN 日常固件已从 `ai-embedded-studio` 的 `b04a192` 并入本仓库，日常开发入口为 `firmware/`。400×400 规格单列，锁定 ESP-IDF 6.0.2、Muse 和 SDK 组件。交叉编译、分区表一致性和 Node／C++ 回环已验证。新输出为未签名离线候选。固件任务交接的上次真机版本为 `0.1.40`／`ota_1`，回退 `0.1.39`／`ota_0`。本轮使用设备前仍按统一验收安排。 [构建与验证](../reports/2026-11-20-firmware-repository-migration.md)
+1.75C-EN 日常固件已从 `ai-embedded-studio` 的 `b04a192` 并入本仓库，日常开发入口为 `firmware/`。400×400 规格单列，锁定 ESP-IDF 6.0.2、Muse 和 SDK 组件。圆屏运行已验签的 `0.1.46`／`ota_0`，首启、完整待机和原绑定核对通过。`0.1.45`／`ota_1` 留板作直接回退，`0.1.44` 与更旧镜像留本机备份。[固件版本与归档](../../firmware/README.md#当前正式留驻版) · [上板验收](../reports/2026-11-25-dsh-motion-discovery.md#圆屏正式版更新)
 
 ESP32 实时 3D 独立路线已完成木子恶魔版大肥鱼原模型的离线评估。466 圆屏 12 角度对照中，正面人物高度保持 266 像素，可见轮廓均未越圆。原版 45,663 三角面、146 蒙皮关节，贴图规模需为板端重新评估。配布网页与 VRM 内嵌修改条款有差异，设备素材转换及帧率待验证。[评估报告和本机入口](../reports/2026-11-19-esp32-3d-bluefatfish.md)
 
-日常 DSH Desktop `0.2.2-rc.5` 仍安装 Hub `0.0.8` Hooks 包。DSH 真机联动收尾时原窗口显示「TCP 实时状态」、已核对持久绑定和「联动已关闭」，读回 `0.1.39-l-battery-usb-pair-test`／`ota_0`。最近一次状态查阅见日常 profile 的 Hub 开关为关闭。Codex 来源等待配置，上一份主动状态包与 profile 已备份。[真机联调与恢复](../reports/2026-11-20-vp8-dsh-task-motion-live.md) · [此前日常换装](../reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装)
+本机正式留驻组合为日常 DSH Desktop `0.2.2-rc.5` 上的 Hub `0.0.13` 和圆屏 `0.1.46`。原窗口确认认证 TCP 心跳推进、联动关闭，Hub `0.0.12` 及原 profile 已备份。`0.0.11` 固定地址包仍为早期回退。设备卡内嵌闪电已目测，低于 20% 黄显和旧读数灰显通过宿主测试。圆屏同款弧形栏已上板，低电量实屏效果待目测。Codex 来源仍待配置。[Hub 换装与回退](plans/task-source-aggregation.md#日常-dsh-验收) · [设备卡及上板验收](plans/vp8-desktop-device-layout.md#圆屏上板结果)
 
-仓库的设备管理源码、界面和测试已用职责命名，桌面候选从 `desktop-host.mjs` 装配并输出至 `dist-desktop/`。管理端私有配置、路由和索引同步采用新名字。设备收发字节及现有日常部署沿用原来的契约。[名称与切换边界](plans/device-code-naming.md) · [固件交接](../protocol/device-naming-firmware-handoff.md)
+仓库的设备管理源码、界面和测试已用职责命名，桌面候选从 `desktop-host.mjs` 装配并输出至 `dist-desktop/`。日常 Hub 使用独立的私有登记索引和长期 Keychain 签名助手。首次迁移用原助手签名的转接方案保留为历史。[名称与切换边界](plans/device-code-naming.md) · [真机换钥匙](plans/device-key-rotation.md#真机换钥匙2026-11-24)
 
 登记、升级和状态查询共用 `exclusive-tty.mjs` 与 `native/exclusive-tty.c`。桌面、素材与历史验证共用 `private-ipv4.mjs` 和 `read-json-body.mjs`，按各入口应用原有授权、期限与回执规则。[共用运行层整理](plans/shared-runtime-cleanup.md)
 
 VP8 `0.1.33` 阶段的主动状态复用原 USB 登记、Keychain 和 VPL1 mode 3。隔离真机通过 USB 首条、实体拔插与纯电池 TCP、受控 TCP 失联 6／9 秒回退和关闭、重连停 USB，以及配网 INFO、升级前 STATUS3 的串口交接。实际 AP 物理断网与 OTA 写入仍待独立验收。此前 `0.1.32` 首帧属于原 Ping 版隔离真机证据。[0.1.33 真机证据](../reports/2026-11-20-vp8-0133-live.md) · [原状态版验证](../reports/2026-11-19-vp8-status-v2-hub.md)
 
-DSH 独立状态源经真实 DSH 任务在 `0.1.39` 验证思考、工作和完成的动作 1／2／3，同一认证连接均收到匹配的 `Accepted`、`Presented`，整理沿用 2 并去重，庆祝一次。首帧语义由设备 DMA 提交确认。整段目测、触摸和断线另验。[真机联调](../reports/2026-11-20-vp8-dsh-task-motion-live.md)
+日常 Hub `0.0.12` 与圆屏 `0.1.45` 经 Bonjour 建连，两轮真实 DSH 任务已验证思考 1、工作 2、等待 41、持续整理 43、完成 3 的设备 `Accepted` 和 `Presented`。补测轮工作动作另收到一次设备 `Expired`。等待领取与已领取待首帧两种超期均通过认证回环，真机的实际超期阶段待采样。失败 42 仍为 Node／C++ 回环证据。整段目测、触摸优先和受控断线后无重放仍待验。复验结束恢复原插件入口和联动关闭。[日常发现版复验](../reports/2026-11-25-dsh-motion-discovery.md) · [工作动作超期排查](../reports/2026-11-25-dsh-motion-discovery.md#工作动作超期排查)
 
-设备页可选择并保存独立 DSH 或 Codex 来源。DSH rc.5 随包控制器通过六档。Codex 可连接已配置 App Server，也可从一个已授权项目的 Hooks 接收本机状态。后者已用 App 随包引擎跑通思考、工作、整理、等待审批、结束／中断回空闲。失败尝试会清除活动，明确完成与出错仍需 App Server 的回合终态。实际桌面窗口的 Hook 审阅、既有对话和 Codex 圆屏首帧待验。[Hooks 验证与回退](../reports/2026-11-20-vp8-codex-app-hooks.md)
+圆屏 `0.1.46` 已通过自动待机切入工作单项复测，并通过完整映射的常规 DSH 轮。七次设备首帧覆盖五种状态，现场目测切换正常。受控关闭单设备 TCP 后，Hub 在 DSH 仍工作时恢复连接，旧工作动作未补播，新任务收到首帧。轻点后的本地挥手和回到待机有现场目测，仍在有效期内的新指令与触摸的竞争另验。[常规联动与重连](../reports/2026-11-25-dsh-motion-discovery.md#正式版常规联动触摸和重连) · [自动待机复测](../reports/2026-11-25-dsh-motion-discovery.md#正式版自动待机真机复测)
+
+设备页可选择并保存独立 DSH 或 Codex 来源。DSH rc.5 随包控制器通过六档。现有 `dsh-pet-hub` Local 项目的 Hook 已在 App 审阅。真实聊天的思考、工作、整理和空闲经隔离 Hub 路由验证，Hub 重开可恢复选择且无旧状态回放。等待审批、中断和模型失败清除活动已有随包引擎验证，明确完成与出错仍需已配置 App Server 的回合终态。完整 App 重启、日常设备页及 Codex 圆屏首帧待验。[Hooks 验证与回退](../reports/2026-11-20-vp8-codex-app-hooks.md#真实-local-聊天)
+
+Hub `0.0.13` 可保存「全部对话」。DSH 的范围控件在日常原窗口已经验收，试选时免填会话 ID。隔离宿主验证了列表、状态读取、Codex Hook 多会话、模式切换、持久保存、同态去重及重连不补播。真实多对话运行及低亮度唤醒另验。[聚合范围和测试](plans/task-source-aggregation.md)
 
 固件任务用 `0.1.26` 和实际 rc.5 设置页验证独立天气地点保存和复位读回，后续 `0.1.29` 修复天气调度。管理端继续用 DESKWEATHER1 通过登记 USB 读写地点。Wi-Fi、时钟与天气设置的 USB 路径分别按现有能力工作。[管理端候选](../reports/2026-11-19-vp8-desktop-weather.md)
 
-rc.3 组合主包 `0.0.6` 与登记包 `0.0.3` 提供 DESKNET2 配网候选。实际 rc.3 Connection 和 Desktop 转发函数的隔离装配已验证二进制请求、超时不重发、取消和回收。固件任务经同一登记包实板验证保存、联网、原绑定及软复位后 SNTP。管理端的独立 INFO 请求因当前环境串口读写受限返回不可用，完整设置窗口读回待验。[配网验证与回退](../reports/2026-11-19-vp8-desktop-network.md)
+日常 Hub 的多 Wi-Fi 经已绑定 USB 实测读列表、增加备用项、同名保存、重启留存和单条移除。收尾仅保留并连接原网络。首选网络失联后的自动轮换和备用项实际联网待验。圆屏重启后 Wi-Fi 已联网，认证 TCP 本次需要重载 Hub 才恢复。[现场记录](plans/wifi-motion-live.md) · [多网络协议](../protocol/firmware/desktop-network.md)
+
+局域网发现已在 `0.1.44` 真机通过同端点 Hub 重载和同 IP 换临时端口，换端口后约 16 秒收到认证心跳。日常 `0.0.12` 与圆屏 `0.1.45` 已通过纯电池冷启动回连，Mac 未枚举 USB，认证心跳推进并上报电池供电。实际换 IP 及 Mac 整机重启待验。[日常冷启动](plans/device-lan-discovery.md#日常纯电池冷启动) · [换端口证据](plans/device-lan-discovery.md#0144-真机换端口复验2026-11-24)
+
+实板 `0.1.42` 已通过 USB 双签名换钥匙，保留设备、控制者和绑定标识，epoch 加一。新助手在长期 Keychain 目录独立签名，日常 Hub 先以固定地址恢复 TCP，再开通发现。保留原登记和旧助手备份，Mac 整机冷启动尚待验。[换钥匙验收](plans/device-key-rotation.md#真机换钥匙2026-11-24)
 
 早期 `0.1.33`／`ota_1` 留驻验收通过签名镜像读回和板端 USB 订阅，当时保留 `0.1.32`／`ota_0` 和本机 `0.1.30` 回退。固件任务在该阶段核对了分区、绑定、网络、天气和 60 个 VP8 素材对象。当前测试固件的可用回退以固件任务为准。[0.1.33 阶段联调方案](plans/vp8-0133-live-acceptance.md)
 

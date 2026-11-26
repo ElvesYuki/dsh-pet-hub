@@ -1,6 +1,20 @@
 # 圆屏互联网校时与天气
 
-当前 Hub 通过下面的关联请求设置 Wi-Fi 和独立天气地点。迁入固件还包含 `DESKNET3` 多网络与联机模式入口，管理页尚未接入该入口。旧单网络命令保留在这里用于协议追溯。
+当前 Hub 离线候选通过已绑定 USB 管理多 Wi-Fi 和独立天气地点。历史单网络请求仍由同一后端解析。上板与日常设置页联调留到统一验收。
+
+## 多网络管理
+
+```text
+DESKNET3 <id> LIST
+DESKNET3 <id> SET <ssid_hex> <password_hex_or_-> <ntp_host> <weather_host_or_-> <utc_minutes> <lat_times_10000> <lon_times_10000>
+DESKNET3 <id> REMOVE <ssid_hex>
+@VP8_DESKNET3 id=<id> status=<ok|saved|removed> mode=<online|offline> link=<off|connecting|online|unavailable> active=<ssid_hex_or_-> profiles=<comma_separated_ssid_hex_or_->
+@VP8_DESKNET3 id=<id> status=<busy|invalid|storage_failed|full|missing>
+```
+
+请求 ID 为 8 个小写十六进制字符。列表最多四项，按设备尝试顺序返回，每项原始 SSID 为 1–32 字节。连接中和离线时 `active` 为 `-`，已连接时指向列表中的一项。更新相同 SSID 保持位置，移除只作用于该项。SET 同时提交全局 NTP、UTC 偏移及天气连接参数，独立天气地点仍用下节协议。LIST 只回传状态与 SSID，设备本地菜单控制在线模式。
+
+桌面候选的绑定路由以二进制传送凭证，元数据以独立的 `version: 3` 选择列表契约，省略时进入旧单网络入口。LIST 失败后的旧 INFO 仅供展示。写入前在同一已核对的串口执行 LIST，收到匹配 `saved` 或 `removed` 才更新设备列表。无写入回执时页面要求重新读取，避免自动重试和旧 CLEAR 清空整个列表。 [Spec／Diff](../../context/plans/wifi-profiles-and-dsh-motion.md)
 
 固件构建开启 `VP8_DESKTOP_INTERNET`。通过可信 USB 维护口写入私有 Wi-Fi、时间主机、UTC 偏移和天气位置。重新上电沿用配置。USB 不参与日常同步。
 

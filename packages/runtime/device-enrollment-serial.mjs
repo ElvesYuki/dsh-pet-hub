@@ -79,7 +79,8 @@ function serialSession(io, timeoutMs, confirmNode) {
   async function run(request, {prefix, match, signal: caller, beforeWrite, allowTimeout, bindingProbe}) {
     const deadline = AbortSignal.timeout(timeoutMs);
     const signal = AbortSignal.any([stop.signal, deadline, ...(caller ? [caller] : [])]);
-    const bytes = Buffer.alloc(512), word = Buffer.alloc(383), start = Buffer.from(prefix, 'ascii');
+    const bytes = Buffer.alloc(512), word = Buffer.alloc(prefix === '@VP8_DESKNET3 ' ? 512 : 383);
+    const start = Buffer.from(prefix, 'ascii');
     let total = 0, used = 0, discard = false, sent = false;
 
     async function read() {
@@ -160,7 +161,7 @@ function serialSession(io, timeoutMs, confirmNode) {
     exchangeDesktop(request, options) {
       need(!active && !closed && !failed, 'device_serial_busy');
       need(Buffer.isBuffer(request) && request.length <= 383 && request.at(-1) === 10 &&
-        ['@VP8_DESKNET2 ', '@VP8_DESKWEATHER1 ', '@VP8_OTA STATUS ', '@VP8_VPCNET1 ', '@VP8_STATUS3 '].includes(options.prefix),
+        ['@VP8_DESKNET2 ', '@VP8_DESKNET3 ', '@VP8_DESKWEATHER1 ', '@VP8_OTA STATUS ', '@VP8_VPCNET1 ', '@VP8_STATUS3 ', '@BINDKEY '].includes(options.prefix),
       'device_serial_frame');
       return start(request, options);
     },

@@ -11,7 +11,7 @@ const desktop = ctx => process.platform === 'darwin' && Boolean(process.versions
  * old I/O to close even if the loader begins remount before awaiting disposal. */
 export function applyBootDesktopConfig(ctx, config = {}, {isDesktop = desktop, checkRoot = enrollmentDirectory,
   createOwner = createDeviceEnrollmentOwner, scope = globalThis, report = console.error, sharedUsb = false, statusV2,
-  connectLan} = {}) {
+  connectLan, lanDiscovery = false} = {}) {
   keys(config, ['enabled', 'enrollmentDirectory']);
   requireThat(config.enabled === undefined || typeof config.enabled === 'boolean', 'device_desktop_config');
   requireThat(config.enrollmentDirectory === undefined || typeof config.enrollmentDirectory === 'string',
@@ -31,7 +31,7 @@ export function applyBootDesktopConfig(ctx, config = {}, {isDesktop = desktop, c
       if (disposed) return;
       requireThat(isDesktop(ctx) && checkRoot(directory) === directory, 'device_review_profile');
       const owner = createOwner(directory, {usbEnrollment: true, sharedUsb, ...(statusV2 ? {statusV2} : {}),
-        ...(connectLan ? {lanCandidate: true} : {})});
+        ...(connectLan ? {lanCandidate: true} : {}), ...(lanDiscovery ? {lanDiscovery: true} : {})});
       unregister = registerEnrollmentRoutes(ctx, {owner, transport: 'desktop-rc3-connection', usbEnrollment: true,
         authorize: () => !disposed && isDesktop(ctx) && checkRoot(directory) === directory});
       try { releaseLan = connectLan?.({owner, signal: lifetime.signal}); }

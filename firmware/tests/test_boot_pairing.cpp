@@ -268,6 +268,8 @@ int main(int argc, char **argv) {
     std::cout << "usb-fence " << line_for(usb_fence, reply_prefix);
   }
   Rig direct_reboot(direct_store, boot + 1, true);
+  const auto bound_usb_info = direct_reboot.send(request(Type::BindingInfo, 0), 90);
+  assert(bound_usb_info[17] == 2 && bound_usb_info[18] == 31);
   expect_proof(direct_reboot.send(proof(Mode::Fence, 0, boot + 1), 100), Mode::Fence, Result::Ok, Phase::Bound, 0x66);
   assert(direct_reboot.send(challenge(usb_enroll), 200)[16] == uint8_t(Result::Denied) && direct_store.writes == 1);
 

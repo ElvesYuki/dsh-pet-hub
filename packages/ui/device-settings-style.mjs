@@ -14,7 +14,8 @@ export const deviceSettingsStyle = `
   --pet-device-green-bg: light-dark(#e9f6ef, #213d36);
   --pet-device-danger: light-dark(#a33348, #ff9aae);
   --pet-device-alert-bg: light-dark(#fff1eb, #442936);
-  --pet-device-track: light-dark(#dbdef0, #414962);
+  --pet-device-battery-low: light-dark(#8c5900, #ffd266);
+  --pet-device-battery-low-fill: #f4bc39;
   width: 100%;
   max-width: 810px;
   display: grid;
@@ -52,6 +53,8 @@ export const deviceSettingsStyle = `
   gap: 8px 12px;
 }
 .pet-device-page .pet-device-head { justify-content: space-between; }
+.pet-device-page .pet-device-connection { display: grid; justify-items: end; gap: 4px; }
+.pet-device-page .pet-device-connection time { font-variant-numeric: tabular-nums; }
 .pet-device-page .pet-device-identity {
   display: flex;
   align-items: center;
@@ -118,7 +121,6 @@ export const deviceSettingsStyle = `
   border-radius: 50%;
   background: currentColor;
 }
-.pet-device-page .pet-device-metrics,
 .pet-device-page .pet-device-fields,
 .pet-device-page .pet-device-settings {
   display: grid;
@@ -129,34 +131,74 @@ export const deviceSettingsStyle = `
   align-items: start;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
 }
-.pet-device-page .pet-device-metrics > div {
+.pet-device-page .pet-device-power {
+  align-items: center;
   padding: 12px;
   background: color-mix(in srgb, var(--pet-device-panel) 73%, var(--pet-device-inset));
   border: 1px solid var(--pet-device-border);
   border-radius: 12px;
 }
-.pet-device-page :is(.pet-device-metrics, .pet-device-fields) dt { font-size: 12px; }
-.pet-device-page :is(.pet-device-metrics, .pet-device-fields) dd {
+.pet-device-page .pet-device-fields dt { font-size: 12px; }
+.pet-device-page .pet-device-fields dd {
   font-weight: 650;
   font-variant-numeric: tabular-nums;
   margin-top: 4px;
 }
-.pet-device-page .pet-device-metrics dd { font-size: 16px; }
-.pet-device-page .pet-device-metrics .pet-device-battery-value { font-size: 22px; line-height: 1.2; }
-.pet-device-page .pet-device-meter {
-  display: block;
-  width: 68px;
-  height: 5px;
-  appearance: none;
-  border: none;
-  margin-top: 8px;
-  border-radius: 99px;
-  overflow: hidden;
-  background: var(--pet-device-track);
+.pet-device-page .pet-device-battery-value {
+  --battery-fill: var(--pet-device-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  line-height: 1.2;
 }
-.pet-device-page .pet-device-meter::-webkit-progress-bar { background: var(--pet-device-track); }
-.pet-device-page .pet-device-meter::-webkit-progress-value { background: var(--pet-device-accent); border-radius: 99px; }
-.pet-device-page .pet-device-meter::-moz-progress-bar { background: var(--pet-device-accent); border-radius: 99px; }
+.pet-device-page .pet-device-battery-value[data-level="low"] {
+  --battery-fill: var(--pet-device-battery-low-fill);
+  color: var(--pet-device-battery-low);
+}
+.pet-device-page .pet-device-battery-value[data-level="muted"] {
+  --battery-fill: var(--pet-device-muted);
+  color: var(--pet-device-muted);
+}
+.pet-device-page .pet-device-battery-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  height: 17px;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+  background: var(--pet-device-inset);
+}
+.pet-device-page .pet-device-battery-icon::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + 1.5px);
+  width: 3px;
+  height: 7px;
+  border-radius: 0 2px 2px 0;
+  background: currentColor;
+}
+.pet-device-page .pet-device-battery-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 2px;
+  background: var(--battery-fill);
+}
+.pet-device-page .pet-device-battery-bolt {
+  position: relative;
+  width: 10px;
+  height: 13px;
+  filter: drop-shadow(1px 0 #211c2c) drop-shadow(-1px 0 #211c2c)
+    drop-shadow(0 1px #211c2c) drop-shadow(0 -1px #211c2c);
+}
+.pet-device-page .pet-device-battery-bolt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  clip-path: polygon(63% 0, 10% 55%, 47% 55%, 33% 100%, 92% 39%, 56% 39%);
+}
 .pet-device-page .pet-device-binding { justify-content: space-between; align-items: start; }
 .pet-device-page .pet-device-binding strong { font-weight: 650; }
 .pet-device-page .pet-device-feedback { display: grid; gap: 5px; }

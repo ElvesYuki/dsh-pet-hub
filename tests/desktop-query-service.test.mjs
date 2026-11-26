@@ -212,8 +212,12 @@ test('managed owner supplies TCP status to local Connection and gates periodic U
   assert.equal(initial.update.networkStatus, undefined);
   const sample = {operation: 'sample', instanceId: initial.instanceId, requestId: 'a'.repeat(32)};
   assert.deepEqual(await call('battery', sample), {status: 'disconnected'});
+  const beforeHeartbeat = Date.now();
   assert.equal(session.receive(1, {schema: 1, version: '0.1.29', slot: 'ota_0', identity: config.usbIdentity}), true);
-  assert.deepEqual((await call('status')).update.networkStatus,
+  const afterHeartbeat = Date.now();
+  const {lastHeartbeatAt, ...networkStatus} = (await call('status')).update.networkStatus;
+  assert.ok(lastHeartbeatAt >= beforeHeartbeat && lastHeartbeatAt <= afterHeartbeat);
+  assert.deepEqual(networkStatus,
     {device: {version: '0.1.29', slot: 'ota_0'}, battery: null, sensors: null});
   assert.deepEqual(await call('battery', sample), {status: 'network_active'});
   await dispose();

@@ -1,4 +1,4 @@
-import {createHash, verify} from 'node:crypto';
+import {createHash, randomBytes, verify} from 'node:crypto';
 import {isIPv4} from 'node:net';
 import {requireThat, same} from '../core/protocol.mjs';
 import {createPbp1BindingVerifier} from './native400-pbp1-binding.mjs';
@@ -73,4 +73,17 @@ export async function armDeviceTcpOverUsb(session, {address, port}, signal, befo
   });
   point(key);
   return key;
+}
+
+/** The existing verified USB descriptor authorizes a binding-scoped discovery opt-in. */
+export async function setDeviceLanDiscoveryOverUsb(session, devicePublicKey, signal, beforeWrite) {
+  const id = randomBytes(4).toString('hex');
+  const operation = devicePublicKey ? 'ENABLE ' + digest(devicePublicKey) : 'DISABLE';
+  const result = await session.exchangeDesktop(Buffer.from(`VPCNET1 DISCOVERY ${id} ${operation}\n`), {
+    signal, beforeWrite, prefix: '@VP8_VPCNET1 ', match(line) {
+      const reply = /^@VP8_VPCNET1 DISCOVERY id=([a-f0-9]{8}) status=(enabled|disabled|unavailable|storage_failed|invalid|busy)\r?\n$/.exec(line);
+      return reply?.[1] === id ? reply[2] : undefined;
+    },
+  });
+  requireThat(result === (devicePublicKey ? 'enabled' : 'disabled'), 'vpl1_discovery_rejected');
 }

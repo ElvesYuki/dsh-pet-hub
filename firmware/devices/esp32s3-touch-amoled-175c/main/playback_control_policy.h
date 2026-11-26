@@ -27,9 +27,10 @@ class Playback {
     first_complete_ = true;
     return true;
   }
-  bool interrupted(uint64_t now, bool contact) {
-    return selected_ && (!can_submit(*selected_, now) || (contact && !first_complete_) ||
-                         (first_complete_ && control_.waiting()));
+  bool should_yield(uint64_t now, bool contact, bool background_ready) {
+    if (!selected_) return background_ready && !contact && control_.tick(now) && control_.waiting();
+    return !can_submit(*selected_, now) || (contact && !first_complete_) ||
+           (first_complete_ && control_.waiting());
   }
   void finish(uint64_t now, bool missing = false) {
     if (selected_ && !first_complete_) {

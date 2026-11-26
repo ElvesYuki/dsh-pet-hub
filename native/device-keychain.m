@@ -33,9 +33,8 @@ static bool private_directory(NSString *path) {
   return accepted;
 }
 
-static bool allowed_parent(NSString *path, bool init) {
+static bool allowed_parent(NSString *path) {
   if ([path isEqualToString:@"/private/tmp"]) return true;
-  if (init) return false;
   const struct passwd *account = getpwuid(getuid());
   if (!account || !account->pw_dir) return false;
   NSString *allowed = [@(account->pw_dir) stringByAppendingPathComponent:@".dsh-pet-hub-enrollment"];
@@ -120,7 +119,7 @@ int main(int argc, const char *argv[]) {
     NSString *path = @(argv[2]), *parent = [path stringByDeletingLastPathComponent];
     NSString *scope = parent.lastPathComponent;
     if (![path isAbsolutePath] || ![path.lastPathComponent isEqualToString:@"enrollment.keychain-db"] ||
-        !allowed_parent(parent.stringByDeletingLastPathComponent, init) ||
+        !allowed_parent(parent.stringByDeletingLastPathComponent) ||
         !matches(scope, @"^device-enrollment-[a-f0-9]{32}$") ||
         ((init || health) ? argc != 3 : !matches(reference, @"^vp8-[a-f0-9]{32}-[a-f0-9]{32}$")) ||
         (!(init || health) && ![@[@"prepare", @"lookup", @"sign"] containsObject:operation])) return 4;

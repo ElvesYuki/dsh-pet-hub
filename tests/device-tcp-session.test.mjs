@@ -9,15 +9,16 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {setTimeout as delay} from 'node:timers/promises';
 import test from 'node:test';
-import {decodeVpc1, encodeVpc1} from '../packages/core/playback-wire.mjs';
+import {decodeVpc1, encodeVpc1, VPC1_KIND as playbackKind} from '../packages/core/playback-wire.mjs';
 import {openDeviceBindingIndex} from '../packages/runtime/device-binding-index.mjs';
 import {createBootKeychain} from '../packages/runtime/device-keychain.mjs';
 import {createDesktopStatusSources} from '../packages/runtime/device-status-sources.mjs';
-import {createDesktopDeviceLan} from '../packages/runtime/desktop-device-lan.mjs';
-import {startDesktopTaskMotion} from '../packages/runtime/desktop-task-motion.mjs';
+import {createDesktopDeviceLan, selectDeviceLanAddress} from '../packages/runtime/desktop-device-lan.mjs';
+import {startDesktopTaskMotion, startTaskSource} from '../packages/runtime/desktop-task-motion.mjs';
 import {decodeUsbStatusReport} from '../packages/runtime/usb-status-subscription.mjs';
 import {createDeviceTcpAdapter} from '../packages/runtime/device-tcp-session.mjs';
-import {armDeviceTcpOverUsb, createDeviceTcpTrust} from '../packages/runtime/device-tcp-trust.mjs';
+import {armDeviceTcpOverUsb, createDeviceTcpTrust, setDeviceLanDiscoveryOverUsb} from '../packages/runtime/device-tcp-trust.mjs';
+import {openDeviceLanPins} from '../packages/runtime/device-lan-pin.mjs';
 import {VPL1, createVpl1Framer, decodeVpl1Status, openVpl1, sealVpl1, vpl1Frame, vpl1Keys, vpl1Tag,
   vpl1Transcript} from '../packages/runtime/device-tcp-wire.mjs';
 import {minimalStatusV2} from './fixtures/device-status-fixture.mjs';
@@ -156,8 +157,8 @@ function fakeClock() {
     }};
 }
 
-async function eventually(predicate) {
-  for (let i = 0; i < 200; i++) {
+async function eventually(predicate, attempts = 200) {
+  for (let i = 0; i < attempts; i++) {
     const current = predicate();
     if (current) return current;
     await delay(5);
@@ -165,7 +166,7 @@ async function eventually(predicate) {
   assert.fail('missing expected loopback event');
 }
 
-async function runPeer(t, adapter, controller, count, binary = peer) {
+async function runPeer(t, adapter, controller, count, binary = peer, mode = binary === pushPeer ? 'tcp' : 'device') {
   const sockets = [];
   const server = createServer(socket => {
     sockets.push(socket);
@@ -173,7 +174,7 @@ async function runPeer(t, adapter, controller, count, binary = peer) {
   });
   server.listen({host: '127.0.0.1', port: 0});
   await once(server, 'listening');
-  const child = spawn(binary, [binary === pushPeer ? 'tcp' : 'device', String(server.address().port),
+  const child = spawn(binary, [mode, String(server.address().port),
     controller.publicKey.toString('hex'), String(count)]);
   let output = '', completed = false;
   child.stdout.setEncoding('utf8').on('data', bytes => { output += bytes; });
@@ -423,12 +424,145 @@ test('listener closure waits for an in-flight ARM and revokes late trust', {time
   assert.equal(lan.address(), null);
 });
 
+test('discovery selects one private IPv4 and waits on ambiguous or absent interfaces', () => {
+  const address = value => ({family: 'IPv4', address: value, internal: false, cidr: value + '/24', netmask: '255.255.255.0'});
+  const first = address('192.168.10.12'), changed = address('192.168.10.34');
+  assert.deepEqual(selectDeviceLanAddress([first, address('203.0.113.2')]), {address: first.address, netmask: first.netmask});
+  assert.deepEqual(selectDeviceLanAddress([changed]), {address: changed.address, netmask: changed.netmask});
+  assert.equal(selectDeviceLanAddress([first, changed]), null);
+  assert.equal(selectDeviceLanAddress([{...first, internal: true}]), null);
+  assert.equal(selectDeviceLanAddress(), null);
+});
+
+test('discovery withdraws the listener and reannounces on the chosen interface without replacing USB trust', {timeout: 8000}, async t => {
+  const {trust} = makeTrust(t);
+  const life = new AbortController(), published = [];
+  const endpoint = {family: 'IPv4', address: '127.0.0.1', netmask: '255.0.0.0', cidr: '127.0.0.1/8'};
+  let entries = [], arms = 0, usbReady = true;
+  const lan = createDesktopDeviceLan({address: '', port: 0, discoveryInterface: 'lo0'}, {fixture: true,
+    interfaces: () => ({lo0: entries}), report: assert.fail,
+    wait: (_, value, options) => delay(15, value, {...options, ref: true}), async publish(input) {
+      const registration = {input, active: true};
+      published.push(registration);
+      return {live: () => registration.active, async close() { registration.active = false; }};
+    }});
+  t.after(() => lan.close());
+  lan.connectEnrollment({owner: {lanUsbIdentity: identity, status: () => ({phase: 'bound'}),
+    lanArm(input) { assert.equal(input.address, endpoint.address); arms++; return {status: 'ok', trust}; }}, signal: life.signal});
+  lan.connectTelemetry({usbIdentity: identity, attach: assert.fail, usbReady: () => usbReady, signal: life.signal});
+  assert.equal(lan.address(), null);
+  entries = [endpoint];
+  await eventually(() => published.length === 1);
+  assert.equal(arms, 1);
+  assert.equal(published[0].input.interfaceName, 'lo0');
+  assert.equal(published[0].input.port, lan.address().port);
+  assert.match(published[0].input.instance, /^DSH Pet Hub [a-f0-9]{16}$/);
+
+  const {port} = lan.address();
+  const socket = connect(port, endpoint.address);
+  let socketError;
+  socket.on('error', error => { socketError = error; });
+  const socketClosed = new Promise(resolve => socket.once('close', resolve));
+  await once(socket, 'connect');
+  usbReady = false;
+  entries = [];
+  await socketClosed;
+  assert.ok(!socketError || socketError.code === 'ECONNRESET');
+  await eventually(() => !published[0].active && lan.address() === null);
+  assert.equal(lan.actionTarget(), undefined);
+  assert.equal(trust.signal.aborted, false);
+
+  entries = [endpoint];
+  await eventually(() => published.length === 2);
+  assert.equal(published[1].input.instance, published[0].input.instance);
+  assert.equal(arms, 1);
+  published[1].active = false; // Simulate an unexpected Bonjour child exit.
+  await eventually(() => published.length === 3);
+  assert.equal(published[2].input.port, lan.address().port);
+  assert.equal(lan.actionTarget(), undefined);
+  life.abort();
+  await lan.close();
+  assert.equal(published[2].active, false);
+  assert.equal(lan.address(), null);
+  assert.equal(trust.signal.aborted, true);
+});
+
 function sequencePair(session, sequence) {
   const out = Buffer.alloc(8);
   out.writeUInt32LE(session);
   out.writeUInt32LE(sequence, 4);
   return out;
 }
+
+test('LAN discovery resumes only an immutable USB pin with a durable confirmation', t => {
+  const {store} = makeTrust(t), binding = store.read(), point = privateFixture(7).publicKey;
+  const directory = mkdtempSync(join(tmpdir(), 'vpl1-pins-'));
+  t.after(() => rmSync(directory, {recursive: true, force: true}));
+  const pins = openDeviceLanPins(directory, identity);
+  assert.throws(() => pins.confirm(binding, point), {code: 'device_lan_pin_changed'});
+  pins.prepare(binding, point);
+  const reopened = openDeviceLanPins(directory, identity);
+  assert.equal(reopened.load(binding), null);
+  assert.throws(() => reopened.prepare(binding, privateFixture(8).publicKey), {code: 'device_lan_pin_changed'});
+  reopened.confirm(binding, point);
+  assert.deepEqual(openDeviceLanPins(directory, identity).load(binding), point);
+  assert.equal(openDeviceLanPins(directory, '20/112233445566').load(binding), null);
+  assert.equal(reopened.load({...binding, revision: '2'}), null);
+  reopened.withdraw(binding);
+  assert.equal(pins.load(binding), null);
+  pins.prepare(binding, point);
+  pins.confirm(binding, point);
+  assert.deepEqual(reopened.load(binding), point);
+});
+
+test('discovery enable and disable require the matching USB reply and validate the exact device key digest', async () => {
+  const point = privateFixture(7).publicKey;
+  let before = 0;
+  for (const key of [point, null]) {
+    const operation = key ? 'ENABLE ' + createHash('sha256').update(point).digest('hex') : 'DISABLE';
+    const status = key ? 'enabled' : 'disabled';
+    await setDeviceLanDiscoveryOverUsb({exchangeDesktop(wire, {beforeWrite, match}) {
+      const [, id, suffix] = /^VPCNET1 DISCOVERY ([a-f0-9]{8}) (.+)\n$/.exec(wire.toString());
+      assert.equal(suffix, operation);
+      beforeWrite();
+      const other = id === 'ffffffff' ? '00000000' : 'ffffffff';
+      assert.equal(match(`@VP8_VPCNET1 DISCOVERY id=${other} status=${status}\n`), undefined);
+      return match(`@VP8_VPCNET1 DISCOVERY id=${id} status=${status}\n`);
+    }}, key, new AbortController().signal, () => before++);
+  }
+  assert.equal(before, 2);
+  await assert.rejects(setDeviceLanDiscoveryOverUsb({exchangeDesktop: () => 'busy'}, point, new AbortController().signal),
+    {code: 'vpl1_discovery_rejected'});
+});
+
+test('confirmed discovery starts the listener after restart with no USB', {timeout: 8000}, async t => {
+  const {trust, controller} = makeTrust(t);
+  const life = new AbortController(), published = Promise.withResolvers();
+  const endpoint = {family: 'IPv4', address: '127.0.0.1', netmask: '255.0.0.0', cidr: '127.0.0.1/8'};
+  const sources = createDesktopStatusSources({usbIdentity: identity, lifetime: life.signal,
+    usbAttachment: () => undefined, usbStatus: () => ({}), read: assert.fail});
+  const lan = createDesktopDeviceLan({address: '', port: 0, discoveryInterface: 'lo0'}, {fixture: true,
+    interfaces: () => ({lo0: [endpoint]}), report: assert.fail, async publish({port}) {
+      published.resolve(port);
+      return {live: () => true, async close() {}};
+    }});
+  t.after(() => lan.close());
+  lan.connectEnrollment({owner: {lanUsbIdentity: identity, status: assert.fail, lanLoad: () => trust,
+    lanArm: assert.fail}, signal: life.signal});
+  lan.connectTelemetry({usbIdentity: identity, attach: sources.attach, usbReady: assert.fail, signal: life.signal});
+  const port = await published.promise;
+  assert.equal(port, lan.address().port);
+  if (pushPeer) {
+    const child = spawn(pushPeer, ['tcp', String(port), controller.publicKey.toString('hex'), '1']);
+    const exited = once(child, 'close');
+    t.after(async () => { if (child.exitCode === null) child.kill(); await exited; });
+    await eventually(() => sources.snapshot().networkStatus);
+    assert.ok(lan.actionTarget());
+    await lan.close();
+    assert.equal(sources.snapshot().usbPresent, false);
+    assert.deepEqual(await exited, [0, null]);
+  }
+});
 
 test('push mode authenticates, only ACKs fresh new statuses and falls back at the 6/9 second deadlines', {timeout: 10000}, async t => {
   const clock = fakeClock(), {trust, store} = makeTrust(t), life = new AbortController();
@@ -534,6 +668,152 @@ test('firmware C++ proactive session returns Play Accepted/Presented independent
   assert.deepEqual(await done,{code:0,output:'open=1 close=1 display=1\n'});
   life.abort();
 });
+
+for (const stage of ['pending', 'claimed']) {
+  const reconnect = stage === 'pending';
+  test(`firmware C++ reports Expired for a ${stage} action and accepts fresh commands ${reconnect ? 'after reconnect' : 'in the same session'}`,
+    {skip: !pushPeer, timeout: 10000}, async t => {
+      const clock = fakeClock(), {trust, controller} = makeTrust(t), life = new AbortController();
+      t.after(() => life.abort());
+      const sources = createDesktopStatusSources({usbIdentity: identity, lifetime: life.signal, clock,
+        usbAttachment: () => undefined, usbStatus: () => ({}), read: assert.fail});
+      const adapter = createDeviceTcpAdapter({trust, pushStatus: true, attach: sources.attach, signal: life.signal, ...clock});
+      const {sockets, done} = await runPeer(t, adapter, controller, reconnect ? 2 : 1, pushPeer, `tcp-expiry-${stage}`);
+      await eventually(() => sources.snapshot().networkStatus);
+      const first = adapter.actionTarget();
+      const ticket = {session: 1, sequence: 1, role: 0, action: 2};
+      assert.equal(first.play(0, 2, 1500), true);
+      const accepted = await eventually(() => adapter.snapshot().lastReceipt);
+      assert.deepEqual(accepted, {...ticket, phase: 'accepted', kind: playbackKind.accepted, value: 0});
+      assert.equal(adapter.snapshot().firstFrame, null);
+
+      if (!reconnect) {
+        clock.to(1500);
+        assert.equal(adapter.snapshot().action.phase, 'expired');
+        assert.deepEqual(adapter.snapshot().lastReceipt, accepted);
+      }
+      const expired = await eventually(() => {
+        const receipt = adapter.snapshot().lastReceipt;
+        if (receipt?.phase !== 'accepted') return receipt;
+      }, 650);
+      assert.deepEqual(expired, {...ticket, phase: 'expired', kind: playbackKind.expired, value: 0});
+      assert.equal(adapter.snapshot().action.phase, 'expired');
+      assert.equal(adapter.snapshot().firstFrame, null);
+      assert.equal(adapter.actionTarget(), first);
+
+      if (reconnect) {
+        sockets[0].destroy();
+        await eventually(() => adapter.snapshot().session === 2 && adapter.actionTarget());
+        assert.equal(adapter.snapshot().firstFrame, null);
+        assert.equal(first.play(0, 2, 1500), false);
+      }
+      const target = adapter.actionTarget(), session = reconnect ? 2 : 1;
+      for (const [action, displaySequence] of [[43, 1], [3, 2]]) {
+        assert.equal(target.play(0, action, 1500), true);
+        assert.deepEqual(await eventually(() => adapter.snapshot().firstFrame),
+          {session, sequence: displaySequence + (reconnect ? 0 : 1), role: 0, action, displaySequence});
+      }
+      await adapter.close();
+      assert.deepEqual(await done, {code: 0, output: `open=${session} close=${session} display=2 late=1\n`});
+    });
+}
+
+test('draining the listener keeps authentication and requires a fresh play after reconnect',
+  {skip: !pushPeer, timeout: 12000}, async t => {
+    const {trust, controller} = makeTrust(t), life = new AbortController();
+    const sources = createDesktopStatusSources({usbIdentity: identity, lifetime: life.signal,
+      usbAttachment: () => undefined, usbStatus: () => ({}), read: assert.fail});
+    const adapter = createDeviceTcpAdapter({trust, pushStatus: true, attach: sources.attach, signal: life.signal});
+    const {done} = await runPeer(t, adapter, controller, 2, pushPeer);
+    t.after(() => life.abort());
+    const old = await eventually(() => adapter.actionTarget());
+    assert.equal(old.play(0, 41, 1500), true);
+    assert.equal((await eventually(() => adapter.snapshot().firstFrame)).session, 1);
+
+    await adapter.disconnect();
+    assert.equal(trust.signal.aborted, false);
+    assert.equal(old.play(0, 42, 1500), false);
+    await eventually(() => adapter.snapshot().session === 2 && adapter.actionTarget());
+    assert.equal(adapter.snapshot().firstFrame, null);
+    assert.equal(adapter.actionTarget().play(0, 43, 1500), true);
+    assert.deepEqual(await eventually(() => adapter.snapshot().firstFrame),
+      {session: 2, sequence: 1, action: 43, role: 0, displaySequence: 2});
+    await adapter.close();
+    assert.deepEqual(await done, {code: 0, output: 'open=2 close=2 display=2\n'});
+  });
+
+test('an existing firmware boot opens a fresh authenticated session after the Hub adapter is replaced',
+  {skip: !pushPeer, timeout: 12000}, async t => {
+    const {trust, store, controller} = makeTrust(t);
+    const mount = bindingTrust => {
+      const lifetime = new AbortController();
+      const status = createDesktopStatusSources({usbIdentity: identity, lifetime: lifetime.signal,
+        usbAttachment: () => undefined, usbStatus: () => ({}), read: assert.fail});
+      const adapter = createDeviceTcpAdapter({trust: bindingTrust, pushStatus: true, attach: status.attach,
+        signal: lifetime.signal});
+      t.after(() => lifetime.abort());
+      return {adapter, status};
+    };
+    const first = mount(trust);
+    let current = first.adapter;
+    const {done} = await runPeer(t, {accept: socket => current.accept(socket), close: () => current.close()},
+      controller, 2, pushPeer);
+    const old = await eventually(() => first.adapter.actionTarget());
+    assert.equal(old.play(0, 41, 1500), true);
+    await eventually(() => first.adapter.snapshot().firstFrame);
+
+    const replacementTrust = createDeviceTcpTrust({store, keychain: {lookup: () => controller},
+      revision: store.read().revision, usbIdentity: identity, devicePublicKey: privateFixture(7).publicKey});
+    const second = mount(replacementTrust);
+    current = second.adapter;
+    await first.adapter.close();
+    assert.equal(old.play(0, 42, 1500), false);
+    assert.equal(first.status.snapshot().networkStatus, undefined);
+    await eventually(() => second.status.snapshot().networkStatus);
+    assert.equal(second.adapter.snapshot().session, 2);
+    assert.equal(second.adapter.snapshot().firstFrame, null);
+    await second.adapter.close();
+    assert.deepEqual(await done, {code: 0, output: 'open=2 close=2 display=1\n'});
+  });
+
+test('DSH extended events reach the authenticated firmware peer as one Play per admitted transition',
+  {skip: !pushPeer, timeout: 10000}, async t => {
+    const {trust, controller} = makeTrust(t), life = new AbortController();
+    const sources = createDesktopStatusSources({usbIdentity: identity, lifetime: life.signal,
+      usbAttachment: () => undefined, usbStatus: () => ({}), read: assert.fail});
+    const adapter = createDeviceTcpAdapter({trust, pushStatus: true, attach: sources.attach, signal: life.signal});
+    const {done} = await runPeer(t, adapter, controller, 1, pushPeer);
+    t.after(() => life.abort());
+    await eventually(() => adapter.actionTarget());
+    let state = null, counter = 1, reads = 0;
+    const motion = startTaskSource({async read() { reads++; return {sessionId: 'target', turnId: 'turn', state, counter}; }},
+      'target', {lan: adapter, extended: true, wait: (_, value, options) => delay(12, value, options)});
+    t.after(() => motion.close());
+    async function display(action, sequence) {
+      const outcome = await eventually(() => {
+        const frame = adapter.snapshot().firstFrame;
+        return frame?.action === action && frame;
+      });
+      assert.equal(outcome.sequence, sequence);
+      assert.equal(outcome.displaySequence, sequence);
+    }
+    function advance(next) { state = next; counter++; }
+    await eventually(() => reads >= 2);
+    advance('waiting');
+    await display(41, 1);
+    advance('working');
+    await display(2, 2);
+    advance('result');
+    await delay(200);
+    await display(43, 3);
+    advance('error');
+    await display(42, 4);
+    const last = reads;
+    await eventually(() => reads >= last + 3);
+    await motion.close();
+    await adapter.close();
+    assert.deepEqual(await done, {code: 0, output: 'open=1 close=1 display=4\n'});
+  });
 
 test('read-only pet state transitions traverse VPL1 mode 3 to real C++ without replay', {skip: !pushPeer}, async t => {
   const {trust, controller} = makeTrust(t), life = new AbortController();

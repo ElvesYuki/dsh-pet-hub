@@ -93,7 +93,7 @@ int main() {
 
   DesktopStatusCache cache;
   cache.sync(1000, 600, Weather::cloud, 21);
-  cache.battery(1000, 78);
+  cache.battery(1000, 78, false);
   cache.clear_weather();
   const auto status = cache.snapshot(1200);
   assert(status.minute == 10 && status.battery == 78 && status.weather == Weather::none && status.celsius == 0);

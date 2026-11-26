@@ -2,13 +2,15 @@
 
 管理端和 1.75C-EN 圆屏固件在同一仓库开发。固件入口位于 `firmware/`，画布规格位于 `media/profiles/`，两端共用协议文档与字节向量。原固件仓保留为迁移前回退依据。 [固件构建与测试](firmware/README.md) · [设备协议](docs/protocol/firmware/README.md)
 
-日常 DSH profile 已安装 Hub `0.0.8` Hooks 包。上次联调的设备页显示「TCP 实时状态」、已核对的持久绑定和「联动已关闭」。上一份主动状态包和配置已备份。[日常换装与回退](docs/reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装)
+本机正式留驻组合为日常 DSH Hub `0.0.13` 与圆屏 `0.1.46`／`ota_0`。圆屏已通过首启、原绑定和认证 TCP 心跳复核，`0.1.45`／`ota_1` 留作直接回退。Hub `0.0.12` 包及原配置已备份。此前 `0.1.45` 已验证纯电池冷启动，实际换 IP 待验。电池图标以内部闪电表示 USB 供电、低于 20% 用黄色。[Hub 换装与回退](docs/context/plans/task-source-aggregation.md#日常-dsh-验收) · [圆屏版本](firmware/README.md#当前正式留驻版)
 
 VP8 主动状态使用 Status v2，设备每 3 秒上报。隔离真机已通过实体拔插、纯电池 TCP、受控失联后切 USB、重连停 USB，以及配网和升级前只读串口交接。AP 物理断网和 OTA 写入另行验收。[真机验证](docs/reports/2026-11-20-vp8-0133-live.md)
 
-DSH 本机任务联动已通过真机首帧。真实 DSH 会话驱动思考、工作和一次庆祝，三次播放均收到匹配的设备接收与首帧回执。验收后已恢复联动关闭。[真机联调](docs/reports/2026-11-20-vp8-dsh-task-motion-live.md)
+圆屏 `0.1.46` 经 Bonjour 和认证 TCP 通过常规 DSH 联动。思考、工作、等待、持续整理和完成均收到设备首帧。受控断链后旧工作动作未补播，新回合可正常联动。此前单项实测也确认了自动待机可提前让出。[真机复验](docs/reports/2026-11-25-dsh-motion-discovery.md#正式版常规联动触摸和重连)
 
-设备页已有「动画联动」入口，当前关闭。DSH 随包控制器通过六档验证。Codex 项目级 Hooks 已用 App 随包引擎验证思考、工作、整理、等待审批和回空闲。Codex 的明确完成与出错仍由已配置的 App Server 读取。日常 Codex 来源待配置，App 的 Hook 审阅与圆屏联调待验。[Codex App 验证](docs/reports/2026-11-20-vp8-codex-app-hooks.md)
+设备页已有「动画联动」入口，当前关闭。DSH 随包控制器通过六档验证。已在 Codex App 审阅项目 Hook，真实 Local 聊天经隔离 Hub 路由读到思考、工作、整理和空闲，等待审批有随包引擎验证。Codex 的明确完成与出错仍由已配置的 App Server 读取。日常 Codex 来源待配置，App 重启及圆屏联调待验。[Codex App 验证](docs/reports/2026-11-20-vp8-codex-app-hooks.md#真实-local-聊天)
+
+日常 Hub 的动画联动可选择「指定对话」或「全部对话」。DSH 聚合当前宿主可见的活跃会话，配置 Hook 端点后 Codex 可聚合已授权项目的本地对话。全部模式通过现有 TCP `Play` 驱动圆屏，实际多对话与低亮度唤醒待验。[聚合契约](docs/context/plans/task-source-aggregation.md)
 
 设备管理源码按状态、连接、登记、播放和界面职责命名。新桌面候选构建输出为 `dist-desktop/`，管理端新配置和板端协议的对应关系集中在文档。[命名与构建](docs/context/plans/device-code-naming.md) · [固件命名交接](docs/protocol/device-naming-firmware-handoff.md)
 

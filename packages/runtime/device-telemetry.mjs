@@ -48,7 +48,7 @@ function statusView(value) {
  * failure, and call receive only with replies from that verified connection.
  * The input schema here is a host object, independent of the VPC1 wire format.
  */
-export function createDeviceTelemetry({usbIdentity, onFresh, now = () => performance.now(),
+export function createDeviceTelemetry({usbIdentity, onFresh, now = () => performance.now(), wallNow = Date.now,
   schedule = setTimeout, unschedule = clearTimeout}) {
   let current, stopped = false;
 
@@ -93,7 +93,7 @@ export function createDeviceTelemetry({usbIdentity, onFresh, now = () => perform
           if (time - session.contact >= closeMs) { end(session); return false; }
           const status = statusView(value);
           if (!status) return false;
-          session.status = status;
+          session.status = Object.freeze({...status, lastHeartbeatAt: wallNow()});
           session.pending = undefined;
           if (session.push) session.sequence = sequence;
           session.contact = time;

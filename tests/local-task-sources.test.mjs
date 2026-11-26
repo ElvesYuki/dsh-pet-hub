@@ -5,7 +5,7 @@ import {mkdtempSync, readFileSync, rmSync, statSync, symlinkSync} from 'node:fs'
 import {createServer} from 'node:http';
 import {join} from 'node:path';
 import test from 'node:test';
-import {openCodexTaskSource, openDshTaskSource} from '../packages/runtime/local-task-sources.mjs';
+import {openCodexTaskSource, openDshTaskAggregate, openDshTaskSource} from '../packages/runtime/local-task-sources.mjs';
 import {openTaskSelection} from '../packages/runtime/task-source-selection.mjs';
 
 test('native DSH reads exactly one session and never treats idle or failed reads as completion', async () => {
@@ -73,6 +73,44 @@ test('DSH exact cursor samples feed six task phases, preserve parallel work and 
   append('user/message', {source: {kind: 'goal'}});
   append('turn/end', {reason: {kind: 'completed'}});
   await phase(null);
+});
+
+test('DSH aggregate samples running summaries only and fails closed until bounded discovery can retry', async () => {
+  let now = 0, lists = 0, fail = false;
+  let items = [{sessionId: 'a', running: true}, {sessionId: 'b', running: true}, {sessionId: 'cold', running: false}];
+  const reads = [];
+  const reader = openDshTaskAggregate('group', (params, signal) => {
+    assert.deepEqual(params, {});
+    signal.throwIfAborted();
+    lists++;
+    return {items};
+  }, ({sessionId}, signal) => {
+    signal.throwIfAborted();
+    reads.push(sessionId);
+    if (fail) throw Error('fixture failure');
+    return {active: true, running: items.find(item => item.sessionId === sessionId).running,
+      cursor: -1, pendingInput: sessionId === 'b' ? ['approval'] : []};
+  }, undefined, {now: () => now});
+  const read = () => reader.read({signal: AbortSignal.timeout(1000)});
+  assert.equal((await read()).state, 'working');
+  assert.deepEqual(reads, ['a', 'b']);
+  items[0].running = false;
+  now = 1000;
+  assert.equal((await read()).state, 'waiting');
+  assert.equal(lists, 1);
+  fail = true;
+  await assert.rejects(read(), /fixture failure/);
+  fail = false;
+  now = 3999;
+  await assert.rejects(read(), /dsh_task_list_unavailable/);
+  now = 4000;
+  assert.equal((await read()).state, 'waiting');
+  assert.equal(reads.at(-1), 'b');
+  items = Array.from({length: 17}, (_, i) => ({sessionId: `active-${i}`, running: true}));
+  now = 7000;
+  await assert.rejects(read(), /dsh_task_list/);
+  assert.equal(lists, 3);
+  assert.equal(await reader.read({signal: AbortSignal.abort()}).then(() => false, e => e.name), 'AbortError');
 });
 
 test('Codex reader verifies the six phases over a bounded local WebSocket and closes on cancellation', async t => {
@@ -179,10 +217,10 @@ test('persisted source choice survives reopen and switches only after old reader
   const history = [], jobs = [];
   const defaults = {source: 'off', sessionId: ''};
   const readers = {dsh: () => 'dsh', codex: () => 'codex'};
-  const config = {directory, defaults, readers, start(source, id, {onSample}) {
+  const config = {directory, defaults, readers, aggregateReaders: {codex: () => 'codex-all'}, start(source, id, {extended, onSample}) {
     history.push(source);
     const drain = Promise.withResolvers();
-    jobs.push({drain, onSample});
+    jobs.push({drain, onSample, extended, id});
     return {done: drain.promise, close() { return drain.promise; }};
   }};
   const owner = openTaskSelection(config);
@@ -194,6 +232,7 @@ test('persisted source choice survives reopen and switches only after old reader
   owner.select(dsh);
   await new Promise(resolve => setImmediate(resolve));
   assert.deepEqual(history, ['dsh']);
+  assert.equal(jobs[0].extended, true);
   assert.throws(() => owner.select(dsh), /task_source_conflict/);
   owner.select(choose(owner, 'codex', 'two'));
   jobs[0].onSample({sessionId: 'one', state: 'success'});
@@ -202,6 +241,7 @@ test('persisted source choice survives reopen and switches only after old reader
   jobs[0].drain.resolve();
   await new Promise(resolve => setImmediate(resolve));
   assert.deepEqual(history, ['dsh', 'codex']);
+  assert.equal(jobs[1].extended, false);
   const configPath = join(directory, 'task-source.json');
   assert.equal(statSync(configPath).mode & 0o777, 0o600);
   assert.equal(JSON.parse(readFileSync(configPath)).sessionId, 'two');
@@ -209,6 +249,23 @@ test('persisted source choice survives reopen and switches only after old reader
   await owner.close();
   const again = openTaskSelection(config);
   assert.equal(again.view().source, 'codex');
-  again.select(choose(again, 'off', ''));
+  assert.equal(again.view().scope, 'single');
+  assert.deepEqual(again.view().aggregateSources, ['codex']);
+  assert.throws(() => again.select({...choose(again, 'dsh', ''), scope: 'all'}), /task_source_invalid/);
+  assert.throws(() => again.select({...choose(again, 'codex', 'chosen'), scope: 'all'}), /task_source_invalid/);
+  again.select({...choose(again, 'codex', ''), scope: 'all'});
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(history.at(-1), 'codex-all');
+  assert.equal(again.view().sessionId, '');
+  const group = jobs.at(-1);
+  group.onSample({sessionId: group.id, state: 'working'});
+  assert.equal(again.view().state, 'working');
+  assert.equal(JSON.parse(readFileSync(configPath)).schema, 2);
+  group.drain.resolve();
   await again.close();
+  const restored = openTaskSelection(config);
+  assert.equal(restored.view().scope, 'all');
+  restored.select(choose(restored, 'off', ''));
+  assert.equal(JSON.parse(readFileSync(configPath)).schema, 1);
+  await restored.close();
 });

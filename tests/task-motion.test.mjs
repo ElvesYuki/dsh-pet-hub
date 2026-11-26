@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {createTaskMotion} from '../packages/core/task-motion.mjs';
+import {createTaskMotion, createTaskStateAggregate} from '../packages/core/task-motion.mjs';
 import {parsePetState} from '../packages/source-pet/schema.mjs';
 import {parsePetSessionState} from '../packages/source-pet/session-state.mjs';
 import {createVpc1Owner} from '../packages/core/playback-owner.mjs';
@@ -55,6 +55,22 @@ test('one scoped task maps semantic edges and one completion, with no source or 
   assert.equal(observe({counter: 6, state: 'success', sessionId: 'target'}, b), undefined);
 });
 
+test('aggregate motion keeps working across member changes and only a fresh group phase can play after reconnect', () => {
+  const aggregate = createTaskStateAggregate('group'), observe = createTaskMotion('group', {extended: true});
+  const first = {}, replacement = {};
+  assert.equal(observe(aggregate([]), first), undefined);
+  assert.equal(observe(aggregate(['thinking']), first), 1);
+  const working = aggregate(['working', 'waiting']);
+  assert.equal(observe(working, first), 2);
+  assert.deepEqual(aggregate(['success', 'working']), working);
+  assert.equal(observe(aggregate(['success', 'working']), first), undefined);
+  assert.equal(observe(aggregate(['working']), replacement), undefined);
+  assert.equal(observe(aggregate(['working', 'thinking']), replacement), undefined);
+  assert.equal(observe(aggregate(['waiting', 'result']), replacement), 41);
+  assert.equal(observe(aggregate(['success', 'error']), replacement), undefined);
+  assert.equal(observe(aggregate(['working']), replacement), 2);
+});
+
 test('current-connection Play never queues offline or replays on reconnect, including Presented', () => {
   let now = 0;
   const requests = [];
@@ -92,4 +108,45 @@ test('a different native turn cannot inherit the previous turn’s celebration',
   assert.equal(sample(4, 'third', 'thinking'), 1);
   assert.equal(sample(5, 'third', 'success'), 3);
   assert.equal(sample(6, 'third', 'success'), undefined);
+});
+
+test('DSH waiting, sustained result and failure play only for the current observed turn', () => {
+  let now = 0;
+  const observe = createTaskMotion('target', {extended: true, now: () => now}), connection = {};
+  const sample = (counter, state, turnId = 'first', target = connection) =>
+    observe({counter, sessionId: 'target', turnId, state}, target);
+  assert.equal(sample(1, null), undefined);
+  assert.equal(sample(2, 'thinking'), 1);
+  assert.equal(sample(3, 'waiting'), 41);
+  assert.equal(sample(3, 'waiting'), undefined);
+  assert.equal(sample(4, 'working'), 2);
+  assert.equal(sample(5, 'waiting'), 41);
+  assert.equal(sample(6, 'working'), 2);
+  assert.equal(sample(7, 'result'), undefined);
+  now = 999;
+  assert.equal(sample(7, 'result'), undefined);
+  now = 1000;
+  assert.equal(sample(7, 'result'), 43);
+  assert.equal(sample(8, 'result'), undefined);
+  assert.equal(sample(9, 'error'), 42);
+  assert.equal(sample(10, 'error'), undefined);
+  assert.equal(sample(11, 'working'), 2);
+  assert.equal(sample(12, 'error'), undefined);
+  assert.equal(sample(13, 'thinking', 'next'), 1);
+  assert.equal(sample(14, 'result', 'next'), 2);
+  now = 1500;
+  assert.equal(sample(15, 'success', 'next'), 3);
+
+  assert.equal(sample(16, 'result', 'third'), 2);
+  assert.equal(observe(undefined, connection), undefined);
+  now = 5000;
+  assert.equal(sample(17, 'result', 'third'), undefined);
+  assert.equal(sample(17, 'result', 'third'), undefined);
+  assert.equal(sample(18, 'working', 'third'), undefined);
+  assert.equal(sample(19, 'result', 'third'), undefined);
+  const reconnected = {};
+  now = 8000;
+  assert.equal(sample(19, 'result', 'third', reconnected), undefined);
+  assert.equal(sample(19, 'result', 'third', reconnected), undefined);
+  assert.equal(sample(20, 'error', 'unobserved', reconnected), undefined);
 });

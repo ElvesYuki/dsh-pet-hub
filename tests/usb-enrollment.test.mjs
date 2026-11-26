@@ -11,7 +11,9 @@ import test from 'node:test';
 import {mountEnrollmentSettings} from '../apps/dsh-plugin/enrollment-routes.mjs';
 import {encodePbp1Frame, decodePbp1Frame} from '../packages/core/native400-pbp1-wire.mjs';
 import {openDeviceBindingIndex} from '../packages/runtime/device-binding-index.mjs';
+import {openDeviceLanPins} from '../packages/runtime/device-lan-pin.mjs';
 import {createEnrollmentCoordinator} from '../packages/runtime/device-enrollment-owner.mjs';
+import {rotateDeviceBinding} from '../packages/runtime/device-key-rotation.mjs';
 import {createBootProof, decodeBootReply, encodeBootRequest} from '../packages/runtime/device-enrollment-wire.mjs';
 import {makeEnrollmentSettings} from '../packages/ui/enrollment-settings.mjs';
 import {compileBootPeer, firmwareHostTests, hasCryptoPeer} from './fixtures/device-enrollment-cpp.mjs';
@@ -46,7 +48,7 @@ function challenge(operation = 3) {
   return line('binding-nonce', body);
 }
 
-function makeOwner(t, {openSession, directory, usbEnrollment = true, lanUsbIdentity} = {}) {
+function makeOwner(t, {openSession, directory, usbEnrollment = true, lanUsbIdentity, lanPins} = {}) {
   const root = directory ?? mkdtempSync(join(tmpdir(), 'vp8-usb-enroll-'));
   if (!directory) t.after(() => rmSync(root, {recursive: true, force: true}));
   const store = openDeviceBindingIndex({directory: root, create: true});
@@ -56,14 +58,14 @@ function makeOwner(t, {openSession, directory, usbEnrollment = true, lanUsbIdent
     Buffer.from(y, 'base64url')]), signTranscript: data => sign('sha256', data, {key: pair.privateKey, dsaEncoding: 'ieee-p1363'})};
   let owner, prepares = 0;
   function reopen() {
-    owner = createEnrollmentCoordinator({store, usbEnrollment, openSession, poll: assert.fail, lanUsbIdentity,
+    owner = createEnrollmentCoordinator({store, usbEnrollment, openSession, poll: assert.fail, lanUsbIdentity, lanPins,
       networkAllowed: lanUsbIdentity ? () => true : undefined,
       keys: {prepare: () => { prepares++; return key; }, lookup: reference => reference === key.ref ? key : undefined}});
     return owner;
   }
   reopen();
   t.after(async () => { await owner.close(); store.close(); });
-  return {reopen, get owner() { return owner; }, get prepares() { return prepares; }, store};
+  return {reopen, get owner() { return owner; }, get prepares() { return prepares; }, store, key};
 }
 
 function input({instanceId, revision}, operation) { return {instanceId, revision, operation}; }
@@ -298,4 +300,128 @@ test('VPL1 ARM pins only after a C++ USB Fence on the same open descriptor and r
     await assert.rejects(arm(), {code: 'vpl1_arm_already_attempted'});
     await f.owner.close();
     assert.equal(result.trust.signal.aborted, true);
+  });
+
+test('discovery uses USB Fence, recovers an unconfirmed enable, then reopens without USB',
+  {skip: !hasCryptoPeer, timeout: 15000}, async t => {
+    const root = mkdtempSync(join(tmpdir(), 'vp8-discovery-fence-'));
+    t.after(() => rmSync(root, {recursive: true, force: true}));
+    const binary = compileBootPeer(root, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
+    const child = spawn(binary, ['--p256', '--usb'], {stdio: ['pipe', 'pipe', 'inherit']});
+    const exited = once(child, 'exit');
+    const lines = createInterface({input: child.stdout})[Symbol.asyncIterator]();
+    t.after(async () => { child.stdin.end(); await exited; });
+    const {publicKey} = generateKeyPairSync('ec', {namedCurve: 'prime256v1'});
+    const {x, y} = publicKey.export({format: 'jwk'});
+    const point = Buffer.concat([Buffer.of(4), Buffer.from(x, 'base64url'), Buffer.from(y, 'base64url')]);
+    const alternate = generateKeyPairSync('ec', {namedCurve: 'prime256v1'}).publicKey.export({format: 'jwk'});
+    const otherPoint = Buffer.concat([Buffer.of(4), Buffer.from(alternate.x, 'base64url'), Buffer.from(alternate.y, 'base64url')]);
+    const lanUsbIdentity = '4/112233445566', lanPins = openDeviceLanPins(root, lanUsbIdentity);
+    let opened = 0, reply = false;
+    const f = makeOwner(t, {directory: root, lanUsbIdentity, lanPins, async openSession() {
+      opened++;
+      const commands = [];
+      return {close() {}, async exchange(text) {
+        commands.push(raw(text)[5]);
+        child.stdin.write(text);
+        return (await lines.next()).value + '\n';
+      }, exchangeDesktop(command, {beforeWrite, match}) {
+        assert.deepEqual(commands, [6, 10]);
+        beforeWrite();
+        const wire = command.toString();
+        if (wire.startsWith('VPCNET1 ARM ')) {
+          match('@VP8_VPCNET1 QUEUED\n');
+          return match('@VP8_VPCNET1 ARMED key=' + point.toString('hex') + '\n');
+        }
+        const [, id, operation] = /^VPCNET1 DISCOVERY ([a-f0-9]{8}) ([^\n]+)\n$/.exec(wire);
+        if (operation === 'DISABLE') return match(`@VP8_VPCNET1 DISCOVERY id=${id} status=disabled\n`);
+        assert.equal(operation, 'ENABLE ' + hash(point).toString('hex'));
+        assert.equal(lanPins.load(f.store.read()), null);
+        assert.throws(() => lanPins.prepare(f.store.read(), otherPoint), {code: 'device_lan_pin_changed'});
+        return reply ? match(`@VP8_VPCNET1 DISCOVERY id=${id} status=enabled\n`) : undefined;
+      }};
+    }});
+    f.owner.command(input(f.owner.status(), 'enroll-usb'));
+    assert.equal((await idle(f.owner)).phase, 'bound');
+    const arm = () => f.owner.lanArm({...input(f.owner.status(), 'arm'), address: '192.168.4.2', port: 18000});
+    assert.deepEqual(await arm(), {status: 'unknown'});
+    assert.equal(lanPins.load(f.store.read()), null);
+    await f.owner.close();
+    f.reopen();
+    assert.equal(f.owner.lanLoad(), null);
+    reply = true;
+    assert.equal((await arm()).status, 'ok');
+    assert.deepEqual(lanPins.load(f.store.read()), point);
+    await f.owner.close();
+
+    f.reopen();
+    const before = opened, trust = f.owner.lanLoad();
+    assert.equal(trust.usbIdentity, lanUsbIdentity);
+    assert.equal(opened, before);
+    assert.equal((await f.owner.lanDisableDiscovery(input(f.owner.status(), 'disable'))).status, 'ok');
+    assert.equal(trust.signal.aborted, true);
+    assert.equal(lanPins.load(f.store.read()), null);
+  });
+
+test('USB key rotation requires both signatures and recovers an acknowledged-on-device commit after reboot',
+  {skip: !hasCryptoPeer, timeout: 15000}, async t => {
+    const root = mkdtempSync(join(tmpdir(), 'vp8-key-rotation-'));
+    t.after(() => rmSync(root, {recursive: true, force: true}));
+    const binary = compileBootPeer(root, 'tests/fixtures/device-binding-proof-peer.cpp', 'peer');
+    const child = spawn(binary, ['--p256', '--usb'], {stdio: ['pipe', 'pipe', 'inherit']});
+    const exited = once(child, 'exit'), lines = createInterface({input: child.stdout})[Symbol.asyncIterator]();
+    t.after(async () => { child.stdin.end(); await exited; });
+    const send = async text => { child.stdin.write(text); return (await lines.next()).value + '\n'; };
+    let fault, lastCommit, commands = 0, prepared = 0;
+    const openSession = async () => ({close() {}, exchange: send, async exchangeDesktop(bytes, {beforeWrite, match}) {
+      let wire = bytes.toString();
+      beforeWrite();
+      if (wire.includes(' COMMIT ')) {
+        commands++;
+        if (fault === 'old' || fault === 'new') {
+          const [, prefix, encoded] = /^(.* COMMIT )([^\n]+)\n$/.exec(wire);
+          const body = Buffer.from(encoded, 'base64');
+          body[fault === 'old' ? 69 : 133] ^= 1;
+          wire = prefix + body.toString('base64') + '\n';
+        } else if (fault === 'expired') child.stdin.write('#tick 20000000 0 0\n');
+        lastCommit = wire;
+      }
+      const reply = await send(wire);
+      if (fault === 'lost' && wire.includes(' COMMIT ')) {
+        assert.match(reply, / committed\n$/);
+        throw Error('simulated lost acknowledgement');
+      }
+      return match(reply);
+    }});
+    const source = makeOwner(t, {directory: root, openSession});
+    source.owner.command(input(source.owner.status(), 'enroll-usb'));
+    assert.equal((await idle(source.owner)).phase, 'bound');
+    const original = source.store.read();
+    const directory = mkdtempSync(join(tmpdir(), 'vp8-replacement-key-'));
+    const replacement = makeOwner(t, {directory, openSession: assert.fail});
+    t.after(() => rmSync(directory, {recursive: true, force: true}));
+    const oldKeys = {lookup: () => source.key};
+    const newKeys = {prepare() { prepared++; return replacement.key; }, lookup: () => replacement.key};
+    const rotate = (keys = oldKeys) => rotateDeviceBinding({source: source.store, destination: replacement.store,
+      oldKeys: keys, newKeys, openSession});
+
+    for (fault of ['old', 'new', 'expired']) {
+      await assert.rejects(rotate(), {code: 'device_key_rotation_denied'});
+      assert.equal(replacement.store.read().record.phase, 'pending');
+      source.owner.command(input(source.owner.status(), 'verify'));
+      assert.equal((await idle(source.owner)).deviceChecked, true);
+    }
+    fault = 'lost';
+    await assert.rejects(rotate(), {code: 'device_key_rotation_unknown'});
+    assert.equal(replacement.store.read().record.phase, 'pending');
+    assert.match(await send(lastCommit), / denied\n$/);
+    child.stdin.write('#reset\n');
+    fault = undefined;
+    assert.deepEqual(await rotate({lookup: assert.fail}), {verified: true});
+    assert.deepEqual(await rotate({lookup: assert.fail}), {verified: true});
+    assert.equal(commands, 4);
+    assert.equal(prepared, 1);
+    assert.deepEqual(source.store.read(), original);
+    assert.deepEqual(replacement.store.read().record, {phase: 'bound', keyRef: replacement.key.ref,
+      target: {...original.record.target, epoch: '2', keySha256: hash(replacement.key.publicKey).toString('hex')}});
   });

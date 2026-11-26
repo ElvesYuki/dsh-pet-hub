@@ -10,7 +10,7 @@ import {registerEnrollmentRoutes} from '../apps/dsh-plugin/enrollment-routes.mjs
 import {decodePbp1Frame, encodePbp1Frame} from '../packages/core/native400-pbp1-wire.mjs';
 import {createEnrollmentCoordinator} from '../packages/runtime/device-enrollment-owner.mjs';
 import {createBootSerial} from '../packages/runtime/device-enrollment-serial.mjs';
-import {decodeNetworkBody, decodeNetworkReply, encodeNetworkLine} from '../packages/runtime/usb-wifi-settings.mjs';
+import {decodeNetworkBody, decodeNetworkReply, decodeWifiProfilesReply, encodeNetworkLine} from '../packages/runtime/usb-wifi-settings.mjs';
 import {desktopUsbOpener} from '../packages/runtime/desktop-usb-ownership.mjs';
 
 const fixtureId = '11111111-1111-1111-1111-111111111111';
@@ -53,7 +53,7 @@ test('DESKNET2 validates safe fields and operation-specific correlated receipts'
   assert.deepEqual(decodeNetworkReply(line('012345ab', 'storage_failed'), '012345ab', 'clear'), {status: 'storage_failed'});
 });
 
-test('Node request bytes match the upstream C++ DESKNET2 command parser', {skip: !hasCppPeer}, t => {
+test('Node Wi-Fi requests match both contracts of the firmware C++ command parser', {skip: !hasCppPeer}, t => {
   const root = mkdtempSync(join(tmpdir(), 'vp8-desknet-peer-'));
   t.after(() => rmSync(root, {recursive: true, force: true}));
   const output = join(root, 'peer');
@@ -66,6 +66,34 @@ test('Node request bytes match the upstream C++ DESKNET2 command parser', {skip:
   assert.deepEqual(replies.map((line, i) => decodeNetworkReply(line, '012345ab', operations[i])),
     [{status: 'ok', configured: false, link: 'off'}, {status: 'saved', configured: true, link: 'connecting'},
       {status: 'cleared', configured: false, link: 'off'}]);
+  const profileInput = {...input, version: 3, ssidHex: 'e59c86e5b18f'};
+  const listOperations = ['info', 'set', 'remove'];
+  const listRequests = listOperations.map(operation => encodeNetworkLine('012345ab', operation, profileInput));
+  const listReplies = execFileSync(output, {input: Buffer.concat(listRequests), encoding: 'ascii', timeout: 5000}).match(/[^\n]+\n/g);
+  assert.deepEqual(listReplies.map((line, i) => decodeWifiProfilesReply(line, '012345ab', listOperations[i], profileInput)),
+    [{version: 3, status: 'ok', configured: false, mode: 'online', link: 'off', active: null, profiles: []},
+      {version: 3, status: 'saved', configured: true, mode: 'online', link: 'connecting', active: null,
+        profiles: [{id: 'e59c86e5b18f', name: '圆屏'}]},
+      {version: 3, status: 'removed', configured: false, mode: 'online', link: 'off', active: null, profiles: []}]);
+});
+
+test('Wi-Fi list receipts enforce correlation, raw identities and operation-specific confirmation', () => {
+  const sel = {operation: 'remove', instanceId: fixtureId, revision: '1', version: 3, ssidHex: 'ff'};
+  assert.equal(decodeNetworkBody(body(sel)).ssidHex, 'ff');
+  for (const value of [{version: 4}, {version: undefined}, {ssidHex: '00'}, {ssidHex: 'FF'}, {ssidHex: 'f'}, {operation: 'clear'}])
+    assert.throws(() => decodeNetworkBody(body({...sel, ...value})));
+  assert.throws(() => decodeNetworkBody(body(sel, secret)));
+  const line = value => `@VP8_DESKNET3 id=012345ab status=${value}\r\n`;
+  for (const fields of ['ok mode=online link=online active=61 profiles=62', 'ok mode=offline link=online active=61 profiles=61',
+    'ok mode=online link=off active=- profiles=61,61', 'ok mode=online link=off active=- profiles=61,62,63,64,65',
+    'ok mode=online link=off active=- profiles=00', 'full', 'ok mode=online link=connecting active=- profiles=-'])
+    assert.equal(decodeWifiProfilesReply(line(fields), '012345ab', 'info'), null);
+  const active = line('ok mode=online link=online active=ff profiles=ff,62');
+  assert.equal(decodeWifiProfilesReply(active, 'ffffffff', 'info'), null);
+  assert.deepEqual(decodeWifiProfilesReply(active, '012345ab', 'info').profiles,
+    [{id: 'ff', name: null}, {id: '62', name: 'b'}]);
+  assert.equal(decodeWifiProfilesReply(line('removed mode=offline link=off active=- profiles=ff'), '012345ab', 'remove', sel), null);
+  assert.equal(decodeWifiProfilesReply(line('saved mode=online link=off active=- profiles=66'), '012345ab', 'set', settings), null);
 });
 
 function fixture(t) {
@@ -116,6 +144,27 @@ function fixture(t) {
       f.weatherPlace = 'lat_e4=-30001 lon_e4=40001';
       f.writeObserved.resolve();
       return f.silenceWrite ? weather('saved', 'lat_e4=-30002 lon_e4=40001') : weather('saved', f.weatherPlace);
+    }
+    if (line.startsWith('DESKNET3 ')) {
+      const [, id, op, ...fields] = line.trimEnd().split(' ');
+      f.calls.push('profiles-' + op);
+      if (!f.profiles) return '';
+      const answer = status => `@VP8_DESKNET3 id=${id} status=${status}\r\n`;
+      const snapshot = status => answer(`${status} mode=online link=${f.profiles.length ? 'online' : 'off'} active=${f.profiles[0] ?? '-'} profiles=${f.profiles.join(',') || '-'}`);
+      if (op === 'LIST') return snapshot('ok');
+      if (op === 'REMOVE') {
+        const index = f.profiles.indexOf(fields[0]);
+        if (index === -1) return answer('missing');
+        f.profiles.splice(index, 1);
+      } else {
+        assert.equal(op, 'SET');
+        assert.equal(fields[1], Buffer.from(secret).toString('hex'));
+        if (!f.profiles.includes(fields[0])) {
+          if (f.profiles.length >= 4) return answer('full');
+          f.profiles.push(fields[0]);
+        }
+      }
+      return f.silenceWrite ? '' : snapshot(op === 'SET' ? 'saved' : 'removed');
     }
     const [, id, op, ...fields] = line.trimEnd().split(' ');
     f.calls.push(op);
@@ -256,6 +305,29 @@ test('a missing write receipt without cancellation returns unknown; a later expl
   assert.equal(f.opens, f.closes);
   assert.deepEqual(await f.network('info'), info);
   assert.equal(f.calls.filter(op => op === 'SET').length, 1);
+});
+
+test('verified USB can list four full-length networks, remove one, add another and recover without replay', async t => {
+  const f = fixture(t);
+  const network = async (operation, fields = {}) => (await f.send(body(
+    {...f.selector(operation), version: 3, ...fields}, operation === 'set' ? secret : undefined))).json();
+  assert.deepEqual(await network('info'), {...info, readOnly: true});
+  assert.deepEqual(await network('set', config), {status: 'unsupported', version});
+  assert.equal(f.calls.includes('SET'), false);
+  const ids = ['61', '62', '63', '64'].map(value => value.repeat(32));
+  f.profiles = [...ids];
+  const listed = await network('info');
+  assert.deepEqual(listed.profiles.map(profile => profile.id), ids);
+  assert.equal(listed.active, ids[0]);
+  assert.deepEqual(await network('set', config), {status: 'full'});
+  assert.deepEqual((await network('remove', {ssidHex: ids[1]})).profiles.map(profile => profile.id), [ids[0], ids[2], ids[3]]);
+  f.silenceWrite = true;
+  assert.deepEqual(await network('set', config), {status: 'unknown'});
+  const recovered = await network('info');
+  assert.deepEqual(recovered.profiles.map(profile => profile.name), ['a'.repeat(32), 'c'.repeat(32), 'd'.repeat(32), '圆屏']);
+  assert.doesNotMatch(JSON.stringify(recovered), /Fixture|466978/);
+  assert.equal(f.calls.filter(op => op === 'profiles-SET').length, 2);
+  assert.equal(f.opens, f.closes);
 });
 
 test('weather settings share the verified USB owner and search is independent of binding and USB', async t => {

@@ -73,7 +73,7 @@ try {
   assert.deepEqual(deviceEnrollment, {enabled: false, enrollmentDirectory: ''});
   assert.equal(unifiedDeviceStatus, false);
   assert.equal(deviceStatusPush, false);
-  assert.deepEqual(deviceLan, {enabled: false, address: '', port: ''});
+  assert.deepEqual(deviceLan, {enabled: false, address: '', port: '', discoveryInterface: ''});
   assert.deepEqual(taskMotion, {enabled: false, source: '', sessionId: '', codexSocket: '', codexHookSocket: ''});
   assert.equal(plugin.Config({unifiedDeviceStatus: true}).unifiedDeviceStatus, true);
 
@@ -91,7 +91,11 @@ try {
 
   const ctx = new Context(), routes = new Map();
   let credential;
-  const services = {profileContext: {name: 'desktop'}, sessionController: {state(request, signal) {
+  const services = {profileContext: {name: 'desktop'}, sessionController: {list(request, signal) {
+    assert.deepEqual(request, {});
+    signal.throwIfAborted();
+    return {items: [{sessionId: 'local-fixture', running: true}, {sessionId: 'cold-fixture', running: false}]};
+  }, state(request, signal) {
     assert.deepEqual(request, {sessionId: 'local-fixture'});
     signal.throwIfAborted();
     return {cursor: 3, active: true, running: true, pendingInput: [], queue: ['must not forward']};
@@ -214,6 +218,7 @@ try {
   const hooks = await mount({taskMotion: {enabled: true, codexHookSocket: hookSocket}});
   const afterReload = await (await desktop(motionPath + 'status')).json();
   assert.deepEqual(afterReload.available, ['off', 'dsh', 'codex']);
+  assert.deepEqual(afterReload.aggregateSources, ['dsh', 'codex']);
   assert.equal(afterReload.source, 'dsh');
   assert.equal(existsSync(hookSocket), false);
   assert.equal((await selectSource({instance: afterReload.instance, revision: afterReload.revision,
@@ -229,12 +234,41 @@ try {
   }
   assert.equal(sourceStatus.state, 'thinking');
   assert.equal(sourceStatus.sessionId, 'app-fixture');
-  assert.equal((await selectSource({instance: sourceStatus.instance, revision: sourceStatus.revision,
-    source: 'dsh', sessionId: 'local-fixture'})).status, 200);
+  async function selectScope(source, scope, sessionId) {
+    const result = await selectSource({instance: sourceStatus.instance, revision: sourceStatus.revision, source, scope, sessionId});
+    assert.equal(result.status, 200);
+    sourceStatus = await result.json();
+    assert.equal(sourceStatus.scope, scope);
+    assert.equal(sourceStatus.sessionId, sessionId);
+  }
+  async function waitState(state) {
+    for (let attempt = 0; attempt < 180; attempt++) {
+      sourceStatus = await (await desktop(motionPath + 'status')).json();
+      if (sourceStatus.status === 'ready' && sourceStatus.state === state) return;
+      await delay(10);
+    }
+    assert.fail(`source did not reach ${state}`);
+  }
+  await selectScope('dsh', 'all', '');
+  await waitState('thinking');
   for (let attempt = 0; attempt < 100 && existsSync(hookSocket); attempt++) await delay(10);
   assert.equal(existsSync(hookSocket), false);
+  await selectScope('codex', 'all', '');
+  await waitState(null);
+  for (const sessionId of ['foreground-fixture', 'background-fixture']) {
+    for (const event of ['start', 'tool-start']) {
+      const peer = createConnection(hookSocket);
+      peer.on('connect', () => peer.end(JSON.stringify({v: 1, sessionId, turnId: 'turn-1', event, sentAt: Date.now(),
+        ...(event === 'tool-start' ? {callId: 'tool'} : {})})));
+      await once(peer, 'close');
+    }
+  }
+  await waitState('working');
+  assert.ok(!JSON.stringify(sourceStatus).includes('foreground-fixture'));
+  await selectScope('off', 'single', '');
   await hooks.dispose();
   handles.pop();
+  assert.equal(existsSync(hookSocket), false);
 
   rmSync(join(profile, 'node_modules', nn));
   symlinkSync(oldMain, join(profile, 'node_modules', nn));

@@ -6,27 +6,36 @@ export function makeTaskSourceSettings(React, transport) {
 
   function SourceForm({view, busy, save}) {
     const [source, setSource] = useState(view.source), [sessionId, setSession] = useState(view.sessionId);
+    const [scope, setScope] = useState(view.scope ?? 'single');
     const available = view.available;
     const options = ['off', 'dsh', 'codex', ...(available.includes('pet') || view.source === 'pet' ? ['pet'] : [])];
     const off = source === 'off';
-    const nextSession = off ? '' : sessionId.trim();
+    const all = scope === 'all';
+    const canAggregate = view.aggregateSources?.includes(source);
+    const nextSession = off || all ? '' : sessionId.trim();
     return h('form', {className: 'pet-device-stack', onSubmit: event => {
       event.preventDefault();
-      void save({instance: view.instance, revision: view.revision, source, sessionId: nextSession});
+      void save({instance: view.instance, revision: view.revision, source, sessionId: nextSession, ...(all ? {scope} : {})});
     }},
     h('label', {className: 'pet-device-input-label'}, '状态来源',
       h('select', {value: source, disabled: busy, className: 'pet-device-input', onChange: event => {
         const next = event.target.value;
         setSource(next);
         setSession(next === view.source ? view.sessionId : '');
+        setScope(next === view.source ? view.scope ?? 'single' : 'single');
       }}, ...options.map(value => h('option', {key: value, value, disabled: !available.includes(value)},
         taskSourceLabels[value] + (available.includes(value) ? '' : ' · 未配置'))))),
-    off ? null : h('label', {className: 'pet-device-input-label'}, source === 'codex' ? 'Codex 会话 ID' : 'DSH 会话 ID',
+    !off && (canAggregate || all) ? h('label', {className: 'pet-device-input-label'}, '对话范围',
+      h('select', {value: scope, disabled: busy, className: 'pet-device-input', onChange: event => setScope(event.target.value)},
+        h('option', {value: 'single'}, '指定对话'),
+        h('option', {value: 'all', disabled: !canAggregate}, '全部对话'))) : null,
+    all && source === 'codex' ? h('p', {className: 'pet-device-message'}, '涵盖已授权项目内通过 Hook 上报状态的本地对话。') : null,
+    off || all ? null : h('label', {className: 'pet-device-input-label'}, source === 'codex' ? 'Codex 会话 ID' : 'DSH 会话 ID',
       h('input', {className: 'pet-device-input', value: sessionId, disabled: busy, required: true, maxLength: 256,
         autoComplete: 'off', onChange: event => setSession(event.target.value)})),
     h('div', {className: 'pet-device-actions'}, h('button', {type: 'submit', className: 'pet-device-btn pet-device-btn-primary',
-      disabled: busy || !available.includes(source) || (!off && !nextSession) ||
-        (source === view.source && nextSession === view.sessionId)}, busy ? '保存中' : '保存来源')));
+      disabled: busy || !available.includes(source) || (all && !canAggregate) || (!off && !all && !nextSession) ||
+        (source === view.source && nextSession === view.sessionId && scope === (view.scope ?? 'single'))}, busy ? '保存中' : '保存来源')));
   }
 
   return function TaskSourceSettings() {

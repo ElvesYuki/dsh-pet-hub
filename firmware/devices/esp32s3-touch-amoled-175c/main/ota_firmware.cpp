@@ -12,6 +12,7 @@
 #include "playback_control_policy.h"
 #endif
 #if VP8_VPC1_LAN
+#include "device_lan_discovery_wire.h"
 #include "device_tcp_server.h"
 #endif
 #if VP8_BATTERY_QUERY
@@ -231,12 +232,12 @@ vp8_daily::Input sleep_cycle(Playback playback, vp8_daily::Input (*take_input)()
   if (!load_sleep(0)) return Input::none;
   wake_timing = {};
   puts("@VP8_SLEEP ENTER");
-  const bool entered = playback(sleep_start_index, buffer.media(), false);
+  const bool entered = playback(sleep_start_index, buffer.media(), false, false);
   auto input = take_input();
   if (!entered) puts("@VP8_SLEEP ENTER_FAILED");
   if (entered && input == Input::none && load_sleep(1)) {
     puts("@VP8_SLEEP ASLEEP");
-    while (playback(sleep_loop_index, buffer.media(), false)) {
+    while (playback(sleep_loop_index, buffer.media(), false, false)) {
       input = take_input();
       if (input != Input::none) break;
     }
@@ -254,7 +255,7 @@ vp8_daily::Input sleep_cycle(Playback playback, vp8_daily::Input (*take_input)()
     if (!load_sleep(2)) return Input::none;
     clip = buffer.media();
   }
-  if (!playback(sleep_end_index, clip, false)) puts("@VP8_SLEEP WAKE_PLAY_FAILED");
+  if (!playback(sleep_end_index, clip, false, false)) puts("@VP8_SLEEP WAKE_PLAY_FAILED");
   return take_input();
 }
 #endif
@@ -638,7 +639,7 @@ void sample_battery() {
     const int percent = reading && reading->present && reading->percent && *reading->percent <= 100
         ? int(*reading->percent) : -1;
     portENTER_CRITICAL(&desktop_lock);
-    desktop_cache.battery(now, percent);
+    desktop_cache.battery(now, percent, reading && reading->usb_power);
     portEXIT_CRITICAL(&desktop_lock);
 #endif
 #if VP8_PLAYFUL_INTERACTIONS
@@ -700,18 +701,20 @@ void poll_pairing() {
   visible_prompt.store(pairing->prompt());
 }
 
+bool pairing_random(int64_t now, vp8_pairing::Digest &out) {
+  if (challenge_issued == UINT32_MAX || (challenge_issued && now - last_challenge < 1000000)) return false;
+  std::array<uint8_t, 4> counter{};
+  pet::put32(counter.data(), ++challenge_issued);
+  last_challenge = now;
+  return vp8_pairing::auth::crypto::tag(pairing_seed.bytes,
+      {vp8_pairing::binding::domain("VP8PAIR1/challenge/v1"), counter}, out);
+}
+
 void receive_pairing(std::string_view frame) {
   if (!pairing || !pairing_link) return;
   const auto now = esp_timer_get_time();
   pairing->receive(frame, now, !running && !reboot_ready,
-    [now](vp8_pairing::Digest &out) {
-      if (challenge_issued == UINT32_MAX || (challenge_issued && now - last_challenge < 1000000)) return false;
-      std::array<uint8_t, 4> counter{};
-      pet::put32(counter.data(), ++challenge_issued);
-      last_challenge = now;
-      return vp8_pairing::auth::crypto::tag(pairing_seed.bytes,
-        {vp8_pairing::binding::domain("VP8PAIR1/challenge/v1"), counter}, out);
-    }, [](auto packet) {
+    [now](vp8_pairing::Digest &out) { return pairing_random(now, out); }, [](auto packet) {
       std::array<char, vp8_pairing::text_limit> text{};
       const auto length = vp8_pairing::encode(packet, text);
       if (length) printf("@VP8_PAIR1 %.*s\n", int(length), text.data());
@@ -873,7 +876,41 @@ void lan_command(std::string_view line) {
     puts("@VP8_VPCNET1 DISARMED");
     return;
   }
-  if (running || reboot_ready || station_fault || checking() || (pairing && pairing->prompt())) {
+  if (op == "DIAGNOSTICS") {
+    if (!vp8_lan::valid_discovery_id(line)) return;
+    const auto stats = lan_control.owner.discovery_stats();
+    printf("@VP8_VPCNET1 DIAGNOSTICS id=%.8s version=1 queries=%lu completed=%lu errors=%lu hits=%lu"
+           " dials=%lu cached=%lu tcp=%lu authenticated=%lu\n", line.data(),
+           static_cast<unsigned long>(stats.queries), static_cast<unsigned long>(stats.completed),
+           static_cast<unsigned long>(stats.errors), static_cast<unsigned long>(stats.hits),
+           static_cast<unsigned long>(stats.dials), static_cast<unsigned long>(stats.cached),
+           static_cast<unsigned long>(stats.tcp), static_cast<unsigned long>(stats.authenticated));
+    return;
+  }
+  const bool blocked = running || reboot_ready || station_fault || checking() || (pairing && pairing->prompt());
+  if (op == "DISCOVERY") {
+    const auto command = vp8_lan::discovery_command(line);
+    if (command.id.empty()) return;
+    using Operation = vp8_lan::DiscoveryCommand::Operation;
+    const char *status = "invalid";
+    if (command.operation != Operation::invalid) {
+      if (blocked) status = "busy";
+      else if (!pairing) status = "unavailable";
+      else {
+        using Result = vp8_lan::Device::DiscoveryResult;
+        const auto key_hash = command.operation == Operation::enable ? std::optional{command.key_hash} : std::nullopt;
+        switch (lan_control.owner.discovery(lan_identity(), pairing->boot(), key_hash)) {
+          case Result::enabled: status = "enabled"; break;
+          case Result::disabled: status = "disabled"; break;
+          case Result::unavailable: status = "unavailable"; break;
+          case Result::storage_failed: status = "storage_failed"; break;
+        }
+      }
+    }
+    printf("@VP8_VPCNET1 DISCOVERY id=%.8s status=%s\n", command.id.data(), status);
+    return;
+  }
+  if (blocked) {
     puts("@VP8_VPCNET1 BUSY");
     return;
   }
@@ -1137,6 +1174,23 @@ void input() {
           printf("%.*s\n", int(reply.size()), reply.data());
         })) return;
     const auto name = token(line);
+#if VP8_BOOT_PAIRING && VP8_USB_ENROLL
+    if (name == "BINDKEY") {
+      if (!pairing || !pairing_link) return;
+      const auto now = esp_timer_get_time();
+      pairing->receive_rotation(line, now, !running && !reboot_ready && !station_fault && !checking() && !pairing->prompt(),
+        [now](vp8_pairing::Digest &out) { return pairing_random(now, out); }, [] {
+#if VP8_VPC1_LAN
+          lan_control.owner.disarm();
+#elif VP8_VPC1_USB_PROBE
+          std::lock_guard lock(control_mutex);
+          control_playback.control().close();
+          control_connected.store(false, std::memory_order_relaxed);
+#endif
+        }, [](std::string_view reply) { printf("%.*s\n", int(reply.size()), reply.data()); });
+      return;
+    }
+#endif
 #if VP8_VPC1_LAN
     if (name == "VPCNET1") {
       lan_command(line);
@@ -1487,10 +1541,14 @@ void worker(void *) {
 #endif
 #if VP8_VPC1_LAN
     const auto target = lan_control.owner.target();
-    const bool route_ready = target && desktop_station && !desktop_reconfigure && !running && !reboot_ready &&
-        !station_fault && !(pairing && pairing->prompt()) && desktop_station->ready() &&
-        on_link(desktop_station->netif(), {target->ip, target->port});
-    lan_control.owner.publish_route(lan_identity(), route_ready);
+    auto *network = desktop_station && !desktop_reconfigure && !running && !reboot_ready && !station_fault &&
+        !(pairing && pairing->prompt()) && desktop_station->ready() ? desktop_station->netif() : nullptr;
+    vp8_lan::DiscoveryLink discovery;
+    esp_netif_ip_info_t ip{};
+    if (network && esp_netif_get_ip_info(network, &ip) == ESP_OK && ip.ip.addr && ip.netmask.addr)
+      discovery = {network, {vp8_lan::ipv4_bytes(ip.ip.addr), vp8_lan::ipv4_bytes(ip.netmask.addr)}};
+    const bool route_ready = target && on_link(network, {target->ip, target->port});
+    lan_control.owner.publish_route(lan_identity(), route_ready, discovery);
 #endif
 #if VP8_VPC1_USB_PROBE
     poll_control_probe();
@@ -1584,16 +1642,13 @@ void toggle_menu_network() { desktop_mode_toggle.store(true, std::memory_order_r
 void control_contact(bool valid, bool pressed) {
   if (valid) control_contact_down.store(pressed, std::memory_order_relaxed);
 }
-bool control_turn(bool idle) {
+bool control_turn(bool background) {
   if (!control_connected.load(std::memory_order_relaxed) && !control_selected.load(std::memory_order_relaxed))
     return false;
   const bool down = control_contact_down.load(std::memory_order_relaxed);
   std::lock_guard lock(control_mutex);
-  const auto now = control_now();
-  if (control_playback.ticket()) return control_playback.interrupted(now, down);
-  auto &core = control_playback.control();
-  return idle && !down && !focus_timer.active() && !visible_prompt.load() &&
-         core.tick(now) && core.waiting();
+  const bool background_ready = background && !focus_timer.active() && !visible_prompt.load();
+  return control_playback.should_yield(control_now(), down, background_ready);
 }
 std::optional<vp8_control::Ticket> control_ticket() {
   if (!control_selected.load(std::memory_order_relaxed)) return std::nullopt;
@@ -1691,7 +1746,7 @@ bool run(Playback playback, vp8_daily::Input (*take_input)()
 
   Buffer idle, wave, other;
   if (!idle.bytes || !wave.bytes || !other.bytes || !load(idle_key, idle) || !load(wave_key, wave)) return false;
-  if (checking() && (!playback(vp8_daily::idle, idle.media(), false) || !confirm_boot())) return false;
+  if (checking() && (!playback(vp8_daily::idle, idle.media(), false, false) || !confirm_boot())) return false;
   const auto *app = esp_app_get_description();
   const auto *app_part = esp_ota_get_running_partition();
   if (!app_slot(app_part)) return false;
@@ -1716,6 +1771,7 @@ bool run(Playback playback, vp8_daily::Input (*take_input)()
 #endif
 #if VP8_VPC1_LAN
   if (!lan_control.owner.start()) puts("@VP8_VPCNET1 TASK_UNAVAILABLE");
+  else if (pairing) lan_control.owner.restore_discovery(lan_identity(), pairing->boot());
 #endif
   constexpr unsigned worker_stack =
 #if VP8_DESKTOP_INTERNET
@@ -1821,9 +1877,7 @@ bool run(Playback playback, vp8_daily::Input (*take_input)()
     }
 #endif
     Buffer *clip = index == vp8_daily::wave ? &wave : &idle;
-#if VP8_LOCAL_MOTION
-    bool automatic_clip = false;
-#endif
+    bool automatic_idle = false;
     {
       std::unique_lock lock(cache_mutex, std::try_to_lock);
       if (lock.owns_lock()) {
@@ -1938,9 +1992,7 @@ bool run(Playback playback, vp8_daily::Input (*take_input)()
                 printf("@VP8_OTA IDLE_PICK id=%u\n", unsigned(*selected));
                 clip = &other;
                 index = extra_index;
-#if VP8_LOCAL_MOTION
-                automatic_clip = true;
-#endif
+                automatic_idle = true;
               }
             }
           }
@@ -1954,13 +2006,13 @@ bool run(Playback playback, vp8_daily::Input (*take_input)()
       }
     }
 #if VP8_LOCAL_MOTION
-    motion_allowed.store((clip == &idle || automatic_clip)
+    motion_allowed.store((clip == &idle || automatic_idle)
 #if VP8_FOCUS_MENU
                          && !focus_timer.active()
 #endif
                          , std::memory_order_relaxed);
 #endif
-    const bool played = playback(index, clip->media(), false);
+    const bool played = playback(index, clip->media(), false, automatic_idle);
 #if VP8_VPC1_USB_PROBE || VP8_VPC1_LAN
     control_finished();
 #endif

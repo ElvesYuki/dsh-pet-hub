@@ -141,7 +141,7 @@ int main() {
   assert(!playback.claim(12, true));
   assert(playback.claim(13, false) == wave);
   assert(playback.can_submit(wave, 14) && !session.pop());
-  assert(playback.interrupted(15, true));
+  assert(playback.should_yield(15, true, false));
   playback.finish(16);
   reply(session, Kind::cancelled, wave);
   assert(!playback.first_dma(wave, 17));
@@ -151,15 +151,15 @@ int main() {
   assert(playback.claim(21, false) == happy);
   assert(playback.first_dma(happy, 22) && !playback.first_dma(happy, 22));
   reply(session, Kind::presented, happy, 1);
-  assert(!playback.interrupted(23, true));
+  assert(!playback.should_yield(23, true, false));
   const Ticket replacement{1,3,0,4};
   assert(session.receive(frame(Kind::play, replacement, 100), 24));
   reply(session, Kind::accepted, replacement);
-  assert(playback.interrupted(25, false));
+  assert(playback.should_yield(25, false, false));
   playback.finish(26);
   assert(playback.claim(27, false) == replacement);
   session.close();
-  assert(!playback.first_dma(replacement, 28) && playback.interrupted(28, false));
+  assert(!playback.first_dma(replacement, 28) && playback.should_yield(28, false, false));
   assert(session.begin_verified(2, 29));
   playback.finish(30);
   assert(!session.pop());
@@ -169,4 +169,36 @@ int main() {
   assert(playback.claim(32, false) == new_wave);
   playback.finish(33, true);
   reply(session, Kind::missing, new_wave);
+
+  // Automatic idle can yield before EOF. Explicit local playback and contact retain priority.
+  Playback background;
+  auto &remote = background.control();
+  const Ticket work{1, 1, 0, 2};
+  assert(remote.begin_verified(1, 0));
+  assert(remote.receive(frame(Kind::play, work, 1500), 100));
+  reply(remote, Kind::accepted, work);
+  assert(!background.should_yield(200, false, false));
+  assert(!background.should_yield(300, true, true));
+  assert(background.should_yield(400, false, true));
+  assert(background.claim(401, false) == work);
+  assert(!background.should_yield(402, false, true) && !remote.pop());
+  assert(background.first_dma(work, 500));
+  reply(remote, Kind::presented, work, 1);
+  background.finish(501);
+  assert(!background.should_yield(502, false, true));
+
+  const Ticket blocked{1, 2, 0, 2};
+  assert(remote.receive(frame(Kind::play, blocked, 1500), 600));
+  reply(remote, Kind::accepted, blocked);
+  assert(!background.should_yield(2099, false, false));
+  assert(!background.should_yield(2100, false, true));
+  reply(remote, Kind::expired, blocked);
+  assert(!background.claim(2101, false));
+
+  const Ticket lost{1, 3, 0, 2};
+  assert(remote.receive(frame(Kind::play, lost, 1500), 2200));
+  reply(remote, Kind::accepted, lost);
+  remote.close();
+  assert(!background.should_yield(2201, false, true));
+  assert(!background.first_dma(lost, 2202));
 }

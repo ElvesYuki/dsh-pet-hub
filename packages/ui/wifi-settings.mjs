@@ -1,5 +1,8 @@
 const outcomes = {
   saved: '已保存到设备。请读取状态确认是否连上 Wi-Fi。',
+  removed: '已移除该网络。',
+  full: '设备最多保存四个网络。请先读取列表，再移除不再使用的网络。',
+  missing: '设备上找不到这个网络。请重新读取列表。',
   cleared: '已清除设备上的 Wi-Fi 配置。',
   unknown: '未收到写入确认，结果未知。请先读取状态，再决定是否重新提交。',
   busy: 'USB 或设备忙，请稍后重试。',
@@ -38,7 +41,8 @@ export function wifiSettingsFields(h, {capable, blocked, network, command}) {
   const {result, info, checked} = network ?? {};
   const status = result?.status;
   const supported = capable && !['unsupported', 'backend_missing'].includes(status);
-  const writable = supported && checked && !blocked;
+  const writable = supported && checked && !blocked && !info?.readOnly;
+  const profiles = info?.version === 3 ? info.profiles : null;
   const input = (label, name, props = {}) => h('label', {className: 'pet-device-input-label'}, label,
     h('input', {name, className: 'pet-device-input', ...props}));
   const button = (label, operation, disabled, tone) => h('button', {type: 'button', disabled,
@@ -48,16 +52,29 @@ export function wifiSettingsFields(h, {capable, blocked, network, command}) {
     h('h4', {className: 'pet-device-section-title'}, '设备 Wi-Fi'),
     h('div', {role: 'status', className: 'pet-device-message'},
       !capable ? outcomes.backend_missing : status === 'unsupported' ?
-        `固件 ${result.version} 未响应 DESKNET2。请使用支持 USB 配网的固件。` :
-        outcomes[status] ?? (info ? null : '先读取设备 Wi-Fi 状态，再填写配置。'),
-      info ? h('div', null, `${info.configured ? '已配置' : '未配置'} · ${links[info.link] ?? '连接状态未知'}`) : null),
+        `固件 ${result.version} 未响应 USB 配网查询。` :
+        status === 'saved' && profiles ? '已保存到设备。' : outcomes[status] ??
+          (info ? null : '先读取设备 Wi-Fi 状态，再填写配置。'),
+      info ? h('div', null, profiles ?
+        `${info.mode === 'offline' ? '离线模式' : '在线模式'} · ${links[info.link]} · 已保存 ${profiles.length}/4` :
+        `${info.configured ? '已配置' : '未配置'} · ${links[info.link] ?? '连接状态未知'}`) : null),
     capable ? h('div', {className: 'pet-device-actions'}, button('读取 Wi-Fi 状态', 'info', blocked)) : null,
-    supported ? h('form', {onSubmit: event => event.preventDefault(), autoComplete: 'off', hidden: !checked,
+    profiles?.length ? h('ul', {'aria-label': '已保存网络', className: 'pet-device-stack'},
+      ...profiles.map(({id, name}) => {
+        const label = name ?? `SSID ${id}`;
+        return h('li', {key: id},
+          h('span', null, label, id === info.active ? '（当前联网）' : ''),
+          h('button', {type: 'button', disabled: !writable, className: 'pet-device-btn pet-device-btn-danger',
+            'aria-label': `移除 ${label}`, onClick: () => command('remove', null, id)}, '移除'));
+      })) : null,
+    info?.readOnly ? h('p', {role: 'status'}, '仅取得旧版状态。请重新读取列表后再改动配置。') : null,
+    supported && !info?.readOnly ? h('form', {onSubmit: event => event.preventDefault(), autoComplete: 'off', hidden: !checked,
       className: 'pet-device-separator'},
       h('fieldset', {disabled: !writable, className: 'pet-device-fieldset pet-device-stack'},
         h('legend', null, '通过 USB 配置'),
         input('网络名称（SSID）', 'ssid', {required: true, maxLength: 32}),
         input('密码（开放网络可留空）', 'password', {type: 'password', maxLength: 63, autoComplete: 'off'}),
+        profiles ? h('p', null, '保存 Wi-Fi 时也会更新设备的全局时间与天气连接设置。') : null,
         h('details', {className: 'pet-device-detail'}, h('summary', null, '时间与天气（高级）'),
           h('div', {className: 'pet-device-stack'},
           input('NTP 主机名', 'timeHost', {required: true, defaultValue: 'pool.ntp.org', maxLength: 63}),
@@ -67,6 +84,6 @@ export function wifiSettingsFields(h, {capable, blocked, network, command}) {
           input('纬度（设置天气时填写）', 'latitude', {inputMode: 'decimal'}),
           input('经度（设置天气时填写）', 'longitude', {inputMode: 'decimal'}))),
         h('div', {className: 'pet-device-actions'},
-          button('保存 Wi-Fi 配置', 'set', !writable, 'primary'),
-          button('清除设备 Wi-Fi', 'clear', !writable || !info?.configured, 'danger')))) : null);
+          button(profiles ? '新增或更新 Wi-Fi' : '保存 Wi-Fi 配置', 'set', !writable, 'primary'),
+          profiles ? null : button('清除设备 Wi-Fi', 'clear', !writable || !info?.configured, 'danger')))) : null);
 }

@@ -80,16 +80,18 @@ int main() {
   DesktopStatusCache status;
   assert(status.snapshot(1).minute == -1 && status.snapshot(1).battery == -1);
   status.sync(0, 86399, Weather::rain, -90);
-  status.battery(0, 83);
+  status.battery(0, 83, true);
   assert(status.snapshot(999999).minute == 1439 && status.snapshot(1000000).minute == 0);
-  assert(status.snapshot(DesktopStatusCache::battery_lifetime - 1).battery == 83);
-  assert(status.snapshot(DesktopStatusCache::battery_lifetime).battery == -1);
+  const auto last_power = status.snapshot(DesktopStatusCache::battery_lifetime - 1);
+  assert(last_power.battery == 83 && last_power.usb_power);
+  const auto expired = status.snapshot(DesktopStatusCache::battery_lifetime);
+  assert(expired.battery == -1 && !expired.usb_power);
   status.sync(2000000, 42, Weather::keep, 0);
   assert(status.snapshot(DesktopStatusCache::weather_lifetime - 1).celsius == -90);
   assert(status.snapshot(DesktopStatusCache::weather_lifetime).weather == Weather::none);
   status.sync(DesktopStatusCache::weather_lifetime, 500, Weather::none, 0);
   assert(status.snapshot(DesktopStatusCache::weather_lifetime).minute == 8);
-  status.battery(DesktopStatusCache::weather_lifetime, 42);
+  status.battery(DesktopStatusCache::weather_lifetime, 42, false);
   status.clear_network();
   assert(status.snapshot(DesktopStatusCache::weather_lifetime).minute == -1 &&
          status.snapshot(DesktopStatusCache::weather_lifetime).battery == 42);
@@ -141,6 +143,31 @@ int main() {
   const auto with_clock = top_pixels({624});
   assert(with_clock != placeholders);
   const auto full_status = top_pixels(actual);
+  const auto battery_view = [&](int percent, bool usb_power) {
+    auto reading = actual;
+    reading.battery = percent;
+    reading.usb_power = usb_power;
+    return top_pixels(reading);
+  };
+  constexpr auto warning = focus_rgb565(255, 209, 74);
+  constexpr auto bolt = focus_rgb565(239, 245, 239);
+  const auto battery_ink = [&](const auto &pixels, uint16_t color) {
+    for (int y = 0; y < 90; ++y)
+      for (int x = 265; x < focus_canvas; ++x)
+        if (pixels[y * focus_canvas + x] == color) return true;
+    return false;
+  };
+  for (int percent : {0, 19, 20, 100}) {
+    const auto unplugged = battery_view(percent, false);
+    const auto plugged = battery_view(percent, true);
+    assert(battery_ink(unplugged, warning) == (percent < 20));
+    assert(battery_ink(plugged, warning) == (percent < 20));
+    assert(!battery_ink(unplugged, bolt) && battery_ink(plugged, bolt));
+    for (int i = 0; i < int(plugged.size()); ++i)
+      if (plugged[i] != unplugged[i]) assert(i / focus_canvas < 90 && i % focus_canvas >= 265 && i % focus_canvas < 300);
+  }
+  assert(battery_ink(battery_view(-1, true), bolt));
+  assert(!battery_ink(battery_view(-1, false), bolt));
   auto online_status = actual;
   online_status.wifi = WifiLink::online;
   const auto full_online = top_pixels(online_status);
@@ -158,7 +185,9 @@ int main() {
     }
   }
   std::fill(whole.begin(), whole.end(), sentinel);
-  desktop.update(actual, 1122);
+  auto wired_status = actual;
+  wired_status.usb_power = true;
+  desktop.update(wired_status, 1122);
   desktop.draw(whole.data(), focus_canvas, 0, focus_canvas);
   for (int y = 0; y < transfer; y += 20)
     desktop.draw(stripes.data() + y * transfer + 1, transfer, y - 1, std::min(20, transfer - y));

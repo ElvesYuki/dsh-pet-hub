@@ -9,11 +9,11 @@ export function startDesktopTaskMotion({source, sessionId}, {lan, wait = delay} 
 }
 
 /** Poll one local reader and optionally project it into the current device connection. */
-export function startTaskSource(reader, sessionId, {lan, wait = delay, onSample = () => {}} = {}) {
+export function startTaskSource(reader, sessionId, {lan, wait = delay, extended = false, onSample = () => {}} = {}) {
   if (!isPetSessionId(sessionId)) throw new Error('device_task_motion_session');
   const lifetime = new AbortController();
   const signal = lifetime.signal;
-  const observe = createTaskMotion(sessionId);
+  const observe = createTaskMotion(sessionId, {extended});
   const done = (async () => {
     while (!signal.aborted) {
       const target = lan?.actionTarget();

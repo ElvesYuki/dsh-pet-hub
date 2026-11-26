@@ -7,7 +7,7 @@ import {createBootEnrollment} from './device-enrollment.mjs';
 import {createBootProof, decodeBootReply, encodeBootRequest, supportsUsbEnrollment} from './device-enrollment-wire.mjs';
 import {exchangeDesktopNetwork} from './usb-wifi-settings.mjs';
 import {exchangeDesktopWeather} from './usb-weather-settings.mjs';
-import {armDeviceTcpOverUsb, createDeviceTcpTrust} from './device-tcp-trust.mjs';
+import {armDeviceTcpOverUsb, createDeviceTcpTrust, setDeviceLanDiscoveryOverUsb} from './device-tcp-trust.mjs';
 
 const wire = {allowBinding: true};
 const keyHash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -26,7 +26,7 @@ function signingKey(candidate) {
  * provider retains private keys and returns only references and signing handles.
  * The caller owns the index and closes it after the owner has stopped. */
 export function createEnrollmentCoordinator({store, openSession, keys: keyProvider, now, poll = delay, usbEnrollment = false,
-  networkAllowed, lanUsbIdentity, statusV2 = false} = {}) {
+  networkAllowed, lanUsbIdentity, lanPins, statusV2 = false} = {}) {
   requireThat(typeof openSession === 'function' && typeof keyProvider?.prepare === 'function' &&
     typeof keyProvider.lookup === 'function' && typeof poll === 'function' && typeof usbEnrollment === 'boolean' &&
     (networkAllowed === undefined || typeof networkAllowed === 'function') && typeof statusV2 === 'boolean' &&
@@ -194,6 +194,11 @@ export function createEnrollmentCoordinator({store, openSession, keys: keyProvid
     };
   }
 
+  function setLanTrust(revision, devicePublicKey) {
+    lanTrust = createDeviceTcpTrust({store, keychain: keyProvider, revision, usbIdentity: lanUsbIdentity, devicePublicKey});
+    return lanTrust;
+  }
+
   const armLan = lanUsbIdentity && desktopOperation(async (session, input, signal, beforeWrite, {revision}) => {
     const publicKey = await armDeviceTcpOverUsb(session, input, signal, () => {
       beforeWrite();
@@ -201,9 +206,24 @@ export function createEnrollmentCoordinator({store, openSession, keys: keyProvid
     });
     signal.throwIfAborted();
     requireThat(networkAllowed(), 'device_network_target');
-    lanTrust = createDeviceTcpTrust({store, keychain: keyProvider, revision,
-      usbIdentity: lanUsbIdentity, devicePublicKey: publicKey});
-    return {status: 'ok', trust: lanTrust};
+    if (lanPins) {
+      const binding = store.read();
+      requireThat(binding.revision === revision, 'vpl1_binding_changed');
+      lanPins.prepare(binding, publicKey);
+      await setDeviceLanDiscoveryOverUsb(session, publicKey, signal, beforeWrite);
+      signal.throwIfAborted();
+      requireThat(networkAllowed() && store.read().revision === revision, 'vpl1_binding_changed');
+      lanPins.confirm(binding, publicKey);
+    }
+    return {status: 'ok', trust: setLanTrust(revision, publicKey)};
+  });
+  const disableDiscovery = lanUsbIdentity && desktopOperation(async (session, input, signal, beforeWrite, {revision}) => {
+    await setDeviceLanDiscoveryOverUsb(session, null, signal, beforeWrite);
+    lanTrust?.revoke();
+    const binding = store.read();
+    requireThat(binding.revision === revision, 'vpl1_binding_changed');
+    lanPins?.withdraw(binding);
+    return {status: 'ok'};
   });
 
   return Object.freeze({
@@ -233,7 +253,12 @@ export function createEnrollmentCoordinator({store, openSession, keys: keyProvid
     },
     ...(networkAllowed ? {network: desktopOperation(exchangeDesktopNetwork),
       weather: desktopOperation(exchangeDesktopWeather)} : {}),
-    ...(armLan ? {async lanArm(input, options) {
+    ...(lanPins ? {lanLoad() {
+      requireThat(!closed && !current && !lanTrust && !lanAttempted && networkAllowed(), 'device_lan_pin_state');
+      const binding = store.read(), point = lanPins.load(binding);
+      return point ? setLanTrust(binding.revision, point) : null;
+    }} : {}),
+    ...(armLan ? {lanDisableDiscovery: disableDiscovery, async lanArm(input, options) {
       requireThat(!lanAttempted, 'vpl1_arm_already_attempted');
       const result = await armLan(input, options);
       if (!closed && !closeFailed) return result;

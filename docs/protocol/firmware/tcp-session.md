@@ -33,6 +33,45 @@ DeviceHello 的 bit 0 表示支持状态版本 1，其余位保留。Hub 选择 
 - 认证封包的数据是 `计数 u32 || 明文 || tag[32]`，tag = `HMAC-SHA256(方向密钥, ASCII("VPL1/record") || 8 B 原始头 || 计数 u32 || 明文)`。每个方向的首个计数为 1，仅接受下一计数。Ready 使用设备出站计数 1。Hub 收到并验证匹配的 Ready 后才可发控制或替换旧会话。计数与 VPC1 请求序号独立，达到上限关闭。
 - 绑定核对和 pin 通过已有受控 USB 配对 proof/Fence 与同一个物理连接。将来正式配发所需的持久端点、设备密钥加密或硬件保护及 pin 更新仍需双方确认。当前候选用 `VPCNET1 ARM <IPv4> <port>` 走直连 USB，按当前绑定生成或读取设备签名身份，公钥在 `@VP8_VPCNET1 ARMED key=<130 小写十六进制>` 返回。USB 先返回 QUEUED，失败回 KEY_UNAVAILABLE。设备用独立 NVS `vp8_vpl1/identity_v1` 存储 scope 摘要和 32 B 私钥。端点只保存在 RAM，掉电后重启需重新 ARM。DISARM 清除 RAM 端点和控制会话，保留绑定及设备签名身份，USB 返 DISARMED。设备在发布路由时发现绑定范围变化即关闭并撤销当前 ARM，随后显式 ARM 新绑定会换签名身份；Hub 本地撤销立即停止旧适配器并注销 pin。USB 拔线不撤销。阶段内一律禁止从 TCP 配网或启用候选。
 
+## USB 换钥匙
+
+USB `BindingStatus` 的 capability bit 4 表示已绑定设备支持换钥匙。每条报文以 LF 结束，请求 ID 是 8 个小写十六进制字符。
+
+```text
+BINDKEY 1 <id> BEGIN
+@BINDKEY 1 <id> challenge <boot_u64_decimal> <reference_u32_decimal> <nonce_hex>
+BINDKEY 1 <id> COMMIT <canonical_base64>
+@BINDKEY 1 <id> <committed|denied|busy|expired|storage_fault>
+```
+
+nonce 是 32 字节，十六进制小写。COMMIT 解码为 197 字节，顺序为引用号 `u32le`、新 SEC1 公钥 65 字节、原密钥签名 64 字节、新密钥签名 64 字节。签名为 ECDSA P-256 SHA-256 的 P1363 `r || s`。两份签名的原文依次拼接域字符串 `BINDKEY/old/v1` 或 `BINDKEY/new/v1`、旧绑定的 device／controller／binding 16 字节标识、epoch 与 boot `u64le`、引用号 `u32le`、32 字节 nonce 及新公钥。域字符串无 NUL。challenge 10 秒内有效，消费后不能重放，已有 USB Fence 或拔线也会清理 challenge。
+
+固件核对双签名后撤销旧运行期 LAN 控制，再把公钥和递增后的 epoch 提交为原 NVS 绑定记录。Hub 保留两个本地索引，完整 Fence 验证后确认新索引。旧 epoch 的 LAN pin 随绑定失效。换钥匙保留固定地址与发现指令的原语义。[Spec／Diff 与现场入口](../../context/plans/device-key-rotation.md)
+
+## USB 开通局域网发现
+
+固定地址 ARM 使用上述原契约。发现候选通过同一已绑定 USB 在 ARM 后单独开通。命令以 LF 结束，`id` 为 8 个小写十六进制字符。
+
+```text
+VPCNET1 DISCOVERY <id> ENABLE <64 lowercase hex SHA-256 of SEC1 device public key>
+VPCNET1 DISCOVERY <id> DISABLE
+@VP8_VPCNET1 DISCOVERY id=<id> status=<enabled|disabled|unavailable|storage_failed|invalid|busy>
+```
+
+Hub 先持久保存 ARM 回送的设备公钥，再发送 ENABLE。设备确认当前绑定和原设备签名公钥，持久写入 65 字节记录。记录由 1 字节版本、32 字节绑定范围摘要、32 字节设备公钥摘要组成。Host 只在匹配 `enabled` 后落盘确认。只有已确认、仍匹配绑定和预选 USB 身份的私有 pin 可在 Host 重启后自动启动发现。原公钥不接受广播或网络替换。请求超时后保留准备记录，重新挂载时通过同一可信 USB 补做。板端 DISABLE 清除授权并读回，Hub 随后撤下确认标记。ARM 和 DISARM 仍只改变运行期选择。
+
+发现公告使用 `_dsh-pet-hub._tcp.local.`、DNS-SD 地址及端口和唯一 TXT `version=1`。圆屏接受当前 Wi-Fi 接口内的 RFC 1918 IPv4，有效地址及端口去重。一轮最多八个候选，PTR 查询使用 1.2 秒 SDK 超时，TCP 建连最多 4 秒，VPL1 握手沿用原期限。尝试候选间隔 200 ms，无候选或用尽后按 3–30 秒退避。通过 VPL1 后清除未尝试的地址。重连候选在同一绑定和链路内允许对最后一次实际认证的端点重拨一次，失败后按原规则重新查找。该地址只存在运行内存，连接仍需完整 VPL1 认证。`0.1.42` 固件每次断线后重新查找。组播受阻时可以用 USB 读状态，必要时恢复固定地址 ARM。[Spec／Diff 与回退](../../context/plans/device-lan-discovery.md)
+
+`0.1.44` 增加缺失 IPv4 时的 DNS-SD 地址补查。只有通过接口、TTL、TXT 及 SRV 端口筛选的记录可以查询其 SRV 主机名。每轮最多两次 A 补查，单次 SDK 超时 600 ms，回复继续核对原主机名、当前接口和同链路 IPv4。路由失效或绑定变化时丢弃结果。`DIAGNOSTICS` 的查询和完成计数仍按 PTR 查询轮次统计。局域网公告与 VPL1 字节保持原契约。
+
+重连诊断候选在实体 USB 提供只读 `VPCNET1 DIAGNOSTICS <id>`，ID 为八位小写十六进制。回复使用同一 ID 和独立版本字段。
+
+```text
+@VP8_VPCNET1 DIAGNOSTICS id=<id> version=1 queries=<n> completed=<n> errors=<n> hits=<n> dials=<n> cached=<n> tcp=<n> authenticated=<n>
+```
+
+计数为本次启动的无符号 32 位十进制值，仅统计发现模式。`queries` 和 `completed` 分别为开始和结束的查询，`errors` 为查询错误，`hits` 为筛选后含候选的查询。`dials` 为发起拨号，`cached` 为其中使用已认证端点的重拨，`tcp` 为 TCP 建连成功，`authenticated` 为 VPL1 握手完成。计数由当前任务独立采样，不作为连接或身份的证明。
+
 ## 状态回执 v1
 
 | 偏移 | 字段 | 约束 |

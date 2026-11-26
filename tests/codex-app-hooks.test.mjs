@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync, spawn} from 'node:child_process';
 import {once} from 'node:events';
-import {existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync} from 'node:fs';
+import {chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync} from 'node:fs';
 import {createConnection, createServer} from 'node:net';
 import {join} from 'node:path';
 import {test} from 'node:test';
@@ -90,9 +90,16 @@ test('Codex App hook projects one fresh turn, preserves parallel tools and expir
 test('a generated Codex project hook sends only bounded metadata and declines decisions when Hub is unavailable', async t => {
   const {root, path} = setup(t);
   const project = join(root, "local project's folder");
-  mkdirSync(project, {mode: 0o700});
+  mkdirSync(project);
+  chmodSync(project, 0o775);
+  assert.throws(() => execFileSync(process.execPath, [setupScript, 'prepare', project, path], {stdio: 'pipe'}),
+    /unsafe Codex project permissions/);
+  assert.equal(existsSync(join(project, '.codex')), false);
+  chmodSync(project, 0o755);
   execFileSync(process.execPath, [setupScript, 'prepare', project, path]);
   const config = join(project, '.codex/hooks.json');
+  assert.equal(statSync(join(project, '.codex')).mode & 0o777, 0o700);
+  assert.equal(statSync(config).mode & 0o777, 0o600);
   assert.throws(() => execFileSync(process.execPath, [setupScript, 'prepare', project, path], {stdio: 'pipe'}));
   const hooks = JSON.parse(readFileSync(config, 'utf8')).hooks;
   const {command} = hooks.PostToolUse[0].hooks[0];
@@ -134,6 +141,43 @@ test('a generated Codex project hook sends only bounded metadata and declines de
   assert.deepEqual(metadata, {v: 1, sessionId: 'session-1', turnId: 'T-1', event: 'tool-end', callId: 'call-1'});
   assert.deepEqual(Object.keys(frames[1]).sort(), ['event', 'sentAt', 'sessionId', 'turnId', 'v']);
   assert.equal(frames[1].event, 'model-stopped');
+});
+
+test('one project Hook socket aggregates independent threads without reviving stopped or expired turns', async t => {
+  const {path} = setup(t);
+  let wall = 100, clock = 0;
+  const reader = openCodexHookTaskSource('group', path, {all: true, wall: () => wall, now: () => clock});
+  t.after(() => reader.close());
+  const read = () => reader.read({signal: lifetime()});
+  const event = (sessionId, event, extra = {}) => send(path, {v: 1, sessionId, turnId: 'same-turn-id', event, sentAt: ++wall, ...extra});
+  assert.deepEqual(await read(), {sessionId: 'group', state: null, counter: 0});
+  await event('unknown', 'tool-start', {callId: 'old-call'});
+  assert.equal((await read()).state, null);
+  await event('a', 'start');
+  assert.equal((await read()).state, 'thinking');
+  await event('a', 'tool-start', {callId: 'tool'});
+  const working = await read();
+  for (let index = 0; index < 31; index++) await event(`b-${index}`, 'start');
+  await event('over-capacity', 'start');
+  await event('over-capacity', 'tool-start', {callId: 'tool'});
+  assert.deepEqual(await read(), working);
+  await event('b-0', 'tool-start', {callId: 'tool'});
+  await event('a', 'stop');
+  await event('a', 'tool-end', {callId: 'tool'});
+  assert.deepEqual(await read(), working);
+  await event('b-0', 'tool-end', {callId: 'tool'});
+  assert.equal((await read()).state, 'thinking');
+  clock += 2001;
+  await event('over-capacity', 'start');
+  await event('over-capacity', 'tool-start', {callId: 'tool'});
+  assert.equal((await read()).state, 'working');
+  clock += 120000;
+  assert.equal((await read()).state, null);
+  await event('b-0', 'stop');
+  await event('a', 'start', {sentAt: wall - 2001});
+  assert.equal((await read()).state, null);
+  await reader.close();
+  assert.equal(existsSync(path), false);
 });
 
 test('Codex hook refuses shared directories and preserves an occupied endpoint', t => {

@@ -18,12 +18,12 @@ work=$(mktemp -d "$1/firmware-host.XXXXXX")
 trap 'rm -rf -- "$work"' EXIT
 # The SDK error types need a config header even when testing only host policy.
 printf '%s\n' '#pragma once' > "$work/sdkconfig.h"
-for name in daily_policy focus_menu lift_wake motion_gesture \
+for name in daily_policy device_lan_address_lookup device_lan_discovery focus_menu lift_wake motion_gesture \
   playful_interactions sleep_wake touch_gesture; do
   "$host_cxx" -std=c++20 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined \
     -DVP8_PLAYFUL_INTERACTIONS=1 \
     -I "$main" -I "$board/include" -I "$firmware/components/protocol/include" -I "$firmware/components/playback/include" \
-    -I "$work" -I "$IDF_PATH/components/esp_common/include" \
+    -I "$work" -I "$IDF_PATH/components/esp_common/include" -I "$tests/fixtures" \
     "$tests/${name}_test.cpp" -o "$work/$name"
   "$work/$name"
   printf '%s\n' "$name passed"

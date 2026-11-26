@@ -59,7 +59,7 @@ inline bool decode(const Blob &blob, const Identifier &device, Record &out) {
   return true;
 }
 
-enum class Operation { Enroll, Resume };
+enum class Operation { Enroll, Resume, Rotate };
 
 inline Bytes domain(const char *value) {
   return {reinterpret_cast<const uint8_t *>(value), std::strlen(value)};
@@ -72,6 +72,16 @@ inline bool proof_digest(Operation operation, const Binding &binding, uint64_t b
   pet::put64(counters.data() + 8, boot);
   return crypto::sha256({domain(operation == Operation::Enroll ? "PBP1/persist/enroll/v1" : "PBP1/persist/resume/v1"),
                          binding.device, binding.controller, binding.pairing, counters, challenge, payload}, out);
+}
+
+inline bool rotation_digest(bool replacement, const Binding &binding, uint64_t boot, uint32_t reference,
+                            const Digest &challenge, const PublicKey &key, Digest &out) {
+  std::array<uint8_t, 20> counters{};
+  pet::put64(counters.data(), binding.epoch);
+  pet::put64(counters.data() + 8, boot);
+  pet::put32(counters.data() + 16, reference);
+  return crypto::sha256({domain(replacement ? "BINDKEY/new/v1" : "BINDKEY/old/v1"), binding.device,
+                        binding.controller, binding.pairing, counters, challenge, key}, out);
 }
 
 struct ActiveProof {
@@ -189,7 +199,7 @@ public:
     if (now < last_) { cancel(); return Result::Expired; }
     advance(now);
     if (confirmation_ != Confirmation::None || challenge_.reference) return Result::Busy;
-    if (record_.bound() != (operation == Operation::Resume) || random == Digest{} ||
+    if (record_.bound() != (operation != Operation::Enroll) || random == Digest{} ||
         issued_ == UINT32_MAX || now > UINT64_MAX - challenge_us) return Result::Denied;
     challenge_ = out = {random, ++issued_};
     operation_ = operation;
@@ -227,6 +237,25 @@ public:
         !active_proof(record_.binding, boot_, transcript, psk, proposal_ + 1, out)) return Result::Denied;
     ++proposal_;
     return Result::Ok;
+  }
+
+  template<class BeforeCommit>
+  Result rotate(uint32_t reference, const PublicKey &key, const Signature &current, const Signature &replacement,
+                uint64_t now, bool idle, BeforeCommit before_commit) {
+    if (!idle) return Result::Busy;
+    Digest challenge{}, old_proof{}, new_proof{};
+    const auto result = consume(Operation::Rotate, reference, now, challenge);
+    if (result != Result::Ok) return result;
+    if (!record_.bound() || record_.binding.epoch == UINT64_MAX || key[0] != 4 || key == record_.key ||
+        !rotation_digest(false, record_.binding, boot_, reference, challenge, key, old_proof) ||
+        !verify_(record_.key, old_proof, current) ||
+        !rotation_digest(true, record_.binding, boot_, reference, challenge, key, new_proof) ||
+        !verify_(key, new_proof, replacement)) return Result::Denied;
+    auto next = record_;
+    ++next.binding.epoch;
+    next.key = key;
+    before_commit();
+    return save(next);
   }
 
   Result request_unbind(uint64_t now, bool idle) {

@@ -14,6 +14,7 @@ export async function exchangeDesktopSettings(session, input, signal, beforeMuta
   }
   const info = await exchange('info');
   if (!info) {
+    if (wire.fallbackInfo) return wire.fallbackInfo();
     const version = statusV2 ? (await exchangeUsbDeviceStatus(session, signal))?.version :
       await session.exchangeDesktop(Buffer.from('STATUS2\n'), {signal,
       prefix: '@VP8_OTA STATUS ', allowTimeout: true, match: line =>

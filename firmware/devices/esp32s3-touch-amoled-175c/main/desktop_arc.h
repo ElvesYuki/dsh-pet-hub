@@ -192,13 +192,17 @@ class DesktopArc {
                const bool slash = !online && !connecting && (x == y + 1 || x == y + 2);
                return slash || ((!connecting || y >= 6) && (wifi_rows[y] >> x & 1));
              });
-    if (status_.battery >= 0) {
+    if (status_.battery >= 0 || status_.usb_power) {
       constexpr float battery = 86;
+      constexpr float percent_start = battery + (22 - 11.5f) + 7;
       const int percent = std::min(status_.battery, 100);
-      icon(battery, 13, 7, [&](FocusCanvas &canvas) { canvas.battery_icon(percent); },
-           std::array{FocusCanvas::soft, FocusCanvas::black});
+      const auto fill = percent >= 0 && percent < 20 ? FocusCanvas::battery_amber : FocusCanvas::soft;
+      icon(battery, 13, 7, [&](FocusCanvas &canvas) { canvas.battery_icon(percent, status_.usb_power, fill); },
+           std::array{FocusCanvas::soft, FocusCanvas::black, FocusCanvas::battery_amber, FocusCanvas::white});
       // The icon's last ink column is x=22. Leave six empty pixels along the arc.
-      integer(percent, '%', battery + (22 - 11.5f) + 7, true);
+      if (percent >= 0) integer(percent, '%', percent_start, true, fill);
+      else text(top_, "--%", percent_start + telemetry_advance * .5f, telemetry_advance, 7,
+                FocusCanvas::soft, telemetry_glyphs, telemetry_scale);
     }
   }
 
@@ -215,7 +219,7 @@ class DesktopArc {
     }
   }
 
-  void integer(int value, char unit, float position, bool from_first_ink) {
+  void integer(int value, char unit, float position, bool from_first_ink, uint16_t color = FocusCanvas::white) {
     char chars[5];
     const auto result = std::to_chars(chars, chars + sizeof(chars) - 1, value);
     if (result.ec != std::errc{}) return;
@@ -225,8 +229,8 @@ class DesktopArc {
       for (auto row : telemetry_glyphs[focus_digits.find(chars[0])]) ink |= row;
       position += (telemetry_advance - 1) * .5f - std::countr_zero(ink);
     }
-    text(top_, {chars, size_t(result.ptr + 1 - chars)}, position, telemetry_advance, 7,
-         unit == '%' ? FocusCanvas::soft : FocusCanvas::white, telemetry_glyphs, telemetry_scale);
+    text(top_, {chars, size_t(result.ptr + 1 - chars)}, position, telemetry_advance, 7, color,
+         telemetry_glyphs, telemetry_scale);
   }
 
   DesktopStatus status_{};

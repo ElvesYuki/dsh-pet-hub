@@ -1,17 +1,19 @@
 import {execFileSync, spawn} from 'node:child_process';
 import {createHash, randomBytes, verify} from 'node:crypto';
-import {chmodSync, mkdirSync, rmSync, writeFileSync} from 'node:fs';
-import {join, resolve} from 'node:path';
+import {chmodSync, closeSync, fsyncSync, lstatSync, mkdirSync, openSync, realpathSync, rmSync, writeFileSync} from 'node:fs';
+import {dirname, join, resolve} from 'node:path';
 import {once} from 'node:events';
 import {createInterface} from 'node:readline';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {setTimeout as delay} from 'node:timers/promises';
-import {createBootKeychain, enrollmentDirectory} from '../packages/runtime/device-keychain.mjs';
+import {createBootKeychain, enrollmentDirectory, enrollmentRoot} from '../packages/runtime/device-keychain.mjs';
 import {openDeviceBindingIndex} from '../packages/runtime/device-binding-index.mjs';
 import {createPbp1BindingVerifier} from '../packages/runtime/native400-pbp1-binding.mjs';
 import {identifyMaintenanceUsb} from '../packages/runtime/device-maintenance-usb.mjs';
 import {createBootSerial} from '../packages/runtime/device-enrollment-serial.mjs';
-import {createDeviceEnrollmentOwner} from '../apps/dsh-plugin/enrollment-host.mjs';
+import {createDeviceEnrollmentOwner, openUsbEnrollment} from '../apps/dsh-plugin/enrollment-host.mjs';
+import {rotateDeviceBinding} from '../packages/runtime/device-key-rotation.mjs';
+import {same} from '../packages/core/protocol.mjs';
 import {compileBootPeer} from '../tests/fixtures/device-enrollment-cpp.mjs';
 import {backupBootDirectory, confirmIndexedSigner, migrateBootDirectory,
   restoreBootDirectory} from './lib/device-enrollment-migration.mjs';
@@ -49,6 +51,48 @@ function prepare() {
     rmSync(root, {recursive: true, force: true});
     throw error;
   }
+}
+
+async function prepareSigner() {
+  const parent = enrollmentRoot();
+  try { mkdirSync(parent, {mode: 0o700}); }
+  catch (error) { if (error.code !== 'EEXIST') throw error; }
+  const stat = lstatSync(parent);
+  if (realpathSync(parent) !== parent || !stat.isDirectory() || stat.uid !== process.getuid() || (stat.mode & 0o777) !== 0o700)
+    throw Error('device_review_directory');
+  const root = join(parent, 'device-enrollment-' + randomBytes(16).toString('hex'));
+  mkdirSync(root, {mode: 0o700});
+  try {
+    writeFileSync(join(root, 'keychain-unlock'), randomBytes(32).toString('hex'), {mode: 0o600, flag: 'wx'});
+    compile(root);
+    openDeviceBindingIndex({directory: root, create: true}).close();
+    await createBootKeychain(root).init();
+    console.log(root);
+  } catch (error) { rmSync(root, {recursive: true, force: true}); throw error; }
+}
+
+async function rotateSigner(sourceRoot, destinationDirectory) {
+  const root = enrollmentDirectory(destinationDirectory);
+  if (root === sourceRoot || dirname(root) !== enrollmentRoot()) throw Error('device_key_rotation_destination');
+  const {peer, openSession} = openUsbEnrollment(sourceRoot);
+  const source = openDeviceBindingIndex({directory: sourceRoot});
+  let destination;
+  try {
+    destination = openDeviceBindingIndex({directory: root});
+    const oldKeys = createBootKeychain(sourceRoot), newKeys = createBootKeychain(root);
+    await newKeys.health();
+    const path = join(root, 'review-peer.json');
+    let fd;
+    try { fd = openSync(path, 'wx', 0o600); }
+    catch (error) { if (error.code !== 'EEXIST') throw error; }
+    if (fd !== undefined) {
+      try { writeFileSync(fd, JSON.stringify(peer)); fsyncSync(fd); }
+      finally { closeSync(fd); }
+    }
+    if (!same(openUsbEnrollment(root).peer, peer)) throw Error('device_key_rotation_usb');
+    await rotateDeviceBinding({source, destination, oldKeys, newKeys, openSession});
+    console.log('New signer and device binding verified. Existing Hub configuration is unchanged.');
+  } finally { destination?.close(); source.close(); }
 }
 
 async function fixture(root, firmware, usbEnrollment) {
@@ -224,6 +268,7 @@ function desktopEnv(root) {
 async function main() {
   if (process.platform !== 'darwin' || extra.length) throw Error('device_review_arguments');
   if (action === 'prepare' && !directory) return prepare();
+  if (action === 'prepare-signer' && !directory) return prepareSigner();
   if (action === 'config-disable' && !directory) {
     console.log('- id: dsh-pet-hub-boot-review\n  config:\n    enabled: false\n    enrollmentDirectory: ""');
     return;
@@ -243,9 +288,20 @@ async function main() {
     return;
   }
   if (identity) throw Error('device_review_arguments');
+  if (action === 'rotate-key' && peerSource) return rotateSigner(root, peerSource);
   if (['fixture', 'fixture-usb'].includes(action) && peerSource) return fixture(root, peerSource, action === 'fixture-usb');
   if (['exercise', 'exercise-usb'].includes(action) && peerSource) return exercise(root, peerSource, action === 'exercise-usb');
   if (peerSource) throw Error('device_review_arguments');
+  if (action === 'discovery-disable') {
+    const owner = createDeviceEnrollmentOwner(root, {usbEnrollment: true, sharedUsb: true, lanCandidate: true, lanDiscovery: true});
+    try {
+      const {instanceId, revision} = owner.status();
+      const result = await owner.lanDisableDiscovery({instanceId, revision});
+      if (result.status !== 'ok') throw Error('device_lan_discovery_disable_unconfirmed');
+      console.log('Device LAN discovery disabled');
+    } finally { await owner.close(); }
+    return;
+  }
   if (action === 'config-enable') {
     openDeviceBindingIndex({directory: root}).close();
     console.log('- id: dsh-pet-hub-boot-review\n  config:\n    enabled: true\n    enrollmentDirectory: ' + JSON.stringify(root));

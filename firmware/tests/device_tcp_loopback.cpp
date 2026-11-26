@@ -159,22 +159,45 @@ void vectors(char **value) {
   subscriptions(value[14]);
 }
 
+enum class Expiry { none, pending, claimed };
+
 struct Port final : ControlPort {
+  explicit Port(Expiry expiry) : expiry(expiry) {}
+
+  const Expiry expiry;
   vp8_control::Control control;
-  unsigned opens{}, closed{}, snapshots{};
+  std::optional<vp8_control::Ticket> delayed;
+  unsigned opens{}, closed{}, snapshots{}, late{};
   bool open(uint32_t session, uint64_t now) override {
     if (!control.begin_verified(session, now)) return false;
     ++opens;
     snapshots = 0;
     return true;
   }
-  void close() override { ++closed; control.close(); }
+  void close() override { ++closed; control.close(); delayed.reset(); }
   bool receive(const vp8_control::Frame &frame, uint64_t now) override {
     if (!control.receive(frame, now)) return false;
+    if (expiry != Expiry::none) {
+      const auto message = vp8_control::decode(frame);
+      if (message && message->kind == vp8_control::Kind::play && message->ticket.action == 2) {
+        delayed = message->ticket;
+        if (expiry == Expiry::claimed) assert(control.claim(now, false) == delayed);
+        return true;
+      }
+    }
     if (auto ticket = control.claim(now, false)) control.presented(*ticket, now, ++display);
     return true;
   }
-  bool tick(uint64_t now) override { return control.tick(now); }
+  bool tick(uint64_t now) override {
+    if (!control.tick(now)) return false;
+    if (delayed && !control.waiting() && !control.owns(*delayed)) {
+      // A released ticket cannot confirm a late first-frame completion.
+      assert(!control.presented(*delayed, now, display + 1));
+      delayed.reset();
+      ++late;
+    }
+    return true;
+  }
   bool renew(uint64_t now) override { return control.renew_verified(now); }
   std::optional<vp8_control::Message> pop() override { return control.pop(); }
   Status snapshot() override { return ++snapshots % 2 ? full() : minimal(); }
@@ -217,7 +240,11 @@ int main(int argc, char **argv) {
   Key device;
   assert(device.import_signing(scalar.bytes));
 
-  Port port;
+  const std::string_view mode = argv[1];
+  assert(mode == "tcp" || mode == "tcp-expiry-pending" || mode == "tcp-expiry-claimed");
+  const auto expiry = mode == "tcp-expiry-pending" ? Expiry::pending :
+                      mode == "tcp-expiry-claimed" ? Expiry::claimed : Expiry::none;
+  Port port(expiry);
   std::optional<Session> session(std::in_place, port);
   Socket io;
   for (int i = 0; i < std::atoi(argv[4]); ++i) {
@@ -243,5 +270,7 @@ int main(int argc, char **argv) {
     ::close(fd);
     assert(now_ms() < until);
   }
-  std::printf("open=%u close=%u display=%u\n", port.opens, port.closed, port.display);
+  std::printf("open=%u close=%u display=%u", port.opens, port.closed, port.display);
+  if (expiry != Expiry::none) std::printf(" late=%u", port.late);
+  std::puts("");
 }

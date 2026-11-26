@@ -28,6 +28,12 @@ export function createDeviceTcpAdapter({trust, usbIdentity = trust.usbIdentity, 
   claimed.add(trust);
   const abortListener = addAbortListener(lifetime, () => void close());
 
+  async function disconnect() {
+    const draining = [...connections];
+    for (const connection of draining) connection.stop('disconnected');
+    await Promise.all(draining.map(connection => connection.done));
+  }
+
   function close() {
     if (closing) return closing;
     stopped = true;
@@ -242,7 +248,7 @@ export function createDeviceTcpAdapter({trust, usbIdentity = trust.usbIdentity, 
     return true;
   }
 
-  return Object.freeze({accept, close, snapshot: owner.snapshot, actionTarget: () => active?.actionTarget(), setAction(...args) {
+  return Object.freeze({accept, close, disconnect, snapshot: owner.snapshot, actionTarget: () => active?.actionTarget(), setAction(...args) {
     requireThat(!stopped, 'vpl1_closed');
     trust.assertCurrent();
     owner.setAction(...args);

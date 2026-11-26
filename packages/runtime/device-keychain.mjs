@@ -120,7 +120,6 @@ export function createBootKeychain(directory) {
 
   return Object.freeze({
     async init({signal} = {}) {
-      requireThat(dirname(root) === '/private/tmp', 'device_keychain_migrate_required');
       await mutate('init', {signal});
     },
     async health({signal} = {}) { await run('health', {signal}); },

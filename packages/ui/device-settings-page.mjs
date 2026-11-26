@@ -13,6 +13,8 @@ export function desktopDeviceCard({binding, query, bindingError, queryError, bat
   const status = binding?.phase;
   const q = query?.update;
   const tcp = queryError ? null : q?.networkStatus;
+  const received = tcp?.lastHeartbeatAt;
+  const lastHeartbeatAt = Number.isSafeInteger(received) && received > 0 && received <= 8.64e15 ? received : null;
   const source = tcp ? 'tcp' : q?.usbPresent === false ? 'offline' : q && !queryError ? 'usb' : 'unknown';
   const found = q?.usbPresent === false ? null : q?.usbDevice ?? q?.device;
   const conflict = q?.sameUsbTarget === false;
@@ -58,7 +60,7 @@ export function desktopDeviceCard({binding, query, bindingError, queryError, bat
     label: flags[status] ?? (bindingError ? '绑定服务暂不可用' : '正在读取绑定状态'),
     evidence: status === 'bound' ? (binding.deviceChecked === true ?
       '本次已从设备核对持久绑定' : '本次尚未从设备核对') : null,
-    issue: issues[binding?.issue] ?? null, source, queryStatus, conflict, device, queryResult, enrollment,
+    issue: issues[binding?.issue] ?? null, source, lastHeartbeatAt, queryStatus, conflict, device, queryResult, enrollment,
     batteryAvailable, batteryIndependent: !tcp && batteryAvailable && q.sameUsbTarget !== true,
     batteryStatus: tcp ? (tcp.battery ? 'ok' : 'not_reported') : batteryView?.status,
     batteryReading: tcp ? tcp.battery : age < 15000 ? batteryView.sample : null,
@@ -224,10 +226,13 @@ export function makeDesktopDevicePage(React, transport) {
         }
       }
     }
-    async function networkCommand(operation, form) {
+    async function networkCommand(operation, form, ssidHex) {
       const session = active.current, source = view.binding;
       if (!session || session.sending || card.busy || card.conflict || source?.phase !== 'bound' ||
-          !source.networkAvailable || (operation !== 'info' && !network?.checked)) return;
+          !source.networkAvailable || (operation !== 'info' && (!network?.checked || network.info?.readOnly))) return;
+      const profiles = network?.info?.version === 3;
+      if (operation === 'remove' && (!profiles || !network.info.profiles.some(profile => profile.id === ssidHex))) return;
+      if (operation === 'clear' && profiles) return;
       if (operation === 'clear') form.elements.namedItem('password').value = '';
       const settings = operation === 'set' ? readDesktopNetworkForm(form) : null;
       if (operation === 'set' && !settings) {
@@ -235,20 +240,30 @@ export function makeDesktopDevicePage(React, transport) {
         return;
       }
       const password = settings?.password ?? new Uint8Array(0);
-      const input = {operation, instanceId: source.instanceId, revision: source.revision, ...settings?.config};
       const {signal} = session.controller;
       session.sending = true;
       session.generation++;
       setSending(true);
-      let result;
-      try { result = await transport.network(input, password, signal); }
-      catch { result = {status: operation === 'info' ? 'unavailable' : 'unknown'}; }
+      let result, sent = false;
+      try {
+        const fresh = await transport.binding(signal);
+        if (fresh.instanceId !== source.instanceId || fresh.phase !== 'bound' || !fresh.networkAvailable || fresh.busy) {
+          result = {status: 'state_changed'};
+        } else {
+          signal.throwIfAborted();
+          const input = {operation, instanceId: fresh.instanceId, revision: fresh.revision, ...settings?.config,
+            ...(operation === 'info' || profiles ? {version: 3} : {}), ...(operation === 'remove' ? {ssidHex} : {})};
+          sent = true;
+          result = await transport.network(input, password, signal);
+        }
+      } catch { result = {status: sent && operation !== 'info' ? 'unknown' : 'unavailable'}; }
       finally {
         password.fill(0);
         session.sending = false;
         if (!signal.aborted) {
           const retainInfo = ['invalid', 'busy', 'storage_failed'].includes(result.status);
-          const info = result.status === 'ok' ? result : retainInfo ? network?.info : null;
+          const listConfirmed = result.version === 3 && ['saved', 'removed'].includes(result.status);
+          const info = result.status === 'ok' || listConfirmed ? result : retainInfo ? network?.info : null;
           setView(old => ({...old, network: {instanceId: source.instanceId, result, info, checked: Boolean(info)}}));
           setSending(false);
         }

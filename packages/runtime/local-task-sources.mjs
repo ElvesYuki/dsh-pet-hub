@@ -1,7 +1,8 @@
 import {connectCodexUnix} from './codex-unix-rpc.mjs';
 import {validatePetUrl} from '../source-pet/index.mjs';
-import {readPetSessionState} from '../source-pet/session-state.mjs';
+import {isPetSessionId, readPetSessionState} from '../source-pet/session-state.mjs';
 import {projectCodexTask, projectDshTaskPage} from './task-phase-projections.mjs';
+import {createTaskStateAggregate} from '../core/task-motion.mjs';
 
 export function openPetTaskSource(base) {
   validatePetUrl(base);
@@ -55,6 +56,42 @@ export function openDshTaskSource(sessionId, readState, readEvents, {now} = {}) 
       return {turnId: projection.turnId, state: projection.state};
     return {turnId: projection?.turnId, state: running ? projection?.state ?? 'working' : null};
   }, undefined, now);
+}
+
+/** Sample the host's running sessions without adding a subscription or activating agents. */
+export function openDshTaskAggregate(sessionId, list, readState, readEvents, {now = () => performance.now()} = {}) {
+  const aggregate = createTaskStateAggregate(sessionId);
+  let readers = new Map(), refreshAt = 0;
+  return {async read({signal}) {
+    signal.throwIfAborted();
+    if (!readers && now() < refreshAt) throw Error('dsh_task_list_unavailable');
+    try {
+      if (now() >= refreshAt) {
+        const {items} = await list({}, signal);
+        signal.throwIfAborted();
+        if (!Array.isArray(items)) throw Error('dsh_task_list');
+        const active = new Map();
+        for (const item of items) {
+          if (typeof item?.running !== 'boolean') throw Error('dsh_task_list');
+          if (!item.running) continue;
+          const id = item.sessionId;
+          if (!isPetSessionId(id) || active.has(id) || active.size >= 16) throw Error('dsh_task_list');
+          active.set(id, readers?.get(id) ?? openDshTaskSource(id, readState, readEvents, {now}));
+        }
+        readers = active;
+        refreshAt = now() + 3000;
+      }
+      const states = [];
+      for (const reader of readers.values()) states.push((await reader.read({signal})).state);
+      signal.throwIfAborted();
+      return aggregate(states);
+    } catch (error) {
+      // A failed sample fences the cached cohort. Keep discovery rate bounded even on failure.
+      readers = null;
+      refreshAt = Math.max(refreshAt, now() + 3000);
+      throw error;
+    }
+  }};
 }
 
 // A fresh connection is established only to the explicitly selected local service.

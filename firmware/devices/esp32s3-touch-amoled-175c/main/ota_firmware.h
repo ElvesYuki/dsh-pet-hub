@@ -10,10 +10,11 @@
 #endif
 
 namespace vp8_ota {
+using Playback = bool (*)(unsigned index, vp8_cache::Clip data, bool verify, bool automatic_idle);
 bool begin_boot();
 bool checking();
 void fail_boot();
-bool run(vp8_cache::Playback playback, vp8_daily::Input (*take_input)()
+bool run(Playback playback, vp8_daily::Input (*take_input)()
 #if VP8_FOCUS_MENU
          , void (*show_menu)(vp8_daily::FocusTimer &, vp8_daily::FocusPage)
 #endif
@@ -25,7 +26,7 @@ void toggle_menu_network();
 #endif
 #if VP8_VPC1_USB_PROBE || VP8_VPC1_LAN
 void control_contact(bool valid, bool pressed);
-bool control_turn(bool idle);
+bool control_turn(bool background);
 std::optional<vp8_control::Ticket> control_ticket();
 bool control_can_submit(const vp8_control::Ticket &ticket);
 void control_first_dma(const vp8_control::Ticket &ticket);

@@ -135,7 +135,7 @@ bool usb_wave() {
 #endif
 }
 
-void poll_daily_input(unsigned current) {
+void poll_daily_input(unsigned current, [[maybe_unused]] bool automatic_idle) {
 #if VP8_OTA
   if (vp8_ota::checking()) return;
 #endif
@@ -245,7 +245,7 @@ void poll_daily_input(unsigned current) {
   if (motion != vp8_daily::Input::none) daily_input = motion;
 #endif
 #if VP8_VPC1_USB_PROBE || VP8_VPC1_LAN
-  if (daily_input == vp8_daily::Input::none && vp8_ota::control_turn(current == vp8_daily::idle))
+  if (daily_input == vp8_daily::Input::none && vp8_ota::control_turn(current == vp8_daily::idle || automatic_idle))
     daily_input = vp8_daily::Input::control_ready;
 #endif
 }
@@ -803,7 +803,7 @@ struct Pipeline {
 
 bool run(const Sample &sample, bool check, unsigned fps = 24, bool *paced = nullptr
 #if VP8_RETAINED
-         , unsigned daily_index = vp8_daily::idle
+         , unsigned daily_index = vp8_daily::idle, bool automatic_idle = false
 #endif
          ) {
 #if VP8_SLEEP_WAKE
@@ -855,7 +855,7 @@ bool run(const Sample &sample, bool check, unsigned fps = 24, bool *paced = null
   while (prepared < limit) {
 #if VP8_RETAINED
     if (!check) {
-      poll_daily_input(daily_index);
+      poll_daily_input(daily_index, automatic_idle);
 #if VP8_FAST_TOUCH
       if (daily_input != vp8_daily::Input::none
 #if VP8_VPC1_USB_PROBE || VP8_VPC1_LAN
@@ -1037,7 +1037,11 @@ extern "C" void app_main() {
 #else
   const auto play = vp8_cache::run_from_flash;
 #endif
-  if (!play([](unsigned index, vp8_cache::Clip data, bool verify) {
+  if (!play([](unsigned index, vp8_cache::Clip data, bool verify
+#if VP8_OTA
+              , bool automatic_idle
+#endif
+              ) {
     static constexpr const char *names[]{"0-400", "4-400", "1-400", "11-400"};
 #if VP8_OTA
     // The retained cache verifies the object SHA. Reference I420 hashes belong to the probe.
@@ -1055,7 +1059,11 @@ extern "C" void app_main() {
 #endif
     const Sample clip{name, data.data(),
                       data.data() + data.size(), visual_side, expected_hashes};
-    return run(clip, verify, 24, nullptr, index);
+    return run(clip, verify, 24, nullptr, index
+#if VP8_OTA
+               , automatic_idle
+#endif
+               );
   }, [] {
     const auto requested = daily_input;
     daily_input = vp8_daily::Input::none;

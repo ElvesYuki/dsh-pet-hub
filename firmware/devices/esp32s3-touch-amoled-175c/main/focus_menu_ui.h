@@ -67,6 +67,7 @@ class FocusCanvas {
   static constexpr auto white = focus_rgb565(239, 245, 239);
   static constexpr auto soft = focus_rgb565(167, 185, 178);
   static constexpr auto amber = focus_rgb565(235, 199, 144);
+  static constexpr auto battery_amber = focus_rgb565(255, 209, 74);
   static constexpr auto mint = focus_rgb565(146, 224, 192);
   static constexpr auto track = focus_rgb565(36, 57, 49);
 
@@ -132,11 +133,21 @@ class FocusCanvas {
       circle(x + 4, y + 9, 1, white);
     }
   }
-  void battery_icon(int percent) {
+  void battery_icon(int percent, bool usb_power, uint16_t fill) {
     box({0, 2, 20, 11}, soft, 3);
     box({2, 4, 16, 7}, black, 1);
-    box({3, 5, percent * 14 / 100, 5}, soft);
+    if (percent > 0) box({3, 5, std::max(1, percent * 14 / 100), 5}, fill);
     box({21, 5, 2, 5}, soft);
+    if (!usb_power) return;
+    constexpr unsigned bolt[]{
+      0b0010000, 0b0011000, 0b0001100, 0b0111110, 0b0110000, 0b0011000, 0b0001000,
+    };
+    for (int row = 0; row < int(std::size(bolt)); ++row)
+      for (int col = 0; col < 7; ++col)
+        if (bolt[row] >> col & 1) box({6 + col, 3 + row, 3, 3}, black);
+    for (int row = 0; row < int(std::size(bolt)); ++row)
+      for (int col = 0; col < 7; ++col)
+        if (bolt[row] >> col & 1) box({7 + col, 4 + row, 1, 1}, white);
   }
   template <size_t Count, size_t Height>
   void time(int a, int b, int x, int y, int advance, uint16_t ink, const uint64_t (&glyphs)[Count][Height]) {

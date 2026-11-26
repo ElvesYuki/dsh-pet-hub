@@ -21,8 +21,8 @@
 
 ### 隔离桌面验收与回退
 
-1. 选用独立的私有临时目录，在其中用 `git init` 准备空的 Local 项目，另留单独的私有 socket 目录。运行 `node scripts/prepare-vp8-codex-hooks.mjs prepare <项目绝对路径> <socket绝对路径>` 会生成项目级 Hook 文件，已有文件会保留。准备命令使用当前 Node 路径，App 运行时无需安装额外 Codex CLI。
-2. 在当前 Codex App 打开该临时项目，在「Review hooks」或「Settings → Hooks」审阅并信任该项目的 Hook。隔离 DSH rc.5 profile 开启 `vp8TaskMotion.enabled`，设置该 `codexHookSocket`。`codexSocket` 与它互斥。打开设备页「动画联动」，选择 Codex 及该测试会话，提交第一条测试任务后即开始显示状态。DSH 可在同页切回。未装配真实设备时也可读取状态。
+1. 选用独立的私有临时目录，在其中用 `git init` 准备空的 Local 项目，另留单独的私有 socket 目录。运行 `node scripts/prepare-codex-hooks.mjs prepare <项目绝对路径> <socket绝对路径>` 会生成项目级 Hook 文件，已有文件会保留。准备命令使用当前 Node 路径，App 运行时无需安装额外 Codex CLI。
+2. 在当前 Codex App 打开该临时项目，在「Review hooks」或「Settings → Hooks」审阅并信任该项目的 Hook。隔离 DSH rc.5 profile 开启 `taskMotion.enabled`，设置该 `codexHookSocket`。`codexSocket` 与它互斥。打开设备页「动画联动」，选择 Codex 及该测试会话，提交第一条测试任务后即开始显示状态。DSH 可在同页切回。未装配真实设备时也可读取状态。
 3. 用一次普通工具、一次需要人工确认的命令及一次主动停止核对回显。操作另一个会话时，原选择不应跟随。重开 App 需由新回合重新建立观测。先验证桌面状态，再接圆屏查首帧回执。
 4. 退出时保存「关闭」，停掉隔离宿主并移除临时项目 Hook。需要回退候选时恢复上一份包。上面的隔离验证阶段保持日常 DSH、pet、Codex、桥接、固件和设备现状。
 
@@ -37,3 +37,16 @@
 上一份 `dsh-pet-hub-0.0.8-active-status-candidate.tgz`、安装前 profile 及已安装 Hub 的私有快照保存在忽略目录下的 `.cache/vp8-codex-app-hooks-daily.KoonI2/rollback/`。需要回退时用 DSH 自带 CLI 离线重装原包并恢复原 `cordis.patch.yml`，再刷新原窗口核对包来源和当时选定的开关。
 
 换包后 `npm run check` 与全量回归通过，2130 项通过、9 项外部夹具跳过。首轮回归继承私有备份的文件权限掩码，导致依赖公开测试文件的负例失效。恢复常规掩码后重跑全套。
+
+### 2026-11-25 现有本机仓库验收
+
+- App 已有指向本仓库的 `dsh-pet-hub` Local 项目，采用该项目。`elves` 项目的根目录为用户主目录。使用私有的转发器副本生成 8 个项目级 Hook。已有配置保护、同用户的 `0755` 项目根、拒绝可共享写入的项目根，以及 `0700` 目录和 `0600` 文件通过复核。生成文件由 Git 忽略。
+- 隔离 rc.5 宿主通过包加载、状态来源切换与卸载测试。对生成的实际命令输入合成事件，复用 Hub 来源选择和状态路由，观察到思考、工作、整理与空闲。测试未装配设备服务。桌面 App 窗口里的项目 Hook 审阅及真实聊天的事件序列、切换、App 重启和圆屏首帧仍待验证。
+- `npm run check`、启用 rc.5 宿主夹具的 `npm test`、`git diff --check` 均通过。全量 2134 项通过，15 项外部夹具测试跳过，0 项失败。
+- 临时的 Hook 文件和转发器副本保留供 App 审阅。回退时先关闭隔离接收端，再核对并移除本轮生成的 `.codex/hooks.json` 及对应私有临时目录。日常 DSH 的配置、插件和圆屏未动，联动维持关闭。
+
+### 真实 Local 聊天
+
+用户在 Codex App 审阅并信任项目 Hook 后，在现有仓库的一条 Local 聊天运行只读任务。独立宿主复用 Hub 的来源选择、Hook 接收器和状态路由，实际收到思考、工作、整理和空闲。重开独立宿主后恢复已保存的选择，状态先等待新的回合，没有回放上一轮。回切并在 App 原窗口提交新回合，再次收到这四种状态。此处验收为真实 App 事件及 Hub 路由。日常 DSH 设备页、App 本身重启和圆屏首帧另验。
+
+经跨聊天工具提交的对照和回切任务都执行完成，Hub 未读到对应的状态变化。这两轮未用于判定原生 App 的会话隔离或回切。原生会话未选中时的实测仍待补齐。全量 2134 项通过，15 项外部夹具测试跳过。收尾关闭临时来源和接收端，保留已信任的项目 Hook，圆屏联动维持关闭。

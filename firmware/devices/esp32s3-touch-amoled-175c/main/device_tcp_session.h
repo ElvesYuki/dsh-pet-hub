@@ -62,6 +62,7 @@ class Session {
   bool receive(Bytes data, uint64_t now);
   bool tick(uint64_t now);
   bool next(Packet &packet, uint64_t now);
+  bool authenticated() const { return state_ == State::ready; }
   void close();
 
  private:

@@ -6,7 +6,7 @@ const targets = {
   connection: {directory: 'dist-connection', version: '0.2.2-rc.1'},
   'legacy-connection': {directory: 'dist-connection-legacy', version: '0.2.2-rc.3'},
   'legacy-desktop': {directory: 'dist-desktop-legacy', version: '0.2.2-rc.3', host: 'legacy-desktop-host.mjs', release: '0.0.7'},
-  desktop: {directory: 'dist-desktop', version: '0.2.2-rc.5', host: 'desktop-host.mjs', release: '0.0.8', enrollment: true},
+  desktop: {directory: 'dist-desktop', version: '0.2.2-rc.5', host: 'desktop-host.mjs', release: '0.0.10', enrollment: true},
 };
 if (!Object.hasOwn(targets, values.target)) throw new Error('unsupported desktop build target');
 const profile = targets[values.target];

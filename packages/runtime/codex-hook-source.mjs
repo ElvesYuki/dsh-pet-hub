@@ -1,34 +1,30 @@
 import {lstatSync} from 'node:fs';
 import {createServer} from 'node:net';
 import {checkCodexHookSocket, codexHookFrameLimit, validCodexHookFrame} from './codex-hook-wire.mjs';
+import {createTaskStateAggregate} from '../core/task-motion.mjs';
 
 const utf8 = new TextDecoder('utf-8', {fatal: true});
 const activeTtl = 120000;
 const wireTtl = 2000;
+const maxThreads = 32;
 
-/** Listen for one selected App thread. close() drains owned peers and the private Unix listener. */
-export function openCodexHookTaskSource(sessionId, path, {wall = Date.now, now = () => performance.now()} = {}) {
-  checkCodexHookSocket(path);
-  // Preserve any prior file or endpoint, including a socket left by a different instance.
-  try { lstatSync(path); throw Error('codex_hook_endpoint_busy'); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; }
-  const opened = wall(), peers = new Set(), calls = new Map();
+function createThread(opened) {
+  const calls = new Map();
   let turnId, state = null, phaseUntil = 0, startAt = opened - 1, toolAt = 0, modelAt = 0, retryUntil = 0;
-  let counter = 0, failed = false, closing;
+  let counter = 0, idleSince = 0;
 
   function update(next, time) {
-    if (state !== next) counter++;
+    if (state !== next) {
+      counter++;
+      if (next === null) idleSince = time;
+    }
     state = next;
     phaseUntil = next ? time + activeTtl : 0;
   }
   function expire(time) {
     if (state && time >= phaseUntil) update(null, time);
   }
-  function accept(frame) {
-    if (!validCodexHookFrame(frame) || frame.sessionId !== sessionId || frame.sentAt < opened) return;
-    const age = wall() - frame.sentAt;
-    if (age < 0 || age > wireTtl) return;
-    const time = now();
+  function accept(frame, time) {
     expire(time);
     if (frame.event === 'start') {
       if (frame.turnId === turnId || frame.sentAt <= startAt) return;
@@ -78,6 +74,41 @@ export function openCodexHookTaskSource(sessionId, path, {wall = Date.now, now =
       }
     }
   }
+  return {accept, sample(time) {
+    expire(time);
+    return {turnId, state, counter};
+  }, idle(time) {
+    expire(time);
+    return state === null && time >= retryUntil && time - idleSince > wireTtl;
+  }};
+}
+
+/** Listen for the selected thread or aggregate an authorized project's threads on one private socket. */
+export function openCodexHookTaskSource(sessionId, path, {all = false, wall = Date.now, now = () => performance.now()} = {}) {
+  checkCodexHookSocket(path);
+  // Preserve any prior file or endpoint, including a socket left by a different instance.
+  try { lstatSync(path); throw Error('codex_hook_endpoint_busy'); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const opened = wall(), peers = new Set(), threads = new Map();
+  const selected = all ? undefined : createThread(opened);
+  const aggregate = all ? createTaskStateAggregate(sessionId) : undefined;
+  let failed = false, closing;
+
+  function accept(frame) {
+    if (!validCodexHookFrame(frame) || frame.sentAt < opened || (!all && frame.sessionId !== sessionId)) return;
+    const age = wall() - frame.sentAt;
+    if (age < 0 || age > wireTtl) return;
+    const time = now();
+    let thread = selected ?? threads.get(frame.sessionId);
+    if (!thread) {
+      if (frame.event !== 'start') return;
+      for (const [id, existing] of threads) if (existing.idle(time)) threads.delete(id);
+      if (threads.size >= maxThreads) return;
+      thread = createThread(opened);
+      threads.set(frame.sessionId, thread);
+    }
+    thread.accept(frame, time);
+  }
 
   const server = createServer(peer => {
     peers.add(peer);
@@ -105,9 +136,12 @@ export function openCodexHookTaskSource(sessionId, path, {wall = Date.now, now =
   return {async read({signal}) {
     await ready;
     signal.throwIfAborted();
-    if (failed || closing || !turnId) throw Error('codex_hook_unavailable');
-    expire(now());
-    return {sessionId, turnId, state, counter};
+    if (failed || closing) throw Error('codex_hook_unavailable');
+    const time = now();
+    if (all) return aggregate([...threads.values()].map(thread => thread.sample(time).state));
+    const sample = selected.sample(time);
+    if (!sample.turnId) throw Error('codex_hook_unavailable');
+    return {sessionId, ...sample};
   }, close() {
     closing ??= ready.then(() => new Promise(resolve => {
       for (const peer of peers) peer.destroy();

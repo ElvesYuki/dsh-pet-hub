@@ -6,10 +6,43 @@ import test from 'node:test';
 import {createDesktopStatusSources} from '../packages/runtime/device-status-sources.mjs';
 import {createDeviceTelemetry} from '../packages/runtime/device-telemetry.mjs';
 import {desktopDeviceCard} from '../packages/ui/device-settings-page.mjs';
+import {renderDesktopDevice} from '../packages/ui/device-settings-view.mjs';
 
 const identity = 'fixture';
 const device = {version: '0.1.29', slot: 'ota_0'};
 const status = {schema: 1, ...device};
+
+test('battery icon shows USB inside the battery and marks only fresh readings below 20%', () => {
+  const h = (tag, props, ...children) => ({tag, ...props, children});
+  const find = (node, className) => node?.className === className ? node :
+    node?.children?.map(child => find(child, className)).find(Boolean);
+  const view = (percent, usbPower, {stale = false, present = true, phase = 'idle'} = {}) => renderDesktopDevice(h, {
+    card: {source: 'tcp', batteryAvailable: true, batteryStale: stale, batteryStatus: 'ok',
+      batteryReading: {present, percent, usbPower, flow: usbPower && phase !== 'full' ? 'charging' : 'standby', phase}},
+  });
+  for (const percent of [0, 19, 20, 100]) {
+    for (const usb of [true, false]) {
+      const tree = view(percent, usb, {phase: percent === 100 ? 'full' : 'cc'});
+      const value = find(tree, 'pet-device-battery-value');
+      const icon = find(value, 'pet-device-battery-icon');
+      assert.equal(value['data-level'], percent < 20 ? 'low' : 'normal');
+      assert.ok(value.children.includes(`${percent}%`));
+      assert.equal(Boolean(find(icon, 'pet-device-battery-bolt')), usb);
+      assert.equal(find(icon, 'pet-device-battery-fill')?.style.width, percent > 0 ? `${percent}%` : undefined);
+      assert.match(JSON.stringify(tree), usb ? /USB 供电/ : /电池供电/);
+      if (usb) assert.match(JSON.stringify(tree), percent === 100 ? /已充满/ : /充电中/);
+    }
+  }
+  const stale = view(19, true, {stale: true});
+  assert.equal(find(stale, 'pet-device-battery-value')['data-level'], 'muted');
+  assert.equal(find(stale, 'pet-device-battery-bolt'), undefined);
+  assert.match(JSON.stringify(stale), /上次读取/);
+  const unknown = view(null, true);
+  assert.equal(find(unknown, 'pet-device-battery-value')['data-level'], 'muted');
+  assert.ok(find(unknown, 'pet-device-battery-bolt'));
+  assert.equal(find(unknown, 'pet-device-battery-fill'), undefined);
+  assert.equal(find(view(null, false, {present: false}), 'pet-device-battery-icon'), undefined);
+});
 
 function fakeClock() {
   let time = 0;
@@ -40,7 +73,8 @@ test('status cadence, freshness, missed probes, replay and connection replacemen
   const clock = fakeClock();
   let closes = 0;
   const probes = [];
-  const owner = createDeviceTelemetry({usbIdentity: identity, ...clock});
+  let wall = 1_795_500_000_000;
+  const owner = createDeviceTelemetry({usbIdentity: identity, ...clock, wallNow: () => wall});
   const attach = (usbIdentity = identity) => owner.attach({usbIdentity,
     probe: n => probes.push([clock.now(), n]), close: () => closes++});
   const first = attach();
@@ -49,15 +83,17 @@ test('status cadence, freshness, missed probes, replay and connection replacemen
   assert.equal(first.receive(1, {...status, schema: 2}), false);
   assert.equal(first.receive(1, {...status, sensors: {touch: {state: 'up', last: [466, 0]}}}), false);
   clock.to(40);
-  assert.equal(first.receive(1, {...status, privateAddress: 'test-only',
+  assert.equal(first.receive(1, {...status, lastHeartbeatAt: wall + 100, privateAddress: 'test-only',
     battery: {present: false, usbPower: true, percent: null, mv: null, flow: null, phase: null, secret: 'test-only'}}), true);
-  assert.deepEqual(owner.snapshot(), {device, sensors: null,
+  assert.deepEqual(owner.snapshot(), {device, sensors: null, lastHeartbeatAt: wall,
     battery: {present: false, usbPower: true, percent: null, mv: null, flow: null, phase: null}});
+  const firstHeartbeat = wall;
+  wall += 90_000; // Wall-clock changes do not advance the heartbeat or the freshness deadline.
   clock.to(6000);
   assert.deepEqual(probes, [[0, 1], [3000, 2], [6000, 3]]);
   assert.equal(first.receive(1, status), false);
   assert.equal(first.receive(2, status), false);
-  assert.ok(owner.snapshot());
+  assert.equal(owner.snapshot().lastHeartbeatAt, firstHeartbeat);
   clock.to(6040);
   assert.equal(owner.snapshot(), null);
   clock.to(9040);
@@ -71,7 +107,9 @@ test('status cadence, freshness, missed probes, replay and connection replacemen
   second.disconnect();
   assert.equal(second.receive(1, status), false);
   assert.equal(owner.snapshot(), null);
+  wall += 3000;
   assert.equal(third.receive(1, status), true);
+  assert.equal(owner.snapshot().lastHeartbeatAt, wall);
   third.disconnect(); // Same boundary used for credential revocation.
   assert.equal(owner.snapshot(), null);
   owner.close();

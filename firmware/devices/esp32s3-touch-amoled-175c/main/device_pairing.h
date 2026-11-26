@@ -2,6 +2,7 @@
 
 #include "persistence/media_binding_wire.h"
 #include "usb_base64.h"
+#include <cstdio>
 #include <span>
 #include <string_view>
 
@@ -70,9 +71,13 @@ class Session {
   Result settled_ = Result::Denied;
 
   binding::WireReply status(Result result, uint32_t reference = 0) const {
-    auto reply = binding::status_reply(device_, boot_, result, lifecycle_.record(), prompt() != 0, reference);
+    const auto *record = lifecycle_.record();
+    auto reply = binding::status_reply(device_, boot_, result, record, prompt() != 0, reference);
     reply.body()[2] |= 4;
-    if (usb_enroll_enabled_) reply.body()[2] |= 8;
+    if (usb_enroll_enabled_) {
+      reply.body()[2] |= 8;
+      if (!reference && record && record->bound()) reply.body()[2] |= 16;
+    }
     reply.finish(reference ? Type::BindingEnrolled : Type::BindingStatus, reply.size - pbp::header_bytes);
     return reply;
   }
@@ -140,6 +145,52 @@ public:
     if (!prompt()) settled_ = Result::Expired;
     else if (drawn == prompt() && idle && click_.update(down, now))
       settled_ = lifecycle_.confirm_local(now, true);
+  }
+
+  /** Same physical enrollment descriptor, separate versioned request and two signatures. */
+  template<class Random, class BeforeCommit, class Emit>
+  void receive_rotation(std::string_view request, uint64_t now, bool idle, Random random, BeforeCommit before_commit,
+                        Emit emit) {
+    if (!usb_enroll_enabled_ || !request.starts_with("1 ")) return;
+    request.remove_prefix(2);
+    if (request.size() <= 8 || request[8] != ' ') return;
+    const auto id = request.substr(0, 8);
+    if (id.find_first_not_of("0123456789abcdef") != id.npos) return;
+    request.remove_prefix(9);
+    Result result = Result::Denied;
+    if (request == "BEGIN") {
+      binding::Challenge challenge{};
+      Digest nonce{};
+      result = !idle ? Result::Busy : !random(nonce) ? Result::Denied :
+          lifecycle_.issue(binding::Operation::Rotate, nonce, now, true, challenge);
+      if (result == Result::Ok) {
+        constexpr char digits[] = "0123456789abcdef";
+        std::array<char, 64> text{};
+        for (size_t i = 0; i < challenge.value.size(); ++i) {
+          text[2 * i] = digits[challenge.value[i] >> 4];
+          text[2 * i + 1] = digits[challenge.value[i] & 15];
+        }
+        char reply[160];
+        const auto length = std::snprintf(reply, sizeof reply, "@BINDKEY 1 %.8s challenge %llu %lu %.64s",
+            id.data(), static_cast<unsigned long long>(boot_), static_cast<unsigned long>(challenge.reference), text.data());
+        if (length > 0 && size_t(length) < sizeof reply) emit(std::string_view(reply, length));
+        return;
+      }
+    } else if (request.starts_with("COMMIT ")) {
+      std::array<uint8_t, 197> packet{};
+      if (decode(request.substr(7), packet) == packet.size()) {
+        binding::PublicKey point{};
+        binding::Signature old_signature{}, new_signature{};
+        std::copy_n(packet.data() + 4, point.size(), point.begin());
+        std::copy_n(packet.data() + 69, old_signature.size(), old_signature.begin());
+        std::copy_n(packet.data() + 133, new_signature.size(), new_signature.begin());
+        result = lifecycle_.rotate(pet::u32(packet.data()), point, old_signature, new_signature, now, idle, before_commit);
+      }
+    }
+    constexpr const char *statuses[] {"committed", "denied", "busy", "expired", "storage_fault"};
+    char reply[48];
+    const auto length = std::snprintf(reply, sizeof reply, "@BINDKEY 1 %.8s %s", id.data(), statuses[uint8_t(result)]);
+    if (length > 0 && size_t(length) < sizeof reply) emit(std::string_view(reply, length));
   }
 
   template<class Random, class Emit>

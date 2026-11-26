@@ -72,6 +72,12 @@ std::unique_ptr<Session> open_session(Memory &memory, binding::VerifySignature v
   }
 }
 
+template<class Session, class Random, class Emit>
+void rotate_session(Session &session, std::string_view request, uint64_t now, bool idle, Random random, Emit emit) {
+  if constexpr (requires { session.receive_rotation(request, now, idle, random, [] {}, emit); })
+    session.receive_rotation(request, now, idle, random, [] {}, emit);
+}
+
 int main(int argc, char **argv) {
   auto verify = check_signature;
   bool usb = false;
@@ -108,12 +114,17 @@ int main(int argc, char **argv) {
     bool answered = false;
     const auto dispatch = [&](std::string_view input) {
       if (input == "STATUS2") { answered = true; std::cout << "status2\n"; return; }
+      const auto random = [](pairing::Digest &challenge) { challenge.fill(0x55); return true; };
+      if (input.starts_with("BINDKEY ")) {
+        rotate_session(*session, input.substr(8), ++now, idle, random, [&](std::string_view reply) {
+          answered = true;
+          std::cout << reply << '\n';
+        });
+        return;
+      }
       if (!input.starts_with(pairing::request_prefix)) return;
       input.remove_prefix(pairing::request_prefix.size());
-      session->receive(input, ++now, idle, [](pairing::Digest &challenge) {
-        challenge.fill(0x55);
-        return true;
-      }, [&](std::span<const uint8_t> packet) {
+      session->receive(input, ++now, idle, random, [&](std::span<const uint8_t> packet) {
         std::array<char, pairing::text_limit> encoded{};
         const auto size = pairing::encode(packet, encoded);
         answered = true;

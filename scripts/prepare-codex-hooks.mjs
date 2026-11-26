@@ -1,4 +1,4 @@
-import {mkdirSync, realpathSync, writeFileSync} from 'node:fs';
+import {mkdirSync, realpathSync, statSync, writeFileSync} from 'node:fs';
 import {createConnection} from 'node:net';
 import {isAbsolute, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -9,7 +9,10 @@ const quote = value => "'" + value.replaceAll("'", "'\\''") + "'";
 
 function prepare(project, socketPath) {
   const root = realpathSync(project);
-  privatePath(root, 'directory');
+  const stat = statSync(root);
+  if (!stat.isDirectory() || stat.uid !== process.getuid() || (stat.mode & 0o022) !== 0) {
+    throw new Error('unsafe Codex project permissions');
+  }
   checkCodexHookSocket(socketPath);
   const folder = join(root, '.codex');
   try { mkdirSync(folder, {mode: 0o700}); }

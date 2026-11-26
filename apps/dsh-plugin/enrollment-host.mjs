@@ -2,6 +2,7 @@ import {closeSync, constants, fstatSync, lstatSync, openSync, readSync, realpath
 import {join} from 'node:path';
 import {keys, requireThat, same} from '../../packages/core/protocol.mjs';
 import {openDeviceBindingIndex} from '../../packages/runtime/device-binding-index.mjs';
+import {openDeviceLanPins} from '../../packages/runtime/device-lan-pin.mjs';
 import {createBootKeychain, enrollmentDirectory} from '../../packages/runtime/device-keychain.mjs';
 import {createEnrollmentCoordinator} from '../../packages/runtime/device-enrollment-owner.mjs';
 import {createBootSerial} from '../../packages/runtime/device-enrollment-serial.mjs';
@@ -43,6 +44,13 @@ function openPeer(root, peer, openTty) {
     {openTty});
 }
 
+/** Explicit maintenance CLI only. The pinned descriptor still verifies identity on open. */
+export function openUsbEnrollment(directory) {
+  const root = enrollmentDirectory(directory), peer = readPeer(root);
+  requireThat(peer.mode === 'usb', 'device_review_peer');
+  return {peer, openSession: openPeer(root, peer)};
+}
+
 /** Only the separate review package uses this entry. An authorized Connection
  * owner has already passed the packaged rc.3 cookie gate before dispatch. */
 export function apply(ctx) {
@@ -63,7 +71,8 @@ export function apply(ctx) {
 }
 
 /** Shared by the dedicated rc.3 package and the isolated native smoke test. */
-export function createDeviceEnrollmentOwner(directory, {usbEnrollment = false, sharedUsb = false, lanCandidate = false, statusV2} = {}) {
+export function createDeviceEnrollmentOwner(directory, {usbEnrollment = false, sharedUsb = false, lanCandidate = false,
+  lanDiscovery = false, statusV2} = {}) {
   const root = enrollmentDirectory(directory), keys = createBootKeychain(root);
   const identity = lstatSync(root, {bigint: true});
   const selected = sharedUsb ? readPeer(root) : undefined;
@@ -75,7 +84,9 @@ export function createDeviceEnrollmentOwner(directory, {usbEnrollment = false, s
     const networkAllowed = usbEnrollment && selected?.mode === 'usb' ?
       () => desktopUsbStatus().sameUsbTarget !== false : undefined;
     owner = createEnrollmentCoordinator({store, keys, usbEnrollment, networkAllowed, statusV2,
-      lanUsbIdentity: lanCandidate && networkAllowed ? selected.usbIdentity : undefined, openSession(options) {
+      lanUsbIdentity: lanCandidate && networkAllowed ? selected.usbIdentity : undefined,
+      lanPins: lanDiscovery && lanCandidate && networkAllowed ? openDeviceLanPins(root, selected.usbIdentity) : undefined,
+      openSession(options) {
       const current = lstatSync(root, {bigint: true});
       requireThat(current.dev === identity.dev && current.ino === identity.ino &&
         enrollmentDirectory(root) === root, 'device_review_peer');
@@ -85,6 +96,7 @@ export function createDeviceEnrollmentOwner(directory, {usbEnrollment = false, s
     }});
   } catch (error) { untrack?.(); store.close(); throw error; }
   return {status: owner.status, command: owner.command, ...(owner.network ? {network: owner.network, weather: owner.weather} : {}),
-    ...(owner.lanArm ? {lanArm: owner.lanArm, lanUsbIdentity: selected.usbIdentity} : {}),
+    ...(owner.lanArm ? {lanArm: owner.lanArm, lanDisableDiscovery: owner.lanDisableDiscovery, lanUsbIdentity: selected.usbIdentity} : {}),
+    ...(owner.lanLoad ? {lanLoad: owner.lanLoad} : {}),
     async close() { try { await owner.close(); } finally { untrack?.(); store.close(); } }};
 }

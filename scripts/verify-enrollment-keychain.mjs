@@ -63,7 +63,7 @@ async function exercise(work, legacyPathOnly) {
     const sourceText = readFileSync(join(repo, 'native/device-keychain.m'), 'utf8');
     const legacy = join(work, 'legacy.m'), replacement = join(work, 'replacement.m');
     const oldSource = legacyPathOnly ? sourceText.replace(/static bool allowed_parent\([^]*?\n}/,
-      'static bool allowed_parent(NSString *path, bool init) {\n  (void)init;\n  return [path isEqualToString:@"/private/tmp"];\n}') : sourceText;
+      'static bool allowed_parent(NSString *path) {\n  return [path isEqualToString:@"/private/tmp"];\n}') : sourceText;
     if (legacyPathOnly) assert.notEqual(oldSource, sourceText);
     writeFileSync(legacy, oldSource, {mode: 0o600});
     writeFileSync(replacement, sourceText + '\nint device_fixture_replacement_build(void) { return 1; }\n', {mode: 0o600});
@@ -158,8 +158,15 @@ try {
   const searchBefore = searchList();
   const compatible = await exercise(work, false);
   const legacy = await exercise(work, true);
+  const signer = run('prepare-signer');
+  try {
+    assert.ok(signer.startsWith(parent + '/device-enrollment-'));
+    const key = await createBootKeychain(signer).prepare({device: 'e4'.repeat(16)});
+    assert.deepEqual(sign(join(signer, 'keychain-helper'), signer, key), {exit: 0, osStatus: null});
+    assert.deepEqual((await createBootKeychain(signer).lookup(key.ref)).publicKey, key.publicKey);
+  } finally { rmSync(signer, {recursive: true, force: true}); }
   assert.ok(searchBefore.equals(searchList()), 'user keychain search list changed');
-  console.log(JSON.stringify({compatible, legacy, searchListUnchanged: true}));
+  console.log(JSON.stringify({compatible, legacy, permanentNewSignerVerified: true, searchListUnchanged: true}));
 } finally {
   rmSync(work, {recursive: true, force: true});
   if (!parentAlreadyExisted && existsSync(parent)) {

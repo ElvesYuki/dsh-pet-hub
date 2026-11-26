@@ -61,6 +61,7 @@ dist/
 coverage/
 .cache/
 .runtime/
+/.codex/hooks.json
 .env
 .env.*
 *.token

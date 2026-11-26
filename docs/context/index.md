@@ -6,15 +6,23 @@ ESP32 实时 3D 独立路线 · [大肥鱼模型、圆屏对照与资源盘点](
 
 VP8 TCP／USB 主动状态 · [真机联调证据](../reports/2026-11-20-vp8-0133-live.md) · [真机验收方案](plans/vp8-0133-live-acceptance.md) · [离线候选与回退](../reports/2026-11-19-vp8-desktop-vpl1-lifecycle.md)。
 
-VP8 DSH 工作状态联动 · [真机首帧与恢复](../reports/2026-11-20-vp8-dsh-task-motion-live.md) · [真机 Spec 与 Diff](plans/vp8-dsh-task-motion-live.md) · [早期 pet 兼容候选](../reports/2026-11-20-vp8-dsh-task-motion.md)。
+VP8 DSH 工作状态联动 · [正式版常规联动及重连](../reports/2026-11-25-dsh-motion-discovery.md#正式版常规联动触摸和重连) · [自动待机真机复测](../reports/2026-11-25-dsh-motion-discovery.md#正式版自动待机真机复测) · [圆屏正式版更新](../reports/2026-11-25-dsh-motion-discovery.md#圆屏正式版更新) · [真机 Spec 与 Diff](plans/vp8-dsh-task-motion-live.md) · [早期真机首帧](../reports/2026-11-20-vp8-dsh-task-motion-live.md)。
 
 VP8 DSH／Codex 本机来源 · [日常 DSH 换装与回退](../reports/2026-11-20-vp8-codex-app-hooks.md#日常-dsh-换装) · [Hooks 验证](../reports/2026-11-20-vp8-codex-app-hooks.md) · [Hooks Spec 与 Diff](plans/vp8-codex-app-hooks.md) · [六档与 App Server 证据](../reports/2026-11-20-vp8-local-task-phases.md) · [来源选择契约](plans/vp8-local-task-sources.md)。
+
+全部对话联动 · [聚合 Spec／Diff、宿主验收与回退](plans/task-source-aggregation.md)。
 
 Hub 设备代码整理 · [源码命名、协议索引与部署边界](plans/device-code-naming.md)。迁移前的固件路径见 [历史命名交接](../protocol/device-naming-firmware-handoff.md)。
 
 同仓共用运行层 · [独占串口、局域网和请求体读取](plans/shared-runtime-cleanup.md)。
 
-VP8 设备设置页新版 · [布局与清理验收](../reports/2026-11-19-vp8-desktop-device-layout.md) · [Spec 与 Diff](plans/vp8-desktop-device-layout.md)。
+管理端多 Wi-Fi 与 DSH 动作 · [Spec／Diff 和离线候选](plans/wifi-profiles-and-dsh-motion.md) · [日常换装与回退](plans/wifi-motion-desktop-deploy.md) · [真机联调](plans/wifi-motion-live.md)。
+
+圆屏局域网发现 · [正式留驻与回退](plans/device-lan-discovery.md#正式留驻-hub-specdiff) · [日常 Hub 开通及冷启动](plans/device-lan-discovery.md#日常纯电池冷启动) · [地址补查和换端口真机复验](plans/device-lan-discovery.md#0144-真机换端口复验2026-11-24)。
+
+圆屏 USB 换钥匙 · [双签名、未知提交恢复与现场入口](plans/device-key-rotation.md)。
+
+设备设置页 · [布局与清理验收](../reports/2026-11-19-vp8-desktop-device-layout.md) · [圆屏与设备卡电池图标](plans/vp8-desktop-device-layout.md#圆屏与设备卡电池图标-specdiff)。
 
 400 VP8 Status v2 · [USB／TCP、日常换包与回退](../reports/2026-11-19-vp8-status-v2-hub.md) · [Spec](plans/vp8-status-v2-hub-spec.md) · [Diff](plans/vp8-status-v2-hub-diff.md) · [换包方案](plans/vp8-status-v2-desktop-deploy.md)。
 
